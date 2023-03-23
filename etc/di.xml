@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Tonder\Payment\Logger\Handler">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
+    </type>
+    <type name="Tonder\Payment\Logger\Logger">
+        <arguments>
+            <argument name="name" xsi:type="string">TonderLogger</argument>
+            <argument name="handlers"  xsi:type="array">
+                <item name="system" xsi:type="object">Tonder\Payment\Logger\Handler</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Model\Service\InvoiceService">
+        <plugin name="invoice_adjustment_amount_plugin" type="Tonder\Payment\Plugin\Model\Service\InvoiceService"
+                sortOrder="10" disabled="false"  />
+    </type>
+    <type name="Magento\Payment\Model\MethodList">
+        <plugin name="tonder_gateway_load" type="Tonder\Payment\Plugin\Model\MethodList" sortOrder="10"/>
+    </type>
+    <type name="Magento\Quote\Model\Quote\Address\Total\Shipping">
+        <plugin name="tonder_gateway_shipping_update" type="Tonder\Payment\Plugin\ShippingPlugin" sortOrder="10"/>
+    </type>
+    <type name="Signifyd\Connect\Observer\PreAuth">
+        <plugin name="tonder_track_stop_checkout_process" type="Tonder\Payment\Plugin\SignifydPreAuthPlugin" sortOrder="10"/>
+    </type>
+</config>

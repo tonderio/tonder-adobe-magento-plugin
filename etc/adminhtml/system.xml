@@ -1,0 +1,138 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+	<system>
+		<section id="payment" sortOrder="1000" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+			<group id="tonder" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+				<label>Tonder Payment Gateway</label>
+				<field id="active" type="select" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+					<label>Enabled</label>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+				</field>
+				<field id="title" type="text" sortOrder="20" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+					<label>Title</label>
+				</field>
+				<field id="version" translate="label comment" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>Version</label>
+					<frontend_model>Tonder\Payment\Block\Adminhtml\System\Config\Field\Version</frontend_model>
+					<comment>The version number of the Tonder Payment extension.</comment>
+				</field>
+				<field id="mode" type="select" sortOrder="25" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+					<label>Server</label>
+					<source_model>Tonder\Payment\Model\Config\Source\Mode</source_model>
+					<depends>
+						<field id="active">1</field>
+					</depends>
+				</field>
+				<field id="live_api_key" translate="label" type="obscure" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
+					<label>Live API Key</label>
+					<backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+					<validate>required-entry no-whitespace</validate>
+					<depends>
+						<field id="mode">2</field>
+						<field id="active">1</field>
+					</depends>
+				</field>
+				<field id="live_username" translate="label" type="obscure" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
+					<label>Live Username</label>
+					<backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+					<validate>required-entry no-whitespace</validate>
+					<depends>
+						<field id="mode">2</field>
+						<field id="active">1</field>
+					</depends>
+				</field>
+				<field id="live_password" translate="label" type="obscure" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
+					<label>Live Password</label>
+					<backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+					<validate>required-entry no-whitespace</validate>
+					<depends>
+						<field id="mode">2</field>
+						<field id="active">1</field>
+					</depends>
+				</field>
+				<field id="stage_api_key" translate="label" type="obscure" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
+					<label>Stage API Key</label>
+					<backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+					<validate>required-entry no-whitespace</validate>
+					<depends>
+						<field id="mode">1</field>
+						<field id="active">1</field>
+					</depends>
+				</field>
+				<field id="stage_username" translate="label" type="obscure" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
+					<label>Stage Username</label>
+					<backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+					<validate>required-entry no-whitespace</validate>
+					<depends>
+						<field id="mode">1</field>
+						<field id="active">1</field>
+					</depends>
+				</field>
+				<field id="stage_password" translate="label" type="obscure" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
+					<label>Stage Password</label>
+					<backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+					<validate>required-entry no-whitespace</validate>
+					<depends>
+						<field id="mode">1</field>
+						<field id="active">1</field>
+					</depends>
+				</field>
+				<field id="mock_api_key" translate="label" type="obscure" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
+					<label>Mock API Key</label>
+					<backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+					<validate>required-entry no-whitespace</validate>
+					<depends>
+						<field id="mode">0</field>
+						<field id="active">1</field>
+					</depends>
+				</field>
+				<field id="mock_username" translate="label" type="obscure" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
+					<label>Mock Username</label>
+					<backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+					<validate>required-entry no-whitespace</validate>
+					<depends>
+						<field id="mode">0</field>
+						<field id="active">1</field>
+					</depends>
+				</field>
+				<field id="mock_password" translate="label" type="obscure" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
+					<label>Mock Password</label>
+					<backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+					<validate>required-entry no-whitespace</validate>
+					<depends>
+						<field id="mode">0</field>
+						<field id="active">1</field>
+					</depends>
+				</field>
+				<field id="order_status" type="select" sortOrder="30" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+					<label>New Order Status</label>
+					<source_model>Magento\Sales\Model\Config\Source\Order\Status</source_model>
+				</field>
+				<field id="cctypes" translate="label" type="multiselect" sortOrder="35" showInDefault="1" showInWebsite="1" showInStore="0">
+					<label>Credit Card Types</label>
+					<source_model>Magento\Payment\Model\Source\Cctype</source_model>
+				</field>
+				<field id="tonder_vault_active" translate="label" type="select" sortOrder="35" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>Enable Vault Payment</label>
+					<config_path>payment/tonder_vault/active</config_path>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+				</field>
+				<field id="allowspecific" type="allowspecific" sortOrder="40" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+					<label>Payment from Applicable Countries</label>
+					<source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
+				</field>
+				<field id="specificcountry" type="multiselect" sortOrder="50" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+					<label>Payment from Applicable Countries</label>
+					<source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+					<can_be_empty>1</can_be_empty>
+				</field>
+				<field id="sort_order" type="text" sortOrder="60" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+					<label>Sort Order</label>
+				</field>
+				<field id="instructions" type="textarea" sortOrder="70" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+					<label>Instructions</label>
+				</field>
+			</group>
+		</section>
+	</system>
+</config>
