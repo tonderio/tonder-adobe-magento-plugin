@@ -1,91 +1,50 @@
 define(
     [
-        'underscore',
         'jquery',
         'Magento_Payment/js/view/payment/cc-form',
-        'Magento_Checkout/js/model/quote',
-        'mage/translate',
-        'Magento_Checkout/js/model/full-screen-loader'
+        'Magento_Checkout/js/model/payment/additional-validators',
+        'ko',
+        'Magento_Ui/js/modal/alert',
+        'Magento_Checkout/js/view/billing-address',
+        'Magento_Payment/js/model/credit-card-validation/validator',
+        'Magento_Checkout/js/model/full-screen-loader',
+        'Magento_Checkout/js/model/url-builder',
+        'mage/storage',
+        'Magento_Checkout/js/action/redirect-on-success',
+        'Magento_Payment/js/model/credit-card-validation/credit-card-number-validator',
+        'Magento_Payment/js/model/credit-card-validation/credit-card-data'
     ],
-    function (_, $, Component, quote, $t, fullScreenLoader) {
+    function ($,
+              Component,
+              additionalValidators,
+              ko,
+              alert,
+              address,
+              validator,
+              fullScreenLoader,
+              urlBuilder,
+              storage,
+              redirectOnSuccessAction,
+              cardNumberValidator,
+              creditCardData
+    ) {
         'use strict';
         return Component.extend({
             defaults: {
                 template: 'Tonder_Payment/payment/tonder',
                 active: false,
-                paymentMethodNonce: null,
-                lastBillingAddress: null,
-                // validatorManager: validatorManager,
-                code: 'tonder',
-                isProcessing: false,
-
-                /**
-                 * Additional payment data
-                 *
-                 * {Object}
-                 */
-                additionalData: {},
-
-                /**
-                 * Braintree client configuration
-                 *
-                 * {Object}
-                 */
-                clientConfig: {
-                    onReady: function (context) {
-                        context.setupHostedFields();
-                    },
-
-                    /**
-                     * Triggers on payment nonce receive
-                     * @param {Object} response
-                     */
-                    onPaymentMethodReceived: function (response) {
-                        this.handleNonce(response);
-                        this.isProcessing = false;
-                    },
-
-                    /**
-                     * Allow a new nonce to be generated
-                     */
-                    onPaymentMethodError: function() {
-                        this.isProcessing = false;
-                    },
-
-                    /**
-                     * Device data initialization
-                     * @param {String} deviceData
-                     */
-                    onDeviceDataRecieved: function (deviceData) {
-                        this.additionalData['device_data'] = deviceData;
-                    },
-
-                    /**
-                     * After Braintree instance initialization
-                     */
-                    onInstanceReady: function () {},
-
-                    /**
-                     * Triggers on any Braintree error
-                     * @param {Object} response
-                     */
-                    onError: function (response) {
-                        this.isProcessing = false;
-                        throw response.message;
-                    },
-
-                    /**
-                     * Triggers when customer click "Cancel"
-                     */
-                    onCancelled: function () {
-                        this.paymentMethodNonce = null;
-                        this.isProcessing = false;
-                    }
-                },
+                scriptLoaded: false,
+                saveKeyData: false,
+                creditCardHolderName: null,
                 imports: {
                     onActiveChange: 'active'
-                }
+                },
+                code: 'tonder',
             },
+
+            placeOrderHandler: null,
+            validateHandler: null,
+            canUseDSecure: ko.observable(false),
 
             /**
              * Set list of observable attributes
@@ -93,29 +52,91 @@ define(
              * @returns {exports.initObservable}
              */
             initObservable: function () {
-                // validator.setConfig(window.checkoutConfig.payment[this.getCode()]);
                 this._super()
-                    .observe(['active']);
-                // this.validatorManager.initialize();
-                this.initClientConfig();
-
+                    .observe('active');
+                this._super()
+                    .observe('saveKeyData');
+                this._super()
+                    .observe('creditCardHolderName');
                 return this;
             },
 
+            disableArrowKeys: function (event) {
+                if ( event.which === 38 || event.which === 40 ) {
+                    event.preventDefault();
+                } else {
+                    return true;
+                }
+            },
+
+            validateInput: function (e) {
+                $(e).valid('isValid');
+            },
+
+            context: function () {
+                return this;
+            },
+
+            getConfig: function (key) {
+                if (window.checkoutConfig.payment[this.getCode()][key] !== undefined) {
+                    return window.checkoutConfig.payment[this.getCode()][key];
+                }
+                return null;
+            },
+
+            hasThreeDSecure: function () {
+                if (this.getConfig('isEnable3dS') === 1) {
+                    return true;
+                }
+                return false;
+            },
+
             /**
-             * Get payment name
-             *
-             * @returns {String}
+             * @returns {Boolean}
              */
+            isShowLegend: function () {
+                return true;
+            },
+
+            setPlaceOrderHandler: function (handler) {
+                this.placeOrderHandler = handler;
+            },
+
+            setValidateHandler: function (handler) {
+                this.validateHandler = handler;
+            },
+
+
             getCode: function () {
                 return this.code;
             },
 
-            /**
-             * Check if payment is active
-             *
-             * @returns {Boolean}
-             */
+            getKeyDataUrl: function () {
+                return window.checkoutConfig.payment[this.getCode()].getKeyData;
+            },
+
+            isVisible: function () {
+                if (window.checkoutConfig.payment[this.getCode()].isVaultEnabled === 1) {
+                    return window.checkoutConfig.payment[this.getCode()].isLoggedIn && 1;
+                }
+                return false;
+            },
+
+            isProvided: function () {
+                if(this.hasThreeDSecure() && !this.creditCardHolderName() && !this.isMultiShipping()){
+                    return false;
+                }
+                if (this.creditCardNumber() && this.creditCardExpMonth()
+                    && this.creditCardExpYear() && this.selectedCardType()) {
+                    return true;
+                }
+                return false;
+            },
+
+            isUsCountry: function () {
+                return window.checkoutConfig.payment[this.getCode()].isUSCountry;
+            },
+
             isActive: function () {
                 var active = this.getCode() === this.isChecked();
 
@@ -123,125 +144,218 @@ define(
 
                 return active;
             },
-
-            /**
-             * Triggers when payment method change
-             * @param {Boolean} isActive
-             */
-            onActiveChange: function (isActive) {
-                if (!isActive) {
-                    return;
-                }
-
-                this.initBraintree();
+            isMultiShipping: function () {
+                return false;
             },
 
-            /**
-             * Init config
-             */
-            initClientConfig: function () {
-                _.each(this.clientConfig, function (fn, name) {
-                    if (typeof fn === 'function') {
-                        this.clientConfig[name] = fn.bind(this);
-                    }
-                }, this);
-            },
-
-            /**
-             * Init Braintree configuration
-             */
-            initBraintree: function () {
-
-                // fullScreenLoader.startLoader();
-
-            },
-
-            /**
-             * Get full selector name
-             *
-             * @param {String} field
-             * @returns {String}
-             */
-            getSelector: function (field) {
-                return '#' + this.getCode() + '_' + field;
-            },
-
-            /**
-             * Get list of available CC types
-             *
-             * @returns {Object}
-             */
-            getCcAvailableTypes: function () {
-                return window.checkoutConfig.payment.ccform.availableTypes[this.getCode()];
-            },
-
-            /**
-             * @returns {String}
-             */
-            getEnvironment: function () {
-                return window.checkoutConfig.payment[this.getCode()].environment;
-            },
-
-            /**
-             * Get data
-             *
-             * @returns {Object}
-             */
-            getData: function () {
-                var data = {
-                    'method': this.getCode(),
-                    'additional_data': {
-                        'payment_method_nonce': this.paymentMethodNonce
-                    }
-                };
-
-                data['additional_data'] = _.extend(data['additional_data'], this.additionalData);
-
-                return data;
-            },
-
-            /**
-             * Set payment nonce
-             * @param {String} paymentMethodNonce
-             */
-            setPaymentMethodNonce: function (paymentMethodNonce) {
-                this.paymentMethodNonce = paymentMethodNonce;
-            },
-
-            /**
-             * Prepare data to place order
-             * @param {Object} data
-             */
-            handleNonce: function (data) {
+            saveKey: function () {
                 var self = this;
 
-                this.setPaymentMethodNonce(data.nonce);
+                $.ajax({
+                    url : self.getKeyDataUrl(),
+                    data : {
+                        'isUs' : self.isUsCountry(),
+                        'form_key' : window.checkoutConfig.formKey,
+                        'card_data' : this.getData(),
+                        'address': {
+                            'street': address().currentBillingAddress()['street'],
+                            'post_code': address().currentBillingAddress()['postcode']
+                        }
+                    },
+                    type : 'POST',
+                    showLoader : true
+                }).done(
+                    function (response) {
+                        this.placeOrder();
+                        return response;
+                    }.bind(this)
 
-                // place order on success validation
-                // self.validatorManager.validate(self, function () {
-                //     return self.placeOrder('parent');
-                // }, function() {
-                //     self.isProcessing = false;
-                //     self.paymentMethodNonce = null;
-                // });
+                ).fail(
+                    function () {
+                        return false;
+                    }
+                );
             },
 
-            /**
-             * Action to place order
-             * @param {String} key
-             */
-            placeOrder: function (key) {
-                if (key) {
-                    return this._super();
+            creditCardValidate: function () {
+                var availableTypesValues = this.getCcAvailableTypesValues();
+                var valid = false;
+                var value = $('#tonder_cc_number').val();
+                var result = cardNumberValidator(value);
+
+                if (!result.isPotentiallyValid && !result.isValid) {
+                    this.selectedCardType(null);
+                    return false;
                 }
 
-                if (this.isProcessing) {
-                    return false;
+                if (result.card !== null) {
+                    this.selectedCardType(result.card.type);
+                    creditCardData.creditCard = result.card;
+                }
+
+                if (result.isValid) {
+                    creditCardData.creditCardNumber = value;
+                    this.creditCardType(result.card.type);
+                }
+                var type = this.selectedCardType();
+
+                for (var i = 0; i < availableTypesValues.length; i++) {
+                    if (type === availableTypesValues[i]["value"]) {
+                        valid = true;
+                        break;
+                    }
+                }
+                if (!valid) {
+                    this.selectedCardType(null);
+                }
+            },
+
+            checkOption: function () {
+                var self = this;
+                if (!$('#co-transparent-form').valid('isValid')) {
+                    return null;
+                }
+                if (this.isProvided()) {
+                    if(this.hasThreeDSecure() && !this.isMultiShipping()){
+                        var cardData = {
+                            cardHolderName: this.creditCardHolderName(),
+                            accountNumber: this.creditCardNumber(),
+                            expMonth: this.creditCardExpMonth(),
+                            expYear: this.creditCardExpYear()
+                        };
+                        var payload = {
+                            cardData: cardData
+                        };
+                        $.ajax({
+                            url: this.getConfig('cardLookupUrl'),
+                            dataType: "json",
+                            type: 'POST',
+                            data: {
+                                payload: payload
+                            },
+                            showLoader: true,
+                        }).done(function (response) {
+                            self.canUseDSecure(response.can_use_3ds)
+                            if (!self.saveKeyData()) {
+                                self.placeOrder();
+                            } else {
+                                return self.saveKey() ? true : null;
+                            }
+                        });
+                    }else {
+                        if (!this.saveKeyData()) {
+                            this.placeOrder();
+                        } else {
+                            return this.saveKey() ? true : null;
+                        }
+                    }
                 } else {
-                    this.isProcessing = true;
+                    alert({
+                        title: 'ERROR',
+                        content: 'Please provide credit card information first!',
+                        clickableOverlay: true,
+                        actions: {
+                            always: function (){}
+                        }
+                    });
+                }
+            },
+            /**
+             * Place order.
+             */
+            placeOrder: function (data, event) {
+                var self = this;
+
+                if (event) {
+                    event.preventDefault();
+                }
+
+                if (this.validate() &&
+                    additionalValidators.validate() &&
+                    this.isPlaceOrderActionAllowed() === true
+                ) {
+                    this.isPlaceOrderActionAllowed(false);
+                    this.getPlaceOrderDeferredObject()
+                        .done(
+                            function () {
+
+                                if(self.hasThreeDSecure() && self.canUseDSecure()){
+                                    self.afterPlaceOrder();
+                                }else{
+                                    if (self.redirectAfterPlaceOrder) {
+                                        redirectOnSuccessAction.execute();
+                                    }
+                                }
+                            }
+                        ).always(
+                        function () {
+                            self.isPlaceOrderActionAllowed(true);
+                        }
+                    );
+                    return true;
                 }
 
                 return false;
+            },
+            afterPlaceOrder: function () {
+                if (event) {
+                    event.preventDefault();
+                }
+                fullScreenLoader.startLoader();
+                var self = this;
+                if (self.validate() && additionalValidators.validate()) {
+                    var paymentData = window.checkoutConfig.payment.moneris,
+                        cardData = [],
+                        payload = [],
+                        userAgent = navigator.userAgent,
+                        quoteData = window.checkoutConfig.quoteData,
+                        cardData = {
+                            cardHolderName: this.creditCardHolderName(),
+                            accountNumber: this.creditCardNumber(),
+                            expMonth: this.creditCardExpMonth(),
+                            expYear: this.creditCardExpYear()
+                        };
+                    payload = {
+                        cardData: cardData,
+                        userAgent: userAgent,
+                        paymentData: paymentData,
+                        quoteData: quoteData,
+                    };
+                    var serviceUrl = urlBuilder.createUrl('/moneris/checkout/threedSecure', {});
+                    storage.post(
+                        serviceUrl,
+                        JSON.stringify({
+                            'payload': payload
+                        })
+                    ).done(
+                        function (response) {
+                            var obj = JSON.parse(response);
+                            if(obj.authentication){
+                                if (obj.TransStatus === "C" && obj.ChallengeURL && obj.ChallengeData) {
+                                    var form = $('<form id="moneris_3d_form" action="' + obj.ChallengeURL + '" method="post">' +
+                                        '</form>');
+                                    $('body').append(form);
+                                    $('<input>').attr({
+                                        type: 'hidden',
+                                        name: 'creq',
+                                        value: obj.ChallengeData
+                                    }).appendTo('#moneris_3d_form');
+
+                                    form.submit();
+                                }else if (self.redirectAfterPlaceOrder) {
+                                    redirectOnSuccessAction.execute();
+                                }
+                            }else{
+                                if(obj.redirect_url)
+                                    window.location.replace(obj.redirect_url);
+                            }
+                        }
+                    ).always(
+                        function () {
+                            fullScreenLoader.stopLoader();
+                        }
+                    );
+                }
             },
 
             getMailingAddress: function () {
