@@ -1,10 +1,9 @@
 <?xml version="1.0"?>
-
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
-    <event name="payment_method_assign_data">
-		<observer name="tonder_payment_gateway_data_assign" instance="Tonder\Payment\Observer\DataAssignObserver" />
+    <event name="payment_method_assign_data_moneris">
+        <observer name="moneris_gateway_data_assign" instance="Tonder\Payment\Observer\DataAssignObserver" />
     </event>
-    <event name="checkout_submit_all_after">
-        <observer name="tonder_checkout_submit_all_after" instance="Tonder\Payment\Observer\CreateInvoice" />
+    <event name="sales_order_save_commit_after">
+        <observer name="moneris_save_order" instance="Tonder\Payment\Observer\Order\Save"/>
     </event>
 </config>

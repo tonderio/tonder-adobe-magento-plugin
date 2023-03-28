@@ -1,57 +1,75 @@
 <?php
-
 namespace Tonder\Payment\Observer;
 
 use Magento\Framework\Event\Observer;
 use Magento\Payment\Observer\AbstractDataAssignObserver;
+use Magento\Quote\Api\Data\PaymentInterface;
+use Magento\Sales\Api\Data\OrderPaymentInterface;
+use Magento\Framework\Encryption\EncryptorInterface;
 
+/**
+ * Class DataAssignObserver
+ */
 class DataAssignObserver extends AbstractDataAssignObserver
 {
+    const CC_NUMBER = 'cc_number';
+    const CC_CID = 'cc_cid';
+    const CC_CID_ENC = 'cc_cid_enc';
+
     /**
-     * Forward the tonder order_id to create_charge API call
-     *
+     * @var array
+     */
+    protected $additionalInformationList = [
+        self::CC_NUMBER,
+        self::CC_CID,
+        OrderPaymentInterface::CC_TYPE,
+        OrderPaymentInterface::CC_EXP_MONTH,
+        OrderPaymentInterface::CC_EXP_YEAR,
+        'public_hash',
+        'is_us'
+    ];
+
+    /**
      * @param Observer $observer
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function execute(Observer $observer)
+    public function execute(\Magento\Framework\Event\Observer $observer)
     {
-        $method = $this->readMethodArgument($observer);
         $data = $this->readDataArgument($observer);
 
-        $paymentInfo = $method->getInfoInstance();
-        if ($data->getDataByKey('transaction_result') !== null) {
-            $paymentInfo->setAdditionalInformation(
-                'transaction_result',
-                $data->getDataByKey('transaction_result')
-            );
+        $additionalData = $data->getData(PaymentInterface::KEY_ADDITIONAL_DATA);
+        if (!is_array($additionalData)) {
+            return;
         }
-        if ($data->getAdditionalData()) {
-            $additionalData = $data->getAdditionalData();
-            if (isset($additionalData['order_id'])) {
-                $paymentInfo->setAdditionalInformation(
-                    'order_id',
-                    $additionalData['order_id']
-                );
+
+        $paymentInfo = $this->readPaymentModelArgument($observer);
+
+        foreach ($this->additionalInformationList as $additionalInformationKey) {
+            $value = $additionalData[$additionalInformationKey] ?? null;
+
+            if ($value === null) {
+                continue;
             }
-            if (isset($additionalData['order_id'])) {
+
+            if ($additionalInformationKey == self::CC_NUMBER) {
                 $paymentInfo->setAdditionalInformation(
-                    'anti_fraud_metadata',
-                    $additionalData['anti_fraud_metadata']
+                    OrderPaymentInterface::CC_NUMBER_ENC,
+                    $paymentInfo->encrypt($value)
                 );
-                if (isset($additionalData['charge_additional_details'])) {
-                    $paymentInfo->setAdditionalInformation(
-                        'charge_additional_details',
-                        $additionalData['charge_additional_details']
-                    );
-                }
-                if (isset($additionalData['tonder_user_language'])) {
-                    $paymentInfo->setAdditionalInformation(
-                        'tonder_user_language',
-                        $additionalData['tonder_user_language']
-                    );
-                }
+
+                continue;
+            } elseif ($additionalInformationKey == self::CC_CID) {
+                $paymentInfo->setAdditionalInformation(
+                    self::CC_CID_ENC,
+                    $paymentInfo->encrypt($value)
+                );
+
+                continue;
             }
+            $paymentInfo->setAdditionalInformation(
+                $additionalInformationKey,
+                $value
+            );
         }
     }
 }

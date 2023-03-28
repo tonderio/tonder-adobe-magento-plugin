@@ -1,0 +1,12 @@
+<?php /** @var $block Notice */
+
+use Tonder\Payment\Block\Message\Notice;
+
+?>
+<?php if ($block->getNoticeMessage()) : ?>
+    <div class="message-notice"
+         style="margin:0 0 10px;display:block;font-size:1.3rem;background:#fdf0d5;color:#6f4400;padding: 12px 20px 1px 12px;position:relative;">
+        <p><?= $block->escapeHtml(__($block->getNoticeMessage())) ?></p>
+        <?php $block->unSetNoticeMessage() ?>
+    </div>
+<?php endif; ?>

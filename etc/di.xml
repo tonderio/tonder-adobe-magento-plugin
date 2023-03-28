@@ -1,30 +1,205 @@
 <?xml version="1.0"?>
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <type name="Tonder\Payment\Logger\Handler">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <virtualType name="MonerisConfig" type="Tonder\Payment\Model\Config\PaymentConfig">
         <arguments>
-            <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+            <argument name="methodCode" xsi:type="string">moneris</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MonerisVaultConfig" type="Tonder\Payment\Model\Config\PaymentConfig">
+        <arguments>
+            <argument name="methodCode" xsi:type="string">moneris_cc_vault</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MonerisZendHttpClient" type="Tonder\Payment\Gateway\Http\Client\Zend">
+        <arguments>
+            <argument name="converter" xsi:type="object">Tonder\Payment\Gateway\Http\Converter\XmlToArray</argument>
+        </arguments>
+    </virtualType>
+    <type name="Tonder\Payment\Gateway\Command\AuthorizeStrategyCommand">
+        <arguments>
+            <argument name="config" xsi:type="object">MonerisConfig</argument>
         </arguments>
     </type>
-    <type name="Tonder\Payment\Logger\Logger">
+    <type name="Tonder\Payment\Gateway\Command\CaptureStrategyCommand">
         <arguments>
-            <argument name="name" xsi:type="string">TonderLogger</argument>
-            <argument name="handlers"  xsi:type="array">
-                <item name="system" xsi:type="object">Tonder\Payment\Logger\Handler</item>
+            <argument name="config" xsi:type="object">MonerisConfig</argument>
+        </arguments>
+    </type>
+    <type name="Tonder\Payment\Gateway\Request\MerchantDataBuilder">
+        <arguments>
+            <argument name="config" xsi:type="object">MonerisConfig</argument>
+        </arguments>
+    </type>
+    <type name="Tonder\Payment\Gateway\Http\TransferFactory">
+        <arguments>
+            <argument name="config" xsi:type="object">MonerisConfig</argument>
+        </arguments>
+    </type>
+    <type name="Tonder\Payment\Gateway\Response\AVSHandler">
+        <arguments>
+            <argument name="config" xsi:type="object">MonerisConfig</argument>
+        </arguments>
+    </type>
+    <type name="Tonder\Payment\Gateway\Request\AVSDataBuilder">
+        <arguments>
+            <argument name="config" xsi:type="object">MonerisConfig</argument>
+        </arguments>
+    </type>
+    <type name="Tonder\Payment\Gateway\Request\CVDDataBuilder">
+        <arguments>
+            <argument name="config" xsi:type="object">MonerisConfig</argument>
+        </arguments>
+    </type>
+    <type name="Tonder\Payment\Gateway\Request\KountDataBuilder">
+        <arguments>
+            <argument name="config" xsi:type="object">MonerisConfig</argument>
+        </arguments>
+    </type>
+    <type name="Tonder\Payment\Gateway\Request\Vault\AVSDataBuilder">
+        <arguments>
+            <argument name="config" xsi:type="object">MonerisConfig</argument>
+        </arguments>
+    </type>
+    <type name="Tonder\Payment\Gateway\Request\Vault\CVDDataBuilder">
+        <arguments>
+            <argument name="config" xsi:type="object">MonerisConfig</argument>
+        </arguments>
+    </type>
+    <type name="Tonder\Payment\Gateway\Response\CVDHandler">
+        <arguments>
+            <argument name="config" xsi:type="object">MonerisConfig</argument>
+        </arguments>
+    </type>
+    <type name="Tonder\Payment\Gateway\Response\KountHandler">
+        <arguments>
+            <argument name="config" xsi:type="object">MonerisConfig</argument>
+        </arguments>
+    </type>
+    <type name="Tonder\Payment\Model\Method\Adapter">
+        <arguments>
+            <argument name="config" xsi:type="object">MonerisConfig</argument>
+        </arguments>
+    </type>
+    <type name="Tonder\Payment\Controller\Payment\Complete">
+        <arguments>
+            <argument name="config" xsi:type="object">MonerisConfig</argument>
+            <argument name="logger" xsi:type="object">Tonder\Payment\Logger\Logger</argument>
+        </arguments>
+    </type>
+    <virtualType name="MonerisHttpClient" type="Tonder\Payment\Gateway\Http\Client\Zend">
+        <arguments>
+            <argument name="converter" xsi:type="object">Tonder\Payment\Gateway\Http\Converter\XmlToArray</argument>
+        </arguments>
+    </virtualType>
+    <type name="Tonder\Payment\Block\Info">
+        <arguments>
+            <argument name="config" xsi:type="object">MonerisConfig</argument>
+        </arguments>
+    </type>
+    <virtualType name="MonerisFacade" type="Magento\Payment\Model\Method\Adapter">
+        <arguments>
+            <argument name="code" xsi:type="string">moneris</argument>
+            <argument name="formBlockType" xsi:type="string">Magento\Payment\Block\Form\Cc</argument>
+            <argument name="infoBlockType" xsi:type="string">Tonder\Payment\Block\Info</argument>
+            <argument name="valueHandlerPool" xsi:type="object">MonerisValueHandlerPool</argument>
+            <argument name="validatorPool" xsi:type="object">MonerisValidatorPool</argument>
+            <argument name="commandPool" xsi:type="object">MonerisCommandPool</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MonerisValueHandlerPool" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="default" xsi:type="string">MonerisDefaultValueHandler</item>
+                <item name="can_initialize" xsi:type="string">Tonder\Payment\Gateway\Config\CanInitializeHandler</item>
+                <item name="can_use_internal" xsi:type="string">Tonder\Payment\Gateway\Config\CanUseInternalHandler</item>
             </argument>
         </arguments>
+    </virtualType>
+    <virtualType name="MonerisDefaultValueHandler" type="Magento\Payment\Gateway\Config\ConfigValueHandler">
+        <arguments>
+            <argument name="configInterface" xsi:type="object">MonerisConfig</argument>
+        </arguments>
+    </virtualType>
+    <type name="Tonder\Payment\Gateway\Config\CanInitializeHandler">
+        <arguments>
+            <argument name="config" xsi:type="object">MonerisConfig</argument>
+        </arguments>
     </type>
-    <type name="Magento\Sales\Model\Service\InvoiceService">
-        <plugin name="invoice_adjustment_amount_plugin" type="Tonder\Payment\Plugin\Model\Service\InvoiceService"
-                sortOrder="10" disabled="false"  />
+    <type name="Tonder\Payment\Gateway\Config\CanUseInternalHandler">
+        <arguments>
+            <argument name="config" xsi:type="object">MonerisConfig</argument>
+        </arguments>
     </type>
-    <type name="Magento\Payment\Model\MethodList">
-        <plugin name="tonder_gateway_load" type="Tonder\Payment\Plugin\Model\MethodList" sortOrder="10"/>
-    </type>
-    <type name="Magento\Quote\Model\Quote\Address\Total\Shipping">
-        <plugin name="tonder_gateway_shipping_update" type="Tonder\Payment\Plugin\ShippingPlugin" sortOrder="10"/>
-    </type>
-    <type name="Signifyd\Connect\Observer\PreAuth">
-        <plugin name="tonder_track_stop_checkout_process" type="Tonder\Payment\Plugin\SignifydPreAuthPlugin" sortOrder="10"/>
-    </type>
-</config>
+    <virtualType name="MonerisValidatorPool" type="Magento\Payment\Gateway\Validator\ValidatorPool">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="country" xsi:type="string">MonerisCountryValidator</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MonerisCountryValidator" type="Magento\Payment\Gateway\Validator\CountryValidator">
+        <arguments>
+            <argument name="config" xsi:type="object">MonerisConfig</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MonerisCommandPool" type="Magento\Payment\Gateway\Command\CommandPool">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="initialize" xsi:type="string">Tonder\Payment\Gateway\Command\InitializeCommand</item>
+                <item name="verify_card" xsi:type="string">MonerisVerifyCardCommand</item>
+                <item name="vault_verify_card" xsi:type="string">MonerisVaultVerifyCardCommand</item>
+                <item name="check_kount" xsi:type="string">MonerisKountCommand</item>
+                <item name="authorize" xsi:type="string">MonerisAuthorizeStrategyCommand</item>
+                <item name="pre_auth" xsi:type="string">MonerisDirectGatewayCommand</item>
+                <item name="pre_auth_capture" xsi:type="string">MonerisPreAuthCaptureCommand</item>
+                <item name="capture" xsi:type="string">MonerisCaptureStrategyCommand</item>
+                <item name="cancel_order" xsi:type="string">Magento\Payment\Gateway\Command\NullCommand</item>
+                <item name="sale" xsi:type="string">MonerisSaleGatewayCommand</item>
+                <item name="vault_sale" xsi:type="string">MonerisVaultSaleCommand</item>
+                <item name="void" xsi:type="string">MonerisVoidGatewayCommand</item>
+                <item name="refund" xsi:type="string">MonerisRefundGatewayCommand</item>
+                <item name="vault_capture" xsi:type="string">MonerisVaultCaptureCommand</item>
+                <item name="vault_authorize" xsi:type="string">MonerisVaultPreAuthCommand</item>
+                <item name="get_key" xsi:type="string">MonerisGetKeyGatewayCommand</item>
+                <item name="purchase_order" xsi:type="string">Magento\Payment\Gateway\Command\NullCommand</item>
+                <item name="three_d_secure" xsi:type="string">MonerisCavvStrategyCommand</item>
+                <item name="cavv_purchase" xsi:type="string">MonerisPurchaseStrategyCommand</item>
+                <item name="cavv_preauth" xsi:type="string">MonerisPreAuthStrategyCommand</item>
+                <item name="cavv_vault_purchase" xsi:type="string">MonerisCavvVaultPurchaseStrategyCommand</item>
+                <item name="cavv_vault_preauth" xsi:type="string">MonerisCavvVaultPreAuthStrategyCommand</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <!--    Kount-->
+    <virtualType name="MonerisKountCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">MonerisKountBuilder</argument>
+            <argument name="transferFactory" xsi:type="object">MonerisKountTransferFactory</argument>
+            <argument name="client" xsi:type="object">MonerisZendHttpClient</argument>
+            <argument name="handler" xsi:type="object">MonerisKountHandler</argument>
+            <argument name="validator" xsi:type="object">Tonder\Payment\Gateway\Validator\Direct\KountResponseValidator</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MonerisKountBuilder" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="merchant" xsi:type="string">Tonder\Payment\Gateway\Request\MerchantDataBuilder</item>
+                <item name="kount" xsi:type="string">Tonder\Payment\Gateway\Request\KountDataBuilder</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <!--    transferFactory-->
+    <virtualType name="MonerisKountTransferFactory" type="Tonder\Payment\Gateway\Http\TransferFactory">
+        <arguments>
+            <argument name="action" xsi:type="const">Tonder\Payment\Gateway\Request\AbstractDataBuilder::KOUNT_INQUIRY</argument>
+        </arguments>
+    </virtualType>
+    <!--    handler-->
+    <virtualType name="MonerisKountHandler" type="Magento\Payment\Gateway\Response\HandlerChain">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="kount" xsi:type="string">Tonder\Payment\Gateway\Response\KountHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+

@@ -2,21 +2,27 @@
 
 namespace Tonder\Payment\Model\Adminhtml\Source;
 
+use Magento\Framework\Option\ArrayInterface;
 use Magento\Payment\Model\Method\AbstractMethod;
 
-class PaymentAction implements \Magento\Framework\Option\ArrayInterface
+/**
+ * Class PaymentAction provides source for backend payment_action selector
+ */
+class PaymentAction implements ArrayInterface
 {
     /**
-     * Payment action
-     *
-     * @return array[]
+     * {@inheritdoc}
      */
     public function toOptionArray()
     {
         return [
             [
                 'value' => AbstractMethod::ACTION_AUTHORIZE,
-                'label' => __('Authorize')
+                'label' => __('Authorize Only')
+            ],
+            [
+                'value' => AbstractMethod::ACTION_AUTHORIZE_CAPTURE,
+                'label' => __('Authorize and Capture')
             ]
         ];
     }

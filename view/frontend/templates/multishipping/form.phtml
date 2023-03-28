@@ -1,0 +1,34 @@
+<?php
+/** Tonder */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+?>
+
+<?php
+$scriptString = <<<script
+require([
+        'uiLayout',
+        'jquery'
+    ], function (layout, $) {
+        $(function () {
+            var paymentMethodData = {
+                method: 'moneris'
+            };
+            layout([
+                {
+                    component: 'Tonder_Moneris/js/view/payment/method-renderer/multishipping/'
+                        + window.checkoutConfig.payment.moneris.connectionType,
+                    name: 'payment_method_moneris',
+                    method: paymentMethodData.method,
+                    item: paymentMethodData
+                }
+            ]);
+
+            $('body').trigger('contentUpdated');
+        })
+    })
+script;
+?>
+
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
+<!-- ko template: getTemplate() --><!-- /ko -->
+
