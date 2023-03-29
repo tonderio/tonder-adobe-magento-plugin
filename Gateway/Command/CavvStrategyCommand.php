@@ -87,51 +87,8 @@ class CavvStrategyCommand implements CommandInterface
         ContextHelper::assertOrderPayment($payment);
         $avsEnable = $this->config->getValue('avs_enable');
         $cvdEnable = $this->config->getValue('cvd_enable');
-        $threeDSecureEnable = $this->config->getValue('three_d_secure');
         $connectType = $this->config->getValue('connection_type');
 
-        if ($threeDSecureEnable && $connectType == ConnectionType::CONNECTION_TYPE_DIRECT) {
-            if (($avsEnable || $cvdEnable)) {
-                if (in_array($payment->getAdditionalInformation('cc_type'), ['VI', 'MC', 'DI', 'AE'])) {
-                    $this->commandPool
-                        ->get(self::VERIFY_CARD)
-                        ->execute($commandSubject);
-                } elseif ($payment->getAdditionalInformation('public_hash')
-                    && empty($payment->getAdditionalInformation('cc_type'))) {
-                    $this->commandPool
-                        ->get(self::VERIFY_CARD_VAULT)
-                        ->execute($commandSubject);
-                }
-            }
-            if ($this->config->getValue('kount_enable')
-                && $this->config->getValue('connection_type') == ConnectionType::CONNECTION_TYPE_DIRECT
-                && !$payment->getAdditionalInformation('kount_transaction_id')) {
-                $this->commandPool
-                    ->get(self::CHECK_KOUNT)
-                    ->execute($commandSubject);
-            }
-            $paymentAction = $payment->getMethodInstance()->getConfigPaymentAction();
-
-            if ($paymentAction == 'authorize') {
-                if ($payment->getAdditionalInformation('public_hash')) {
-                    return $this->commandPool
-                        ->get(self::CAVV_VAULT_AUTHORIZE)
-                        ->execute($commandSubject);
-                }
-                return $this->commandPool
-                    ->get(self::CAVV_PREAUTH)
-                    ->execute($commandSubject);
-            } else {
-                if ($payment->getAdditionalInformation('public_hash')) {
-                    return $this->commandPool
-                        ->get(self::CAVV_VAULT_PURCHASE)
-                        ->execute($commandSubject);
-                }
-                return $this->commandPool
-                    ->get(self::CAVV_PURCHASE)
-                    ->execute($commandSubject);
-            }
-        }
         return $this->commandPool
             ->get(self::SALE)
             ->execute($commandSubject);

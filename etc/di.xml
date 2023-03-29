@@ -1,97 +1,97 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <virtualType name="MonerisConfig" type="Tonder\Payment\Model\Config\PaymentConfig">
+    <virtualType name="MonerisConfig" type="Magenest\Moneris\Model\Config\PaymentConfig">
         <arguments>
             <argument name="methodCode" xsi:type="string">moneris</argument>
         </arguments>
     </virtualType>
-    <virtualType name="MonerisVaultConfig" type="Tonder\Payment\Model\Config\PaymentConfig">
+    <virtualType name="MonerisVaultConfig" type="Magenest\Moneris\Model\Config\PaymentConfig">
         <arguments>
             <argument name="methodCode" xsi:type="string">moneris_cc_vault</argument>
         </arguments>
     </virtualType>
-    <virtualType name="MonerisZendHttpClient" type="Tonder\Payment\Gateway\Http\Client\Zend">
+    <virtualType name="MonerisZendHttpClient" type="Magenest\Moneris\Gateway\Http\Client\Zend">
         <arguments>
-            <argument name="converter" xsi:type="object">Tonder\Payment\Gateway\Http\Converter\XmlToArray</argument>
+            <argument name="converter" xsi:type="object">Magenest\Moneris\Gateway\Http\Converter\XmlToArray</argument>
         </arguments>
     </virtualType>
-    <type name="Tonder\Payment\Gateway\Command\AuthorizeStrategyCommand">
+    <type name="Magenest\Moneris\Gateway\Command\AuthorizeStrategyCommand">
         <arguments>
             <argument name="config" xsi:type="object">MonerisConfig</argument>
         </arguments>
     </type>
-    <type name="Tonder\Payment\Gateway\Command\CaptureStrategyCommand">
+    <type name="Magenest\Moneris\Gateway\Command\CaptureStrategyCommand">
         <arguments>
             <argument name="config" xsi:type="object">MonerisConfig</argument>
         </arguments>
     </type>
-    <type name="Tonder\Payment\Gateway\Request\MerchantDataBuilder">
+    <type name="Magenest\Moneris\Gateway\Request\MerchantDataBuilder">
         <arguments>
             <argument name="config" xsi:type="object">MonerisConfig</argument>
         </arguments>
     </type>
-    <type name="Tonder\Payment\Gateway\Http\TransferFactory">
+    <type name="Magenest\Moneris\Gateway\Http\TransferFactory">
         <arguments>
             <argument name="config" xsi:type="object">MonerisConfig</argument>
         </arguments>
     </type>
-    <type name="Tonder\Payment\Gateway\Response\AVSHandler">
+    <type name="Magenest\Moneris\Gateway\Response\AVSHandler">
         <arguments>
             <argument name="config" xsi:type="object">MonerisConfig</argument>
         </arguments>
     </type>
-    <type name="Tonder\Payment\Gateway\Request\AVSDataBuilder">
+    <type name="Magenest\Moneris\Gateway\Request\AVSDataBuilder">
         <arguments>
             <argument name="config" xsi:type="object">MonerisConfig</argument>
         </arguments>
     </type>
-    <type name="Tonder\Payment\Gateway\Request\CVDDataBuilder">
+    <type name="Magenest\Moneris\Gateway\Request\CVDDataBuilder">
         <arguments>
             <argument name="config" xsi:type="object">MonerisConfig</argument>
         </arguments>
     </type>
-    <type name="Tonder\Payment\Gateway\Request\KountDataBuilder">
+    <type name="Magenest\Moneris\Gateway\Request\KountDataBuilder">
         <arguments>
             <argument name="config" xsi:type="object">MonerisConfig</argument>
         </arguments>
     </type>
-    <type name="Tonder\Payment\Gateway\Request\Vault\AVSDataBuilder">
+    <type name="Magenest\Moneris\Gateway\Request\Vault\AVSDataBuilder">
         <arguments>
             <argument name="config" xsi:type="object">MonerisConfig</argument>
         </arguments>
     </type>
-    <type name="Tonder\Payment\Gateway\Request\Vault\CVDDataBuilder">
+    <type name="Magenest\Moneris\Gateway\Request\Vault\CVDDataBuilder">
         <arguments>
             <argument name="config" xsi:type="object">MonerisConfig</argument>
         </arguments>
     </type>
-    <type name="Tonder\Payment\Gateway\Response\CVDHandler">
+    <type name="Magenest\Moneris\Gateway\Response\CVDHandler">
         <arguments>
             <argument name="config" xsi:type="object">MonerisConfig</argument>
         </arguments>
     </type>
-    <type name="Tonder\Payment\Gateway\Response\KountHandler">
+    <type name="Magenest\Moneris\Gateway\Response\KountHandler">
         <arguments>
             <argument name="config" xsi:type="object">MonerisConfig</argument>
         </arguments>
     </type>
-    <type name="Tonder\Payment\Model\Method\Adapter">
+    <type name="Magenest\Moneris\Model\Method\Adapter">
         <arguments>
             <argument name="config" xsi:type="object">MonerisConfig</argument>
         </arguments>
     </type>
-    <type name="Tonder\Payment\Controller\Payment\Complete">
+    <type name="Magenest\Moneris\Controller\Payment\Complete">
         <arguments>
             <argument name="config" xsi:type="object">MonerisConfig</argument>
-            <argument name="logger" xsi:type="object">Tonder\Payment\Logger\Logger</argument>
+            <argument name="logger" xsi:type="object">Magenest\Moneris\Logger\Logger</argument>
         </arguments>
     </type>
-    <virtualType name="MonerisHttpClient" type="Tonder\Payment\Gateway\Http\Client\Zend">
+    <virtualType name="MonerisHttpClient" type="Magenest\Moneris\Gateway\Http\Client\Zend">
         <arguments>
-            <argument name="converter" xsi:type="object">Tonder\Payment\Gateway\Http\Converter\XmlToArray</argument>
+            <argument name="converter" xsi:type="object">Magenest\Moneris\Gateway\Http\Converter\XmlToArray</argument>
         </arguments>
     </virtualType>
-    <type name="Tonder\Payment\Block\Info">
+    <type name="Magenest\Moneris\Block\Info">
         <arguments>
             <argument name="config" xsi:type="object">MonerisConfig</argument>
         </arguments>
@@ -100,7 +100,7 @@
         <arguments>
             <argument name="code" xsi:type="string">moneris</argument>
             <argument name="formBlockType" xsi:type="string">Magento\Payment\Block\Form\Cc</argument>
-            <argument name="infoBlockType" xsi:type="string">Tonder\Payment\Block\Info</argument>
+            <argument name="infoBlockType" xsi:type="string">Magenest\Moneris\Block\Info</argument>
             <argument name="valueHandlerPool" xsi:type="object">MonerisValueHandlerPool</argument>
             <argument name="validatorPool" xsi:type="object">MonerisValidatorPool</argument>
             <argument name="commandPool" xsi:type="object">MonerisCommandPool</argument>
@@ -110,8 +110,8 @@
         <arguments>
             <argument name="handlers" xsi:type="array">
                 <item name="default" xsi:type="string">MonerisDefaultValueHandler</item>
-                <item name="can_initialize" xsi:type="string">Tonder\Payment\Gateway\Config\CanInitializeHandler</item>
-                <item name="can_use_internal" xsi:type="string">Tonder\Payment\Gateway\Config\CanUseInternalHandler</item>
+                <item name="can_initialize" xsi:type="string">Magenest\Moneris\Gateway\Config\CanInitializeHandler</item>
+                <item name="can_use_internal" xsi:type="string">Magenest\Moneris\Gateway\Config\CanUseInternalHandler</item>
             </argument>
         </arguments>
     </virtualType>
@@ -120,12 +120,12 @@
             <argument name="configInterface" xsi:type="object">MonerisConfig</argument>
         </arguments>
     </virtualType>
-    <type name="Tonder\Payment\Gateway\Config\CanInitializeHandler">
+    <type name="Magenest\Moneris\Gateway\Config\CanInitializeHandler">
         <arguments>
             <argument name="config" xsi:type="object">MonerisConfig</argument>
         </arguments>
     </type>
-    <type name="Tonder\Payment\Gateway\Config\CanUseInternalHandler">
+    <type name="Magenest\Moneris\Gateway\Config\CanUseInternalHandler">
         <arguments>
             <argument name="config" xsi:type="object">MonerisConfig</argument>
         </arguments>
@@ -145,7 +145,7 @@
     <virtualType name="MonerisCommandPool" type="Magento\Payment\Gateway\Command\CommandPool">
         <arguments>
             <argument name="commands" xsi:type="array">
-                <item name="initialize" xsi:type="string">Tonder\Payment\Gateway\Command\InitializeCommand</item>
+                <item name="initialize" xsi:type="string">Magenest\Moneris\Gateway\Command\InitializeCommand</item>
                 <item name="verify_card" xsi:type="string">MonerisVerifyCardCommand</item>
                 <item name="vault_verify_card" xsi:type="string">MonerisVaultVerifyCardCommand</item>
                 <item name="check_kount" xsi:type="string">MonerisKountCommand</item>
@@ -177,29 +177,578 @@
             <argument name="transferFactory" xsi:type="object">MonerisKountTransferFactory</argument>
             <argument name="client" xsi:type="object">MonerisZendHttpClient</argument>
             <argument name="handler" xsi:type="object">MonerisKountHandler</argument>
-            <argument name="validator" xsi:type="object">Tonder\Payment\Gateway\Validator\Direct\KountResponseValidator</argument>
+            <argument name="validator" xsi:type="object">Magenest\Moneris\Gateway\Validator\Direct\KountResponseValidator</argument>
         </arguments>
     </virtualType>
     <virtualType name="MonerisKountBuilder" type="Magento\Payment\Gateway\Request\BuilderComposite">
         <arguments>
             <argument name="builders" xsi:type="array">
-                <item name="merchant" xsi:type="string">Tonder\Payment\Gateway\Request\MerchantDataBuilder</item>
-                <item name="kount" xsi:type="string">Tonder\Payment\Gateway\Request\KountDataBuilder</item>
+                <item name="merchant" xsi:type="string">Magenest\Moneris\Gateway\Request\MerchantDataBuilder</item>
+                <item name="kount" xsi:type="string">Magenest\Moneris\Gateway\Request\KountDataBuilder</item>
             </argument>
         </arguments>
     </virtualType>
     <!--    transferFactory-->
-    <virtualType name="MonerisKountTransferFactory" type="Tonder\Payment\Gateway\Http\TransferFactory">
+    <virtualType name="MonerisKountTransferFactory" type="Magenest\Moneris\Gateway\Http\TransferFactory">
         <arguments>
-            <argument name="action" xsi:type="const">Tonder\Payment\Gateway\Request\AbstractDataBuilder::KOUNT_INQUIRY</argument>
+            <argument name="action" xsi:type="const">Magenest\Moneris\Gateway\Request\AbstractDataBuilder::KOUNT_INQUIRY</argument>
         </arguments>
     </virtualType>
     <!--    handler-->
     <virtualType name="MonerisKountHandler" type="Magento\Payment\Gateway\Response\HandlerChain">
         <arguments>
             <argument name="handlers" xsi:type="array">
-                <item name="kount" xsi:type="string">Tonder\Payment\Gateway\Response\KountHandler</item>
+                <item name="kount" xsi:type="string">Magenest\Moneris\Gateway\Response\KountHandler</item>
             </argument>
         </arguments>
     </virtualType>
 
+    <!--    End Kount-->
+
+    <!-- Vault Authorization&Capture command -->
+    <virtualType name="MonerisVaultSaleCommand" type="MonerisVaultCaptureCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">MonerisVaultSaleRequest</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MonerisVaultSaleRequest" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="authorize" xsi:type="string">MonerisVaultCaptureRequest</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Start implement 3D Secure   -->
+
+    <virtualType name="MonerisCavvStrategyCommand" type="Magenest\Moneris\Gateway\Command\CavvStrategyCommand">
+        <arguments>
+            <argument name="commandPool" xsi:type="object">MonerisCommandPool</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="MonerisPurchaseStrategyCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">MonerisDataBuilder</argument>
+            <argument name="transferFactory" xsi:type="object">MonerisCavvTransferFactory</argument>
+            <argument name="client" xsi:type="object">MonerisZendHttpClient</argument>
+            <argument name="handler" xsi:type="object">MonerisCaptureResponseHandler</argument>
+            <argument name="commandPool" xsi:type="object">MonerisCommandPool</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MonerisCavvTransferFactory" type="Magenest\Moneris\Gateway\Http\TransferFactory">
+        <arguments>
+            <argument name="action" xsi:type="const">Magenest\Moneris\Gateway\Request\AbstractDataBuilder::CAVV_PURCHASE</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magenest\Moneris\Controller\Order\AbstractPostBack">
+        <arguments>
+            <argument name="config" xsi:type="object">MonerisConfig</argument>
+            <argument name="commandPool" xsi:type="object">MonerisCommandPool</argument>
+        </arguments>
+    </type>
+    <type name="Magenest\Moneris\Gateway\Command\CavvStrategyCommand">
+        <arguments>
+            <argument name="config" xsi:type="object">MonerisConfig</argument>
+        </arguments>
+    </type>
+    <!-- Start preAuth with 3d secure   -->
+    <virtualType name="MonerisPreAuthStrategyCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">MonerisDataBuilder</argument>
+            <argument name="transferFactory" xsi:type="object">MonerisPreAuthStrategyTransferFactory</argument>
+            <argument name="client" xsi:type="object">MonerisZendHttpClient</argument>
+            <argument name="handler" xsi:type="object">MonerisCaptureResponseHandler</argument>
+            <argument name="validator" xsi:type="object">Magenest\Moneris\Gateway\Validator\Direct\ResponseValidator</argument>
+            <argument name="commandPool" xsi:type="object">MonerisCommandPool</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MonerisPreAuthStrategyTransferFactory" type="Magenest\Moneris\Gateway\Http\TransferFactory">
+        <arguments>
+            <argument name="action" xsi:type="const">Magenest\Moneris\Gateway\Request\AbstractDataBuilder::CAVV_PREAUTH</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MonerisCavvVaultPurchaseStrategyCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">MonerisVaultCaptureRequest</argument>
+            <argument name="transferFactory" xsi:type="object">MonerisCavvVaultPurchaseTransferFactory</argument>
+            <argument name="client" xsi:type="object">MonerisHttpClient</argument>
+            <argument name="validator" xsi:type="object">Magenest\Moneris\Gateway\Validator\VaultDataValidator</argument>
+            <argument name="handler" xsi:type="object">MonerisVaultResponseHandler</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MonerisCavvVaultPurchaseTransferFactory" type="Magenest\Moneris\Gateway\Http\TransferFactory">
+        <arguments>
+            <argument name="action" xsi:type="const">Magenest\Moneris\Gateway\Request\AbstractDataBuilder::CAVV_VAULT_PURCHASE</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MonerisCavvVaultPreAuthStrategyCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">MonerisVaultCaptureRequest</argument>
+            <argument name="transferFactory" xsi:type="object">MonerisCavvVaultPreAuthTransferFactory</argument>
+            <argument name="client" xsi:type="object">MonerisHttpClient</argument>
+            <argument name="validator" xsi:type="object">Magenest\Moneris\Gateway\Validator\VaultDataValidator</argument>
+            <argument name="handler" xsi:type="object">MonerisVaultResponseHandler</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MonerisCavvVaultPreAuthTransferFactory" type="Magenest\Moneris\Gateway\Http\TransferFactory">
+        <arguments>
+            <argument name="action" xsi:type="const">Magenest\Moneris\Gateway\Request\AbstractDataBuilder::CAVV_VAULT_PREAUTH</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- End preAuth with 3d secure   -->
+    <!-- End implement 3D Secure  -->
+    <!-- Start Authorize Command -->
+    <virtualType name="MonerisVerifyCardCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">MonerisVerifyCardBuilder</argument>
+            <argument name="transferFactory" xsi:type="object">MonerisVerifyCardTransferFactory</argument>
+            <argument name="client" xsi:type="object">MonerisZendHttpClient</argument>
+            <argument name="handler" xsi:type="object">MonerisCardVerifyHandler</argument>
+            <argument name="validator" xsi:type="object">Magenest\Moneris\Gateway\Validator\Direct\VerifyCardResponseValidator</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MonerisVaultVerifyCardCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">MonerisVaultVerifyCardBuilder</argument>
+            <argument name="transferFactory" xsi:type="object">MonerisVaultVerifyCardTransferFactory</argument>
+            <argument name="client" xsi:type="object">MonerisZendHttpClient</argument>
+            <argument name="handler" xsi:type="object">MonerisCardVerifyHandler</argument>
+            <argument name="validator" xsi:type="object">Magenest\Moneris\Gateway\Validator\Direct\VerifyCardResponseValidator</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MonerisAuthorizeStrategyCommand" type="Magenest\Moneris\Gateway\Command\AuthorizeStrategyCommand">
+        <arguments>
+            <argument name="commandPool" xsi:type="object">MonerisCommandPool</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MonerisDirectGatewayCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">MonerisDataBuilder</argument>
+            <argument name="transferFactory" xsi:type="object">MonerisAuthorizeTransferFactory</argument>
+            <argument name="client" xsi:type="object">MonerisZendHttpClient</argument>
+            <argument name="handler" xsi:type="object">MonerisDirectResponseHandler</argument>
+            <argument name="validator" xsi:type="object">Magenest\Moneris\Gateway\Validator\Direct\ResponseValidator</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MonerisVerifyCardBuilder" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="merchant" xsi:type="string">Magenest\Moneris\Gateway\Request\MerchantDataBuilder</item>
+                <item name="card_details" xsi:type="string">Magenest\Moneris\Gateway\Request\CardDetailsDataBuilder</item>
+                <item name="transaction" xsi:type="string">Magenest\Moneris\Gateway\Request\VerificationCardTransactionDataBuilder</item>
+                <item name="avs" xsi:type="string">Magenest\Moneris\Gateway\Request\AVSDataBuilder</item>
+                <item name="cvd" xsi:type="string">Magenest\Moneris\Gateway\Request\CVDDataBuilder</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MonerisVaultVerifyCardBuilder" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="merchant" xsi:type="string">Magenest\Moneris\Gateway\Request\MerchantDataBuilder</item>
+                <item name="transaction" xsi:type="string">Magenest\Moneris\Gateway\Request\Vault\VerificationCardTransactionDataBuilder</item>
+                <item name="avs" xsi:type="string">Magenest\Moneris\Gateway\Request\AVSDataBuilder</item>
+                <item name="cvd" xsi:type="string">Magenest\Moneris\Gateway\Request\CVDDataBuilder</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="MonerisDataBuilder" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="merchant" xsi:type="string">Magenest\Moneris\Gateway\Request\MerchantDataBuilder</item>
+                <item name="card_details" xsi:type="string">Magenest\Moneris\Gateway\Request\CardDetailsDataBuilder</item>
+                <item name="transaction" xsi:type="string">Magenest\Moneris\Gateway\Request\TransactionDataBuilder</item>
+                <item name="amount" xsi:type="string">Magenest\Moneris\Gateway\Request\AmountDataBuilder</item>
+                <item name="avs" xsi:type="string">Magenest\Moneris\Gateway\Request\AVSDataBuilder</item>
+                <item name="cvd" xsi:type="string">Magenest\Moneris\Gateway\Request\CVDDataBuilder</item>
+                <item name="customer" xsi:type="string">Magenest\Moneris\Gateway\Request\CustomerDataBuilder</item>
+                <item name="billing_address" xsi:type="string">Magenest\Moneris\Gateway\Request\BillingAddressDataBuilder</item>
+                <item name="shipping_address" xsi:type="string">Magenest\Moneris\Gateway\Request\ShippingAddressDataBuilder</item>
+                <item name="items" xsi:type="string">Magenest\Moneris\Gateway\Request\ItemsDataBuilder</item>
+                <item name="cavv" xsi:type="string">Magenest\Moneris\Gateway\Request\CavvDataBuilder</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MonerisVerifyCardTransferFactory" type="Magenest\Moneris\Gateway\Http\TransferFactory">
+        <arguments>
+            <argument name="action" xsi:type="const">Magenest\Moneris\Gateway\Request\AbstractDataBuilder::CARD_VERIFICATION</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MonerisVaultVerifyCardTransferFactory" type="Magenest\Moneris\Gateway\Http\TransferFactory">
+        <arguments>
+            <argument name="action" xsi:type="const">Magenest\Moneris\Gateway\Request\AbstractDataBuilder::CARD_VERIFICATION_VAULT</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MonerisAuthorizeTransferFactory" type="Magenest\Moneris\Gateway\Http\TransferFactory">
+        <arguments>
+            <argument name="action" xsi:type="const">Magenest\Moneris\Gateway\Request\AbstractDataBuilder::AUTHORIZE</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MonerisDirectResponseHandler" type="Magento\Payment\Gateway\Response\HandlerChain">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="payment_details" xsi:type="string">Magenest\Moneris\Gateway\Response\PaymentDetailsHandler</item>
+                <item name="response_messages" xsi:type="string">Magenest\Moneris\Gateway\Response\ResponseMessagesHandler</item>
+                <item name="card_details" xsi:type="string">Magenest\Moneris\Gateway\Response\Direct\CardDetailsHandler</item>
+                <item name="avs" xsi:type="string">Magenest\Moneris\Gateway\Response\AVSHandler</item>
+                <item name="cvd" xsi:type="string">Magenest\Moneris\Gateway\Response\CVDHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MonerisCardVerifyHandler" type="Magento\Payment\Gateway\Response\HandlerChain">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="avs" xsi:type="string">Magenest\Moneris\Gateway\Response\AVSHandler</item>
+                <item name="cvd" xsi:type="string">Magenest\Moneris\Gateway\Response\CVDHandler</item>
+                <item name="response_messages" xsi:type="string">Magenest\Moneris\Gateway\Response\ResponseMessagesHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <!-- End Authorize Command -->
+
+    <!-- Start Capture Pre Capture Command -->
+    <virtualType name="MonerisPreAuthCaptureCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">MonerisCaptureDataBuilder</argument>
+            <argument name="transferFactory" xsi:type="object">MonerisPreAuthTransferFactory</argument>
+            <argument name="client" xsi:type="object">MonerisHttpClient</argument>
+            <argument name="validator" xsi:type="object">Magenest\Moneris\Gateway\Validator\TransactionCaptureValidator</argument>
+            <argument name="handler" xsi:type="object">MonerisPreAuthResponseHandler</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MonerisPreAuthTransferFactory" type="Magenest\Moneris\Gateway\Http\TransferFactory">
+        <arguments>
+            <argument name="action" xsi:type="const">Magenest\Moneris\Gateway\Request\AbstractDataBuilder::PRE_AUTH_CAPTURE</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MonerisCaptureDataBuilder" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="merchant" xsi:type="string">Magenest\Moneris\Gateway\Request\MerchantDataBuilder</item>
+                <item name="transaction" xsi:type="string">Magenest\Moneris\Gateway\Request\TransactionDataBuilder</item>
+                <item name="transaction_id" xsi:type="string">Magenest\Moneris\Gateway\Request\TransactionIdDataBuilder</item>
+                <item name="comp_amount" xsi:type="string">Magenest\Moneris\Gateway\Request\CompAmountDataBuilder</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MonerisPreAuthResponseHandler" type="Magento\Payment\Gateway\Response\HandlerChain">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="response_messages" xsi:type="string">Magenest\Moneris\Gateway\Response\ResponseMessagesHandler</item>
+                <item name="card_details" xsi:type="string">Magenest\Moneris\Gateway\Response\TransactionCaptureHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <!-- End Capture Pre Capture Command -->
+
+    <!-- Start Direct Capture(Sale) Command -->
+    <virtualType name="MonerisCaptureStrategyCommand" type="Magenest\Moneris\Gateway\Command\CaptureStrategyCommand">
+        <arguments>
+            <argument name="commandPool" xsi:type="object">MonerisCommandPool</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MonerisSaleGatewayCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">MonerisDataBuilder</argument>
+            <argument name="transferFactory" xsi:type="object">MonerisSaleTransferFactory</argument>
+            <argument name="client" xsi:type="object">MonerisZendHttpClient</argument>
+            <argument name="handler" xsi:type="object">MonerisCaptureResponseHandler</argument>
+            <argument name="validator" xsi:type="object">Magenest\Moneris\Gateway\Validator\Direct\ResponseValidator</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MonerisSaleTransferFactory" type="Magenest\Moneris\Gateway\Http\TransferFactory">
+        <arguments>
+            <argument name="action" xsi:type="const">Magenest\Moneris\Gateway\Request\AbstractDataBuilder::PURCHASE</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MonerisCaptureResponseHandler" type="Magento\Payment\Gateway\Response\HandlerChain">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="payment_details" xsi:type="string">Magenest\Moneris\Gateway\Response\PaymentDetailsHandler</item>
+                <item name="response_messages" xsi:type="string">Magenest\Moneris\Gateway\Response\ResponseMessagesHandler</item>
+                <item name="card_details" xsi:type="string">Magenest\Moneris\Gateway\Response\Direct\CardDetailsHandler</item>
+                <item name="avs" xsi:type="string">Magenest\Moneris\Gateway\Response\AVSHandler</item>
+                <item name="cvd" xsi:type="string">Magenest\Moneris\Gateway\Response\CVDHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <!-- End Capture Command -->
+
+    <!-- Start Void Command  @TODO-->
+    <virtualType name="MonerisVoidGatewayCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">MonerisVoidDataBuilder</argument>
+            <argument name="transferFactory" xsi:type="object">MonerisVoidTransferFactory</argument>
+            <argument name="client" xsi:type="object">MonerisHttpClient</argument>
+            <argument name="validator" xsi:type="object">Magenest\Moneris\Gateway\Validator\VoidValidator</argument>
+            <argument name="handler" xsi:type="object">Magenest\Moneris\Gateway\Response\TransactionVoidHandler</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MonerisVoidTransferFactory" type="Magenest\Moneris\Gateway\Http\TransferFactory">
+        <arguments>
+            <argument name="action" xsi:type="const">Magenest\Moneris\Gateway\Request\AbstractDataBuilder::VOID</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MonerisVoidDataBuilder" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="merchant" xsi:type="string">Magenest\Moneris\Gateway\Request\MerchantDataBuilder</item>
+                <item name="transaction" xsi:type="string">Magenest\Moneris\Gateway\Request\TransactionDataBuilder</item>
+                <item name="transaction_id" xsi:type="string">Magenest\Moneris\Gateway\Request\TransactionIdDataBuilder</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <!-- End Void Command -->
+
+    <!-- Start Refund Command -->
+    <virtualType name="MonerisRefundGatewayCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">MonerisRefundDataBuilder</argument>
+            <argument name="transferFactory" xsi:type="object">MonerisRefundTransferFactory</argument>
+            <argument name="client" xsi:type="object">MonerisHttpClient</argument>
+            <argument name="validator" xsi:type="object">Magenest\Moneris\Gateway\Validator\RefundValidator</argument>
+            <argument name="handler" xsi:type="object">MonerisRefundResponseHandler</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MonerisRefundTransferFactory" type="Magenest\Moneris\Gateway\Http\TransferFactory">
+        <arguments>
+            <argument name="action" xsi:type="const">Magenest\Moneris\Gateway\Request\AbstractDataBuilder::REFUND</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MonerisRefundDataBuilder" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="merchant" xsi:type="string">Magenest\Moneris\Gateway\Request\MerchantDataBuilder</item>
+                <item name="transaction_id" xsi:type="string">Magenest\Moneris\Gateway\Request\TransactionIdDataBuilder</item>
+                <item name="transaction" xsi:type="string">Magenest\Moneris\Gateway\Request\TransactionDataBuilder</item>
+                <item name="amount" xsi:type="string">Magenest\Moneris\Gateway\Request\RefundAmountDataBuilder</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MonerisRefundResponseHandler" type="Magento\Payment\Gateway\Response\HandlerChain">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="response_messages" xsi:type="string">Magenest\Moneris\Gateway\Response\ResponseMessagesHandler</item>
+                <item name="refund" xsi:type="string">Magenest\Moneris\Gateway\Response\TransactionRefundHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magenest\Moneris\Gateway\Helper\RefundHelper">
+        <arguments>
+            <argument name="transferFactory" xsi:type="object">MonerisRefundTransferFactory</argument>
+            <argument name="client" xsi:type="object">MonerisHttpClient</argument>
+            <argument name="config" xsi:type="object">MonerisConfig</argument>
+        </arguments>
+    </type>
+    <!-- End Refund Command -->
+
+    <!-- Moneris NET -->
+    <virtualType name="MonerisNetFacade" type="Magento\Payment\Model\Method\Adapter">
+        <arguments>
+            <argument name="code" xsi:type="string">moneris</argument>
+            <argument name="formBlockType" xsi:type="string">Magento\Payment\Block\Form\Cc</argument>
+            <argument name="infoBlockType" xsi:type="string">Magenest\Moneris\Block\Info</argument>
+            <argument name="valueHandlerPool" xsi:type="object">MonerisValueHandlerPool</argument>
+            <argument name="validatorPool" xsi:type="object">MonerisValidatorPool</argument>
+            <argument name="commandPool" xsi:type="object">MonerisNetCommandPool</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MonerisNetCommandPool" type="Magento\Payment\Gateway\Command\CommandPool">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="initialize" xsi:type="string">Magenest\Moneris\Gateway\Command\InitializeCommand</item>
+                <item name="authorize" xsi:type="string">Magento\Payment\Gateway\Command\NullCommand</item>
+                <item name="capture" xsi:type="string">MonerisNetCaptureStrategyCommand</item>
+                <item name="sale" xsi:type="string">Magento\Payment\Gateway\Command\NullCommand</item>
+                <item name="pre_auth_capture" xsi:type="string">MonerisPreAuthCaptureCommand</item>
+                <item name="complete" xsi:type="string">Magenest\Moneris\Gateway\Command\Net\CompleteCommand</item>
+                <item name="cancel_order" xsi:type="string">Magenest\Moneris\Gateway\Command\Net\CancelOrderCommand</item>
+                <item name="void" xsi:type="string">MonerisVoidGatewayCommand</item>
+                <item name="refund" xsi:type="string">MonerisRefundGatewayCommand</item>
+                <item name="get_key" xsi:type="string">MonerisGetKeyGatewayCommand</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MonerisNetCaptureStrategyCommand" type="Magenest\Moneris\Gateway\Command\CaptureStrategyCommand">
+        <arguments>
+            <argument name="commandPool" xsi:type="object">MonerisNetCommandPool</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magenest\Moneris\Gateway\Command\Net\UpdateDetailsCommand">
+        <arguments>
+            <argument name="config" xsi:type="object">MonerisConfig</argument>
+            <argument name="validator" xsi:type="object">Magenest\Moneris\Gateway\Validator\Net\UpdateDetailsValidator</argument>
+            <argument name="handler" xsi:type="object">Magenest\Moneris\Gateway\Response\Net\UpdateDetailsHandler</argument>
+            <argument name="validatorUS" xsi:type="object">Magenest\Moneris\Gateway\Validator\Net\UpdateDetailsValidatorUS</argument>
+            <argument name="handlerUS" xsi:type="object">Magenest\Moneris\Gateway\Response\Net\UpdateDetailsHandlerUS</argument>
+        </arguments>
+    </type>
+    <type name="Magenest\Moneris\Gateway\Command\Net\UpdateOrderCommand">
+        <arguments>
+            <argument name="config" xsi:type="object">MonerisConfig</argument>
+        </arguments>
+    </type>
+    <!-- End Moneris NET -->
+    <type name="Magento\Config\Block\System\Config\Form\Field">
+        <plugin name="moneris_form_field_attribute_plugin" type="Magenest\Moneris\Plugin\System\Config\FormFieldPlugin" sortOrder="0"/>
+    </type>
+
+    <!-- Configuration for Vault Capture payments -->
+    <virtualType name="MonerisVaultPaymentConfig" type="Magenest\Moneris\Model\Config\PaymentConfig">
+        <arguments>
+            <argument name="methodCode" xsi:type="const">Magenest\Moneris\Gateway\Request\AbstractDataBuilder::CC_VAULT_CODE</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MonerisVaultPaymentValueHandler" type="VaultPaymentDefaultValueHandler">
+        <arguments>
+            <argument name="configInterface" xsi:type="object">MonerisVaultPaymentConfig</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MonerisVaultPaymentValueHandlerPool" type="VaultPaymentValueHandlerPool">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="default" xsi:type="string">MonerisVaultPaymentValueHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MonerisCreditCardVaultFacade" type="Magento\Vault\Model\Method\Vault">
+        <arguments>
+            <argument name="config" xsi:type="object">MonerisVaultPaymentConfig</argument>
+            <argument name="valueHandlerPool" xsi:type="object">MonerisVaultPaymentValueHandlerPool</argument>
+            <argument name="vaultProvider" xsi:type="object">MonerisFacade</argument>
+            <argument name="code" xsi:type="const">Magenest\Moneris\Gateway\Request\AbstractDataBuilder::CC_VAULT_CODE</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MonerisVaultCaptureCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">MonerisVaultCaptureRequest</argument>
+            <argument name="transferFactory" xsi:type="object">MonerisVaultCaptureTransferFactory</argument>
+            <argument name="client" xsi:type="object">MonerisHttpClient</argument>
+            <argument name="validator" xsi:type="object">Magenest\Moneris\Gateway\Validator\VaultDataValidator</argument>
+            <argument name="handler" xsi:type="object">MonerisVaultResponseHandler</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MonerisVaultCaptureTransferFactory" type="Magenest\Moneris\Gateway\Http\TransferFactory">
+        <arguments>
+            <argument name="action" xsi:type="const">Magenest\Moneris\Gateway\Request\AbstractDataBuilder::VAULT_CAPTURE</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MonerisVaultCaptureRequest" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="merchant" xsi:type="string">Magenest\Moneris\Gateway\Request\MerchantDataBuilder</item>
+                <item name="vault_details" xsi:type="string">Magenest\Moneris\Gateway\Request\VaultDetailsDataBuilder</item>
+                <item name="amount" xsi:type="string">Magenest\Moneris\Gateway\Request\AmountDataBuilder</item>
+                <item name="transaction" xsi:type="string">Magenest\Moneris\Gateway\Request\TransactionDataBuilder</item>
+                <item name="customer" xsi:type="string">Magenest\Moneris\Gateway\Request\CustomerDataBuilder</item>
+                <item name="billing_address" xsi:type="string">Magenest\Moneris\Gateway\Request\BillingAddressDataBuilder</item>
+                <item name="shipping_address" xsi:type="string">Magenest\Moneris\Gateway\Request\ShippingAddressDataBuilder</item>
+                <item name="items" xsi:type="string">Magenest\Moneris\Gateway\Request\ItemsDataBuilder</item>
+                <item name="avs" xsi:type="string">Magenest\Moneris\Gateway\Request\AVSDataBuilder</item>
+                <item name="cvd" xsi:type="string">Magenest\Moneris\Gateway\Request\CVDDataBuilder</item>
+                <item name="cavv" xsi:type="string">Magenest\Moneris\Gateway\Request\CavvDataBuilder</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MonerisVaultResponseHandler" type="Magento\Payment\Gateway\Response\HandlerChain">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="payment_details" xsi:type="string">Magenest\Moneris\Gateway\Response\PaymentDetailsHandler</item>
+                <item name="response_messages" xsi:type="string">Magenest\Moneris\Gateway\Response\ResponseMessagesHandler</item>
+                <item name="avs" xsi:type="string">Magenest\Moneris\Gateway\Response\AVSHandler</item>
+                <item name="cvd" xsi:type="string">Magenest\Moneris\Gateway\Response\CVDHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MonerisCommandManager" type="Magento\Payment\Gateway\Command\CommandManager">
+        <arguments>
+            <argument name="commandPool" xsi:type="object">MonerisCommandPool</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Payment\Gateway\Command\CommandManagerPool">
+        <arguments>
+            <argument name="executors" xsi:type="array">
+                <item name="moneris" xsi:type="string">MonerisCommandManager</item>
+            </argument>
+        </arguments>
+    </type>
+    <!-- END Configuration for Vault Capture payments -->
+
+    <!-- Configuration for Vault Pre-Auth payments -->
+    <virtualType name="MonerisVaultPreAuthCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">MonerisVaultCaptureRequest</argument>
+            <argument name="transferFactory" xsi:type="object">MonerisVaultPreAuthTransferFactory</argument>
+            <argument name="client" xsi:type="object">MonerisHttpClient</argument>
+            <argument name="validator" xsi:type="object">Magenest\Moneris\Gateway\Validator\VaultDataValidator</argument>
+            <argument name="handler" xsi:type="object">MonerisVaultResponseHandler</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MonerisVaultPreAuthTransferFactory" type="Magenest\Moneris\Gateway\Http\TransferFactory">
+        <arguments>
+            <argument name="action" xsi:type="const">Magenest\Moneris\Gateway\Request\AbstractDataBuilder::VAULT_AUTHORIZE</argument>
+        </arguments>
+    </virtualType>
+    <!-- END Configuration for Vault Pre-Auth payments -->
+
+    <!-- Start get key -->
+    <virtualType name="MonerisGetKeyGatewayCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">MonerisGetKeyBuilder</argument>
+            <argument name="transferFactory" xsi:type="object">MonerisGetKeyTransferFactory</argument>
+            <argument name="client" xsi:type="object">MonerisHttpClient</argument>
+            <argument name="validator" xsi:type="object">Magenest\Moneris\Gateway\Validator\GetKeyValidator</argument>
+            <argument name="handler" xsi:type="object">MonerisGetKeyResponseHandler</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MonerisGetKeyBuilder" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="get_key" xsi:type="string">Magenest\Moneris\Gateway\Request\GetKeyDataBuilder</item>
+                <item name="avs" xsi:type="string">Magenest\Moneris\Gateway\Request\Vault\AVSDataBuilder</item>
+                <item name="cvd" xsi:type="string">Magenest\Moneris\Gateway\Request\Vault\CVDDataBuilder</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MonerisGetKeyTransferFactory" type="Magenest\Moneris\Gateway\Http\TransferFactory">
+        <arguments>
+            <argument name="action" xsi:type="const">Magenest\Moneris\Gateway\Request\AbstractDataBuilder::GET_KEY</argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Magenest\Moneris\Gateway\Response\GetKeyDataHandler">
+        <arguments>
+            <argument name="paymentTokenFactory" xsi:type="object">Magento\Vault\Model\CreditCardTokenFactory</argument>
+        </arguments>
+    </type>
+
+    <virtualType name="MonerisGetKeyResponseHandler" type="Magento\Payment\Gateway\Response\HandlerChain">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="data" xsi:type="string">Magenest\Moneris\Gateway\Response\GetKeyDataHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <!-- End get key -->
+    <!-- Csrf validator bypass -->
+    <type name="Magento\Framework\App\Request\CsrfValidator">
+        <plugin name="csrf_bypass" type="Magenest\Moneris\Plugin\Framework\App\Request\CsrfByPass" sortOrder="0"/>
+    </type>
+
+    <!-- Moneric log   -->
+    <type name="Magenest\Moneris\Logger\Handler">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
+    </type>
+    <type name="Magenest\Moneris\Logger\Logger">
+        <arguments>
+            <argument name="name" xsi:type="string">Moneris Logger</argument>
+            <argument name="handlers" xsi:type="array">
+                <item name="system" xsi:type="object">Magenest\Moneris\Logger\Handler</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

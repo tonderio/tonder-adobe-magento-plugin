@@ -48,8 +48,6 @@ class Info extends ConfigurableInfo
                 return __('Authentication Code');
             case 'mcp_purchase':
                 return __('MCP Purchase');
-            case 'threed_secure_response_code':
-                return __('3D Secure');
             default:
                 return parent::getLabel($field);
         }
@@ -72,8 +70,6 @@ class Info extends ConfigurableInfo
                 return $this->formatAvsMessage($value);
             case 'cvd_response_code':
                 return $this->formatCvdMessage($value);
-            case 'threed_secure_response_code':
-                return $this->formatThreeDSecure($value);
             default:
                 return parent::getValueView($field, $value);
         }
@@ -168,60 +164,6 @@ class Info extends ConfigurableInfo
         return isset($cvdMessageMapping[$code]) ? $cvdMessageMapping[$code] : 'Can not resolve response code';
     }
 
-    /**
-     * @param $code
-     * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    public function formatThreeDSecure($code)
-    {
-        if ($code == 'none') {
-            return 'non-authenticated';
-        }
-        $card_type = $this->getInfo()->getAdditionalInformation('cc_type');
-        $visaMapping = [
-            '0' => 'CAVV authentication results invalid',
-            '1' => 'CAVV failed validation (authentication)',
-            '2' => 'CAVV passed validation (authentication)',
-            '3' => 'CAVV passed validation (attempt)',
-            '8' => 'CAVV passed validation (attempt)',
-            'A' => 'CAVV passed validation (attempt)',
-            '4' => 'CAVV failed validation (attempt)',
-            '7' => 'CAVV failed validation (attempt)',
-            '9' => 'CAVV failed validation (attempt)',
-            '6' => 'CAVV not validated - Issuer not participating',
-            'B' => 'CAVV passed validation; info only',
-            'C' => 'CAVV was not validated (attempt)',
-            'D' => 'CAVV was not validated (authentication)',
-        ];
-        $masterMapping =  [
-            '0' => 'Authentication failed',
-            '1' => 'Authentication attempted',
-            '2' => 'Authentication successful',
-        ];
-        $ameExMapping = [
-            '1' => 'AEVV Failed - Authentication, Issuer Key',
-            '2' => 'AEVV Passed - Authentication, Issuer Key',
-            '3' => 'AEVV Passed - Attempt, Issuer Key',
-            '4' => 'AEVV Failed - Attempt, Issuer Key',
-            '7' => 'AEVV Failed - Attempt, Issuer not participating, Network Key',
-            '8' => 'AEVV Passed - Attempt, Issuer not participating, Network Key',
-            '9' => 'AEVV Failed - Attempt, Participating, Access Control Server (ACS) not available, Network Key',
-            'A' => 'AEVV Passed - Attempt, Participating, Access Control Server (ACS) not available, Network Key',
-            'U' => 'AEVV Unchecked',
-        ];
-
-        switch ($card_type) {
-            case 'V':
-                return $visaMapping[$code] ?? 'Can not resolve response code';
-            case 'M':
-                return $masterMapping[$code] ??'Can not resolve response code';
-            case "AX":
-                return $ameExMapping[$code] ?? 'Can not resolve response code';
-            default:
-                return 'non-authenticated';
-        }
-    }
     /**
      * Getting codes of messages and the text representation
      *

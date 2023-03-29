@@ -16,7 +16,6 @@ class TransferFactory extends AbstractTransferFactory
     {
         if (isset($request[AbstractDataBuilder::REPLACE_KEY]) && isset($request[AbstractDataBuilder::REPLACE_KEY]['type'])) {
             if ($request[AbstractDataBuilder::REPLACE_KEY]['type'] == 'card_lookup'
-               || $request[AbstractDataBuilder::REPLACE_KEY]['type'] == 'threeds_authentication'
                || $request[AbstractDataBuilder::REPLACE_KEY]['type'] == 'cavv_lookup'
            ) {
                 return $this->transferBuilder

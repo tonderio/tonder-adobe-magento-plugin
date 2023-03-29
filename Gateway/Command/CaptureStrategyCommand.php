@@ -61,16 +61,6 @@ class CaptureStrategyCommand extends AuthorizeStrategyCommand
         $payment = $paymentObject->getPayment();
         ContextHelper::assertOrderPayment($payment);
 
-        $threeDSecureEnable = $this->config->getValue('three_d_secure');
-        $connectType = $this->config->getValue('connection_type');
-        $canUse3DS = $payment->getAdditionalInformation('can_use_3ds');
-        $nonAuthenticated = $payment->getAdditionalInformation('3ds_non_authenticated');
-        $isProcessInvoice = $this->request->getParam('invoice');
-
-        if ($threeDSecureEnable && $connectType == ConnectionType::CONNECTION_TYPE_DIRECT && $canUse3DS && !$nonAuthenticated && !$isProcessInvoice) {
-            return $this->commandPool->get('purchase_order')->execute($commandSubject);
-        }
-
         $this->avsAndCvdCondition($commandSubject, $payment);
 
         if ($this->config->getValue('kount_enable')

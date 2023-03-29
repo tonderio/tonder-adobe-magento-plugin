@@ -38,14 +38,6 @@ class PostBack extends AbstractPostBack
                     'cres' => $response['cres'],
                     'order_id' => $order->getRealOrderId()
                 ];
-                // Cavv Lookup Request
-                $cavvResponse = $this->_threeDSecure->sendMPIRequest($store_id, $api_token, $txnArray);
-                if ($this->validateCavvResponse($cavvResponse)) {
-                    $this->messageManager->addErrorMessage($cavvResponse['Message']);
-                    $this->addCommentHistoryOrder($order, $cavvResponse['Message']);
-                    $resultRedirect->setPath('moneris/order/cancel');
-                    return $resultRedirect;
-                }
                 $arguments['payment'] = $this->paymentDataObjectFactory->create($order->getPayment());
                 $arguments['response'] = $cavvResponse;
                 $arguments['amount'] = sprintf('%.2F', $order->getTotalDue());

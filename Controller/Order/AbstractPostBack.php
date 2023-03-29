@@ -1,7 +1,6 @@
 <?php
 namespace Tonder\Payment\Controller\Order;
 
-use Tonder\Payment\Api\ThreeDSecureInterface;
 use Magento\Framework\App\CsrfAwareActionInterface;
 use Magento\Framework\App\Request\InvalidRequestException;
 use Magento\Framework\App\RequestInterface;
@@ -11,8 +10,6 @@ use Magento\Payment\Gateway\ConfigInterface;
 
 abstract class AbstractPostBack extends \Magento\Framework\App\Action\Action implements CsrfAwareActionInterface
 {
-    /** @var ThreeDSecureInterface  */
-    protected $_threeDSecure;
 
     /** @var \Magento\Checkout\Model\Session  */
     protected $checkoutSession;
@@ -46,7 +43,6 @@ abstract class AbstractPostBack extends \Magento\Framework\App\Action\Action imp
     /**
      * PostBack constructor.
      *
-     * @param ThreeDSecureInterface $threeDSecure
      * @param \Magento\Checkout\Model\Session $session
      * @param \Magento\Payment\Gateway\Data\PaymentDataObjectFactory $paymentDataObjectFactory
      * @param \Magento\Payment\Gateway\Command\CommandPoolInterface $commandPool
@@ -58,7 +54,6 @@ abstract class AbstractPostBack extends \Magento\Framework\App\Action\Action imp
      * @param \Magento\Sales\Api\OrderStatusHistoryRepositoryInterface $orderStatusRepository
      */
     public function __construct(
-        ThreeDSecureInterface $threeDSecure,
         \Magento\Checkout\Model\Session $session,
         \Magento\Payment\Gateway\Data\PaymentDataObjectFactory $paymentDataObjectFactory,
         \Magento\Payment\Gateway\Command\CommandPoolInterface $commandPool,
@@ -69,7 +64,6 @@ abstract class AbstractPostBack extends \Magento\Framework\App\Action\Action imp
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Sales\Api\OrderStatusHistoryRepositoryInterface $orderStatusRepository
     ) {
-        $this->_threeDSecure = $threeDSecure;
         $this->checkoutSession = $session;
         $this->_customerSession = $customerSession;
         $this->paymentDataObjectFactory = $paymentDataObjectFactory;

@@ -94,7 +94,6 @@ abstract class AbstractDataBuilder implements BuilderInterface
     const MCP_VAULT_AUTHORIZE = 'mcp_res_preauth_cc';
 
     const CARD_LOOKUP = 'card_lookup';
-    const THREEDS_AUTHENTICATION = 'threeds_authentication';
     const CAVV_PURCHASE = 'cavv_purchase';
     const CAVV_PREAUTH = 'cavv_preauth';
     const CAVV_VAULT_PURCHASE = 'res_cavv_purchase_cc';

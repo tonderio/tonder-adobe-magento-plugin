@@ -6,8 +6,6 @@ use Magento\Payment\Gateway\Request\BuilderInterface;
 class CavvDataBuilder extends AbstractDataBuilder implements BuilderInterface
 {
     const CAVV = 'cavv';
-    const THREE_D_VERSION = 'threeds_version';
-    const ThreeDSServerTransId = 'threeds_server_trans_id';
 
     /**
      * @param array $buildSubject
@@ -23,8 +21,6 @@ class CavvDataBuilder extends AbstractDataBuilder implements BuilderInterface
             return [
                 self::REPLACE_KEY => [
                     self::CAVV => $cavv,
-                    self::THREE_D_VERSION => '2',
-                    self::ThreeDSServerTransId => $buildSubject['response']['ThreeDSServerTransId']
                 ]
             ];
         }

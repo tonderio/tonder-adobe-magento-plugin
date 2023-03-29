@@ -28,10 +28,7 @@ class CardLookup extends Action
      * @var \Magento\Framework\Serialize\Serializer\Json
      */
     protected $_jsonFramework;
-    /**
-     * @var \Tonder\Payment\Model\ThreeDSecureRepository
-     */
-    protected $_threeDSecureRepository;
+
     /**
      * @var PaymentTokenCollectionFac
      */
@@ -55,7 +52,6 @@ class CardLookup extends Action
      * @param Session $checkoutSession
      * @param CustomerSession $customerSession
      * @param \Magento\Framework\Serialize\Serializer\Json $jsonFramework
-     * @param \Tonder\Payment\Model\ThreeDSecureRepository $threeDSecureRepository
      * @param PaymentTokenCollectionFac $paymentTokenCollectionFactory
      * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
      * @param ConfigInterface $config
@@ -66,7 +62,6 @@ class CardLookup extends Action
         Session $checkoutSession,
         CustomerSession $customerSession,
         \Magento\Framework\Serialize\Serializer\Json $jsonFramework,
-        \Tonder\Payment\Model\ThreeDSecureRepository $threeDSecureRepository,
         PaymentTokenCollectionFac $paymentTokenCollectionFactory,
         \Magento\Quote\Model\QuoteRepository $quoteRepository,
         ConfigInterface $config,
@@ -75,7 +70,6 @@ class CardLookup extends Action
         $this->checkoutSession = $checkoutSession;
         $this->_customerSession = $customerSession;
         $this->_jsonFramework = $jsonFramework;
-        $this->_threeDSecureRepository = $threeDSecureRepository;
         $this->paymentTokenCollectionFactory = $paymentTokenCollectionFactory;
         $this->quoteRepository = $quoteRepository;
         $this->config = $config;
@@ -114,29 +108,13 @@ class CardLookup extends Action
             }
             $pan = $cardData['accountNumber'] ?? '';
             //Card lookup request
-            $cardLookupResponse = $this->_threeDSecureRepository->cardLookupRequest($store_id, $api_token, $pan, $token, $merchantUrl);
             $result->setData([
                 'can_use_3ds'   => false
             ]);
             $quote->getPayment()->setAdditionalInformation('can_use_3ds', false);
-            if ($this->validateCardLookup($cardLookupResponse)) {
-                $quote->getPayment()->setAdditionalInformation('can_use_3ds', true);
-                $result->setData([
-                    'can_use_3ds'   => true
-                ]);
-            }
             $this->quoteRepository->save($quote);
         }
 
         return $result;
-    }
-
-    /**
-     * @param array $response
-     * @return bool
-     */
-    protected function validateCardLookup(array $response)
-    {
-        return $response['ThreeDSMethodURL'] != 'null' && $response['ThreeDSMethodData'] != null;
     }
 }

@@ -143,7 +143,6 @@ class Zend extends \Magento\Payment\Gateway\Http\Client\Zend
     {
         $typesRequest = [
             AbstractDataBuilder::CARD_LOOKUP,
-            AbstractDataBuilder::THREEDS_AUTHENTICATION,
             AbstractDataBuilder::CAVV_PREAUTH,
             AbstractDataBuilder::CAVV_PURCHASE
         ];

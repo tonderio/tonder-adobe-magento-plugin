@@ -84,13 +84,6 @@ define(
                 return null;
             },
 
-            hasThreeDSecure: function () {
-                if (this.getConfig('isEnable3dS') === 1) {
-                    return true;
-                }
-                return false;
-            },
-
             /**
              * @returns {Boolean}
              */
@@ -123,9 +116,6 @@ define(
             },
 
             isProvided: function () {
-                if(this.hasThreeDSecure() && !this.creditCardHolderName() && !this.isMultiShipping()){
-                    return false;
-                }
                 if (this.creditCardNumber() && this.creditCardExpMonth()
                     && this.creditCardExpYear() && this.selectedCardType()) {
                     return true;
@@ -216,38 +206,10 @@ define(
                     return null;
                 }
                 if (this.isProvided()) {
-                    if(this.hasThreeDSecure() && !this.isMultiShipping()){
-                        var cardData = {
-                            cardHolderName: this.creditCardHolderName(),
-                            accountNumber: this.creditCardNumber(),
-                            expMonth: this.creditCardExpMonth(),
-                            expYear: this.creditCardExpYear()
-                        };
-                        var payload = {
-                            cardData: cardData
-                        };
-                        $.ajax({
-                            url: this.getConfig('cardLookupUrl'),
-                            dataType: "json",
-                            type: 'POST',
-                            data: {
-                                payload: payload
-                            },
-                            showLoader: true,
-                        }).done(function (response) {
-                            self.canUseDSecure(response.can_use_3ds)
-                            if (!self.saveKeyData()) {
-                                self.placeOrder();
-                            } else {
-                                return self.saveKey() ? true : null;
-                            }
-                        });
-                    }else {
-                        if (!this.saveKeyData()) {
-                            this.placeOrder();
-                        } else {
-                            return this.saveKey() ? true : null;
-                        }
+                    if (!this.saveKeyData()) {
+                        this.placeOrder();
+                    } else {
+                        return this.saveKey() ? true : null;
                     }
                 } else {
                     alert({
@@ -278,13 +240,8 @@ define(
                     this.getPlaceOrderDeferredObject()
                         .done(
                             function () {
-
-                                if(self.hasThreeDSecure() && self.canUseDSecure()){
-                                    self.afterPlaceOrder();
-                                }else{
-                                    if (self.redirectAfterPlaceOrder) {
-                                        redirectOnSuccessAction.execute();
-                                    }
+                                if (self.redirectAfterPlaceOrder) {
+                                    redirectOnSuccessAction.execute();
                                 }
                             }
                         ).always(
@@ -296,66 +253,6 @@ define(
                 }
 
                 return false;
-            },
-            afterPlaceOrder: function () {
-                if (event) {
-                    event.preventDefault();
-                }
-                fullScreenLoader.startLoader();
-                var self = this;
-                if (self.validate() && additionalValidators.validate()) {
-                    var paymentData = window.checkoutConfig.payment.moneris,
-                        cardData = [],
-                        payload = [],
-                        userAgent = navigator.userAgent,
-                        quoteData = window.checkoutConfig.quoteData,
-                        cardData = {
-                            cardHolderName: this.creditCardHolderName(),
-                            accountNumber: this.creditCardNumber(),
-                            expMonth: this.creditCardExpMonth(),
-                            expYear: this.creditCardExpYear()
-                        };
-                    payload = {
-                        cardData: cardData,
-                        userAgent: userAgent,
-                        paymentData: paymentData,
-                        quoteData: quoteData,
-                    };
-                    var serviceUrl = urlBuilder.createUrl('/moneris/checkout/threedSecure', {});
-                    storage.post(
-                        serviceUrl,
-                        JSON.stringify({
-                            'payload': payload
-                        })
-                    ).done(
-                        function (response) {
-                            var obj = JSON.parse(response);
-                            if(obj.authentication){
-                                if (obj.TransStatus === "C" && obj.ChallengeURL && obj.ChallengeData) {
-                                    var form = $('<form id="moneris_3d_form" action="' + obj.ChallengeURL + '" method="post">' +
-                                        '</form>');
-                                    $('body').append(form);
-                                    $('<input>').attr({
-                                        type: 'hidden',
-                                        name: 'creq',
-                                        value: obj.ChallengeData
-                                    }).appendTo('#moneris_3d_form');
-
-                                    form.submit();
-                                }else if (self.redirectAfterPlaceOrder) {
-                                    redirectOnSuccessAction.execute();
-                                }
-                            }else{
-                                if(obj.redirect_url)
-                                    window.location.replace(obj.redirect_url);
-                            }
-                        }
-                    ).always(
-                        function () {
-                            fullScreenLoader.stopLoader();
-                        }
-                    );
-                }
             },
 
             getMailingAddress: function () {
