@@ -27,7 +27,7 @@ class PaymentConfig implements ConfigInterface
     /**
      * @var string|null
      */
-    private $methodCode = "moneris";
+    private $methodCode = "tonder";
 
     /**
      * @var string|null

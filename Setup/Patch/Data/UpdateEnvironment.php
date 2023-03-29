@@ -44,7 +44,7 @@ class UpdateEnvironment implements DataPatchInterface
     {
         $table = $this->resourceConnection->getTableName('core_config_data');
         $connection = $this->resourceConnection->getConnection();
-        $where = "path = 'payment/moneris/environment' AND value = 'US'";
+        $where = "path = 'payment/tonder/environment' AND value = 'US'";
         $usEnvironment = $connection->select()->from($table, 'value')->where($where);
         if ($connection->fetchCol($usEnvironment)) {
             $connection->update($table, ['value' => 'CA'], $where);

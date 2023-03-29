@@ -40,7 +40,7 @@ class AmountDataBuilder extends AbstractDataBuilder implements BuilderInterface
      */
     public function build(array $buildSubject)
     {
-        $multiCurrency = $this->config->getValue('payment/moneris/multi_currency', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        $multiCurrency = $this->config->getValue('payment/tonder/multi_currency', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
         $paymentData = $buildSubject['payment'];
         $code = $paymentData->getPayment()->getOrder()->getOrderCurrencyCode();
         if ($multiCurrency) {

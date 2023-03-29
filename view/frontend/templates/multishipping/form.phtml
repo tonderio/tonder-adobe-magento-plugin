@@ -11,13 +11,13 @@ require([
     ], function (layout, $) {
         $(function () {
             var paymentMethodData = {
-                method: 'moneris'
+                method: 'tonder'
             };
             layout([
                 {
-                    component: 'Tonder_Moneris/js/view/payment/method-renderer/multishipping/'
-                        + window.checkoutConfig.payment.moneris.connectionType,
-                    name: 'payment_method_moneris',
+                    component: 'Tonder_Payment/js/view/payment/method-renderer/multishipping/'
+                        + window.checkoutConfig.payment.tonder.connectionType,
+                    name: 'payment_method_tonder',
                     method: paymentMethodData.method,
                     item: paymentMethodData
                 }

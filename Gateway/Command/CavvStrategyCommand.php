@@ -13,37 +13,37 @@ use Magento\Sales\Model\Order;
 class CavvStrategyCommand implements CommandInterface
 {
     /**
-     * Moneris Direct sale command
+     * Tonder Direct sale command
      */
     const SALE = 'sale';
 
     /**
-     * Moneris cavv purchase command
+     * Tonder cavv purchase command
      */
     const CAVV_PURCHASE = 'cavv_purchase';
 
     /**
-     * Moneris cavv preauth command
+     * Tonder cavv preauth command
      */
     const CAVV_PREAUTH = 'cavv_preauth';
 
     /**
-     * Moneris cavv vault purchase command
+     * Tonder cavv vault purchase command
      */
     const CAVV_VAULT_PURCHASE = 'cavv_vault_purchase';
 
     /**
-     * Moneris cavv vault preauth command
+     * Tonder cavv vault preauth command
      */
     const CAVV_VAULT_AUTHORIZE = 'cavv_vault_preauth';
 
     /**
-     * Moneris Verify Card Command
+     * Tonder Verify Card Command
      */
     const VERIFY_CARD = 'verify_card';
 
     /**
-     * Moneris Verify Card with Vault Command
+     * Tonder Verify Card with Vault Command
      */
     const VERIFY_CARD_VAULT = 'vault_verify_card';
 

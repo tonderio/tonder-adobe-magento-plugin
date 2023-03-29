@@ -12,7 +12,7 @@ use Magento\Payment\Gateway\ConfigInterface;
  */
 class Payment extends Template
 {
-    const MONERIS_CODE = 'moneris';
+    const MONERIS_CODE = 'tonder';
     /**
      * @var ConfigInterface
      */

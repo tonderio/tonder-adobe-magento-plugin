@@ -66,7 +66,7 @@ class ConfigProvider implements ConfigProviderInterface
                     'connectionType' => $this->config->getValue('connection_type'),
                     'cvd' => (int)$this->config->getValue('cvd_enable'),
                     'orderCancelUrl' => $this->urlBuilder->getUrl(
-                        'moneris/order/cancel',
+                        'tonder/order/cancel',
                         ['_secure' => true]
                     ),
                     'paymentUrl' => $this->getPaymentUrl(),
@@ -74,10 +74,10 @@ class ConfigProvider implements ConfigProviderInterface
                     'hppkey' => $this->config->getValue('hpp_key'),
                     'isUSCountry' => $this->isUsCountry(),
                     'getOrderData' => $this->urlBuilder->getUrl(
-                        'moneris/order/getorderdata'
+                        'tonder/order/getorderdata'
                     ),
                     'getKeyData' => $this->urlBuilder->getUrl(
-                        'moneris/key/getkeydata',
+                        'tonder/key/getkeydata',
                         ['_secure'=> true]
                     ),
                     'isValid' => $this->checkStoreInfo(),
@@ -85,7 +85,7 @@ class ConfigProvider implements ConfigProviderInterface
                     'isVaultEnabled' => (int)$this->vaultConfig->getValue('active'),
                     'isEnable3dS' => (int)$this->isEnable3dS(),
                     'cardLookupUrl' => $this->urlBuilder->getUrl(
-                        'moneris/order/cardlookup',
+                        'tonder/order/cardlookup',
                         ['_secure' => true]
                     ),
                 ]
@@ -119,10 +119,10 @@ class ConfigProvider implements ConfigProviderInterface
     {
         $prefix = (bool)$this->config->getValue('sandbox_flag') ? 'sandbox_' : '';
         $after = $this->isUsCountry() ? '_us' : '';
-        $path = $prefix . 'moneris_gateway' . $after;
+        $path = $prefix . 'tonder_gateway' . $after;
         $gateway = $this->config->getValue($path);
 
-        $apiRequest = 'moneris_path_servlet' . $after;
+        $apiRequest = 'tonder_path_servlet' . $after;
         $apiUrl = $this->config->getValue($apiRequest);
 
         return trim($gateway) . $apiUrl;
@@ -135,9 +135,9 @@ class ConfigProvider implements ConfigProviderInterface
     {
         $prefix = (bool)$this->config->getValue('sandbox_flag') ? 'sandbox_' : '';
         $after = $this->isUsCountry() ? '_us' : '';
-        $path = $prefix . 'moneris_gateway' . $after;
+        $path = $prefix . 'tonder_gateway' . $after;
         $gateway = $this->config->getValue($path);
-        $preload_request = 'moneris_path_preload_request' . $after;
+        $preload_request = 'tonder_path_preload_request' . $after;
         $additionalPath = $this->config->getValue($preload_request);
         return trim($gateway) . $additionalPath;
     }

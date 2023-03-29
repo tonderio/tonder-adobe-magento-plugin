@@ -81,7 +81,7 @@ class Complete extends CompleteUs
         } catch (\Exception $e) {
             $this->logger->debug($e->getMessage());
             $this->messageManager->addError($e->getMessage());
-            $resultRedirect->setPath('moneris/order/cancel');
+            $resultRedirect->setPath('tonder/order/cancel');
             return $resultRedirect;
         }
 

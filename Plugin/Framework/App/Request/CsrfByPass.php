@@ -12,9 +12,9 @@ use Magento\Framework\App\Area;
 class CsrfByPass
 {
     const BY_PASS_URI = [
-        '/moneris/payment/complete',
-        '/moneris/payment/completeus',
-        '/moneris/order/cancel'
+        '/tonder/payment/complete',
+        '/tonder/payment/completeus',
+        '/tonder/order/cancel'
     ];
 
     /**

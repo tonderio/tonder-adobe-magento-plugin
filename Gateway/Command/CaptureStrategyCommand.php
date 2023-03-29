@@ -15,17 +15,17 @@ use Magento\Sales\Model\Order;
 class CaptureStrategyCommand extends AuthorizeStrategyCommand
 {
     /**
-     * Moneris Direct sale command
+     * Tonder Direct sale command
      */
     const SALE = 'sale';
 
     /**
-     * Moneris Direct capture command
+     * Tonder Direct capture command
      */
     const PRE_AUTH_CAPTURE = 'pre_auth_capture';
 
     /**
-     * Moneris Vault Capture Command
+     * Tonder Vault Capture Command
      */
     const VAULT_CAPTURE = 'vault_capture';
 

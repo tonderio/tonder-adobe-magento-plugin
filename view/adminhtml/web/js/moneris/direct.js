@@ -1,11 +1,11 @@
 define([
     'jquery',
-    'Tonder_Moneris/js/moneris',
+    'Tonder_Payment/js/tonder',
     'underscore'
-], function ($, Moneris) {
+], function ($, Tonder) {
     'use strict';
 
-    return Moneris.extend({
+    return Tonder.extend({
 
         invalidFormValidate: function () {
             $('#' + self.code + '_cc_number').val('');

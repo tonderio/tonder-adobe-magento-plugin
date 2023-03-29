@@ -67,7 +67,7 @@ class Create
         $quote = $this->getQuote();
         $quote->getPayment()->importData(
             [
-                'method' => 'moneris_cc_vault',
+                'method' => 'tonder_cc_vault',
                 'public_hash' => isset($handlingSubject['public_hash']) ? $handlingSubject['public_hash'] : null
             ]
         );

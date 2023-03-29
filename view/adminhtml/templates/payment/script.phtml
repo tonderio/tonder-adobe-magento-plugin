@@ -9,16 +9,16 @@
 $scriptString = <<<script
 require(
         [
-            'Tonder_Moneris/js/moneris/direct',
+            'Tonder_Payment/js/tonder/direct',
             'jquery',
             'domReady!'
-        ], function(Moneris, $) {
+        ], function(Tonder, $) {
             var config = {$block->getPaymentConfig()},
                 payment,
                 form = $('#payment_form_{$block->getCode()}');
 
             config.active = form.length > 0 && !form.is(':hidden');
-            payment = new Moneris(config);
+            payment = new Tonder(config);
         });
 script;
 ?>

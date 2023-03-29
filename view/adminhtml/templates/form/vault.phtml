@@ -13,7 +13,7 @@ $id = $block->escapeHtml($block->getData('id'));
 $hash = $block->getData(TokenUiComponentProviderInterface::COMPONENT_PUBLIC_HASH);
 ?>
 <div data-mage-init='{
-        "Tonder_Moneris/js/vault": {
+        "Tonder_Payment/js/vault": {
             "container": "payment_<?= /* @noEscape */ $id ?>",
             "publicHash": "<?= $block->escapeHtml($hash) ?>"
         }

@@ -5,7 +5,7 @@
         <referenceBlock name="checkout_billing">
             <arguments>
                 <argument name="form_templates" xsi:type="array">
-                    <item name="moneris" xsi:type="string">Tonder_Moneris::multishipping/form.phtml</item>
+                    <item name="tonder" xsi:type="string">Tonder_Payment::multishipping/form.phtml</item>
                 </argument>
             </arguments>
         </referenceBlock>

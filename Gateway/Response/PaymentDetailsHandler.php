@@ -60,7 +60,7 @@ class PaymentDetailsHandler implements HandlerInterface
                 $payment->setAdditionalInformation($informationKey, $response[$responseKey]);
             }
         }
-        $multiCurrency = $this->scopeConfig->getValue('payment/moneris/multi_currency', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        $multiCurrency = $this->scopeConfig->getValue('payment/tonder/multi_currency', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
         $currencyCode = $paymentDO->getPayment()->getOrder()->getOrderCurrencyCode();
         $enableMCPPurchase = isset($response['MCPRate']) || ($multiCurrency && $currencyCode == 'CAD') ? 'Yes' : 'No';
         $payment->setAdditionalInformation('mcp_purchase', $enableMCPPurchase);

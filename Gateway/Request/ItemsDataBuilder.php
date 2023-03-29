@@ -56,7 +56,7 @@ class ItemsDataBuilder extends AbstractDataBuilder implements BuilderInterface
     private function prepareItems($items)
     {
         $result = [];
-        $multiCurrency = $this->scopeConfig->getValue('payment/moneris/multi_currency', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        $multiCurrency = $this->scopeConfig->getValue('payment/tonder/multi_currency', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
 
         /** @var \Magento\Sales\Model\Order\Item $item */
 

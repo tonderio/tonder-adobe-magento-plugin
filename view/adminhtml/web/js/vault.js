@@ -36,7 +36,7 @@ define([
          * @returns {String}
          */
         getCode: function () {
-            return 'moneris';
+            return 'tonder';
         },
 
         /**

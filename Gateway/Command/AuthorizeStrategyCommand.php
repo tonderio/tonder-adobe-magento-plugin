@@ -13,22 +13,22 @@ use Magento\Sales\Model\Order;
 class AuthorizeStrategyCommand implements CommandInterface
 {
     /**
-     * Moneris pre authorize command
+     * Tonder pre authorize command
      */
     const PRE_AUTH = 'pre_auth';
 
     /**
-     * Moneris Vault Capture Command
+     * Tonder Vault Capture Command
      */
     const VAULT_AUTHORIZE = 'vault_authorize';
 
     /**
-     * Moneris Verify Card Command
+     * Tonder Verify Card Command
      */
     const VERIFY_CARD = 'verify_card';
 
     /**
-     * Moneris Verify Card with Vault Command
+     * Tonder Verify Card with Vault Command
      */
     const VERIFY_CARD_VAULT = 'vault_verify_card';
 

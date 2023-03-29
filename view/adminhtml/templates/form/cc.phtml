@@ -2,7 +2,7 @@
 
 /** @var Magento\Payment\Block\Form\Cc $block */
 
-$monerisConfig = $block->getLayout()->createBlock('Tonder\Payment\Block\PaymentConfig');
+$tonderConfig = $block->getLayout()->createBlock('Tonder\Payment\Block\PaymentConfig');
 
 $code = $block->escapeHtml($block->getMethodCode()) ?>
 <fieldset class="admin__fieldset payment-method" id="payment_form_<?= /* @noEscape */ $code ?>" style="display:none">
@@ -61,7 +61,7 @@ $code = $block->escapeHtml($block->getMethodCode()) ?>
         </div>
     </div>
 
-    <?php if ($monerisConfig->cvdEnable()): ?>
+    <?php if ($tonderConfig->cvdEnable()): ?>
         <div class="field-number required admin__field _required">
             <label class="admin__field-label"
                    for="<?= /* @noEscape */ $code ?>_cc_cid_encrypt">

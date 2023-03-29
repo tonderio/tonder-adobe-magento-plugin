@@ -81,7 +81,7 @@ class CompleteUs extends Action
         } catch (\Exception $e) {
             $this->logger->debug($e->getMessage());
             $this->messageManager->addError($e->getMessage());
-            $resultRedirect->setPath('moneris/order/cancel');
+            $resultRedirect->setPath('tonder/order/cancel');
             return $resultRedirect;
         }
 
@@ -99,7 +99,7 @@ class CompleteUs extends Action
     {
         $this->logger->debug($message);
         $this->messageManager->addError($message);
-        $resultRedirect->setPath('moneris/order/cancel');
+        $resultRedirect->setPath('tonder/order/cancel');
         return $resultRedirect;
     }
 

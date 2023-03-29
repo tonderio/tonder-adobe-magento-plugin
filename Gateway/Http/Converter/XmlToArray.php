@@ -49,7 +49,7 @@ class XmlToArray implements ConverterInterface
         try {
             $this->parser->loadXML($response);
         } catch (\Exception $e) {
-            throw new ConverterException(__('Can\'t read response from Moneris'));
+            throw new ConverterException(__('Can\'t read response from Tonder'));
         }
         $result = $this->parser->xmlToArray();
         if (!empty($result['response']['receipt'])) {
@@ -61,8 +61,8 @@ class XmlToArray implements ConverterInterface
         } elseif (!empty($result['response'])) {
             return $result['response'];
         } else {
-            $this->logger->debug('Can\'t read response from Moneris');
-            throw new ConverterException(__('Can\'t read response from Moneris'));
+            $this->logger->debug('Can\'t read response from Tonder');
+            throw new ConverterException(__('Can\'t read response from Tonder'));
         }
     }
 }

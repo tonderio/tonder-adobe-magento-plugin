@@ -3,7 +3,7 @@
     <body>
         <referenceContainer name="content">
             <referenceBlock name="vault.cards.list">
-                <block class="Tonder\Payment\Block\Customer\CardRenderer" name="moneris.card.renderer" template="Magento_Vault::customer_account/credit_card.phtml"/>
+                <block class="Tonder\Payment\Block\Customer\CardRenderer" name="tonder.card.renderer" template="Magento_Vault::customer_account/credit_card.phtml"/>
             </referenceBlock>
         </referenceContainer>
     </body>

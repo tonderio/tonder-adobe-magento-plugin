@@ -49,7 +49,7 @@ class PostBack extends AbstractPostBack
                 $this->addCommentHistoryOrder($order, $e->getMessage());
             }
             $this->messageManager->addErrorMessage($e->getMessage());
-            $resultRedirect->setPath('moneris/order/cancel', ['order_id' => $order->getId()]);
+            $resultRedirect->setPath('tonder/order/cancel', ['order_id' => $order->getId()]);
             return $resultRedirect;
         }
 

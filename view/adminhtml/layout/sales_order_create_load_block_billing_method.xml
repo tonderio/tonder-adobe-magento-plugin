@@ -3,8 +3,8 @@
     <body>
         <referenceBlock name="order.create.billing.method.form">
             <action method="setMethodFormTemplate">
-                <argument name="method" xsi:type="string">moneris</argument>
-                <argument name="template" xsi:type="string">Tonder_Moneris::form/cc.phtml</argument>
+                <argument name="method" xsi:type="string">tonder</argument>
+                <argument name="template" xsi:type="string">Tonder_Tonder::form/cc.phtml</argument>
             </action>
         </referenceBlock>
     </body>

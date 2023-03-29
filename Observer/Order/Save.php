@@ -104,7 +104,7 @@ class Save implements ObserverInterface
                 }
             }
         } catch (\Exception $e) {
-            \Magento\Framework\App\ObjectManager::getInstance()->get(\Psr\Log\LoggerInterface::class)->debug('Moneris Save Order Exception: ' . $e->getMessage());
+            \Magento\Framework\App\ObjectManager::getInstance()->get(\Psr\Log\LoggerInterface::class)->debug('Tonder Save Order Exception: ' . $e->getMessage());
             $this->messageManager->addError(
                 "Something happened during processing order. Please contact admin for more information."
             );

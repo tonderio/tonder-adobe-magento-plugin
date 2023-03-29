@@ -42,7 +42,7 @@ class CustomerDataBuilder extends AbstractDataBuilder implements BuilderInterfac
             self::REPLACE_KEY => [
                 self::CUSTOMER => [
                     self::EMAIL => $billingAddress->getEmail(),
-                    self::INSTRUCTIONS => 'Magento 2 Moneris Payment'
+                    self::INSTRUCTIONS => 'Magento 2 Tonder Payment'
                 ]
             ]
         ];

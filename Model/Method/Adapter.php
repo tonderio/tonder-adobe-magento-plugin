@@ -12,8 +12,8 @@ use Tonder\Payment\Model\Adminhtml\Source\ConnectionType;
  */
 class Adapter implements MethodInterface
 {
-    const DIRECT_FACADE = 'MonerisFacade';
-    const REDIRECT_FACADE = 'MonerisNetFacade';
+    const DIRECT_FACADE = 'TonderFacade';
+    const REDIRECT_FACADE = 'TonderNetFacade';
 
     /**
      * @var ConfigInterface

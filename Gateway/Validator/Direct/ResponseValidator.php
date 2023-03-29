@@ -32,7 +32,7 @@ class ResponseValidator extends AbstractResponseValidator
     public function validate(array $validationSubject)
     {
         $response = SubjectReader::readResponse($validationSubject);
-        $multi_currency = $this->scopeConfig->getValue('payment/moneris/multi_currency', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        $multi_currency = $this->scopeConfig->getValue('payment/tonder/multi_currency', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
         $amount = SubjectReader::readAmount($validationSubject);
         $paymentData = $validationSubject['payment']->getPayment();
         if ($multi_currency) {

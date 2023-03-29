@@ -3,18 +3,18 @@
     <body>
         <referenceBlock name="order_create_billing_form">
             <action method="setMethodFormTemplate">
-                <argument name="method" xsi:type="string">moneris</argument>
-                <argument name="template" xsi:type="string">Tonder_Moneris::form/cc.phtml</argument>
+                <argument name="method" xsi:type="string">tonder</argument>
+                <argument name="template" xsi:type="string">Tonder_Tonder::form/cc.phtml</argument>
             </action>
         </referenceBlock>
         <referenceBlock name="order_create_billing_form">
             <action method="setMethodFormTemplate">
-                <argument name="method" xsi:type="string">moneris_cc_vault</argument>
+                <argument name="method" xsi:type="string">tonder_cc_vault</argument>
                 <argument name="template" xsi:type="string">Magento_Vault::form/vault.phtml</argument>
             </action>
         </referenceBlock>
         <referenceBlock name="content">
-            <block name="moneris_payment_script" as="moneris_payment_script" after="billing_method" template="Tonder_Moneris::payment/script.phtml" class="Tonder\Payment\Block\Payment"/>
+            <block name="tonder_payment_script" as="tonder_payment_script" after="billing_method" template="Tonder_Tonder::payment/script.phtml" class="Tonder\Payment\Block\Payment"/>
         </referenceBlock>
     </body>
 </page>

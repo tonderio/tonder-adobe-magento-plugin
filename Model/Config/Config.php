@@ -37,9 +37,9 @@ class Config extends \Magento\Config\Block\System\Config\Form\Field
         if (!($id = $field_config['id'])) {
             throw new NoSuchEntityException(__('Element Id not found!'));
         }
-        $approved_url = $this->_urlBuilder->getBaseUrl() . 'moneris/payment/complete';
-        $declined_url = $this->_urlBuilder->getBaseUrl() . 'moneris/order/cancel';
-        $response_url = $this->_urlBuilder->getBaseUrl() . 'moneris/payment/completeus';
+        $approved_url = $this->_urlBuilder->getBaseUrl() . 'tonder/payment/complete';
+        $declined_url = $this->_urlBuilder->getBaseUrl() . 'tonder/order/cancel';
+        $response_url = $this->_urlBuilder->getBaseUrl() . 'tonder/payment/completeus';
         switch ($id) {
             case 'approved_url':
                 $element->addData([

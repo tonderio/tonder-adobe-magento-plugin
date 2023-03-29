@@ -75,9 +75,9 @@ abstract class AbstractDataBuilder implements BuilderInterface
     const COMP_AMOUNT = 'comp_amount';
 
     /**
-     * Moneris CC Vault
+     * Tonder CC Vault
      */
-    const CC_VAULT_CODE = 'moneris_cc_vault';
+    const CC_VAULT_CODE = 'tonder_cc_vault';
 
     /**
      * Vault Capture

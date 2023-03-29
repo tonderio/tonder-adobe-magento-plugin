@@ -96,13 +96,13 @@ abstract class AbstractTransferFactory implements TransferFactoryInterface
     {
         $prefix = (bool)$this->config->getValue('sandbox_flag') ? 'sandbox_' : '';
         $after = $this->isUsCountry() ? '_us' : '';
-        $path = $prefix . 'moneris_gateway' . $after;
+        $path = $prefix . 'tonder_gateway' . $after;
         $gateway = $this->config->getValue($path);
         if ($additionalPath == '' && !$is3DS) {
-            $additionalPath = $this->config->getValue('moneris_path_servlet' . $after);
+            $additionalPath = $this->config->getValue('tonder_path_servlet' . $after);
         }
         if ($additionalPath == '' && $is3DS) {
-            $additionalPath = $this->config->getValue('moneris_path_mpi_servlet' . $after);
+            $additionalPath = $this->config->getValue('tonder_path_mpi_servlet' . $after);
         }
         return trim($gateway) . $additionalPath;
     }

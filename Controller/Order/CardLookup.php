@@ -90,7 +90,7 @@ class CardLookup extends Action
             $store_id  = $this->config->getValue(self::STORE_ID);
             $api_token = $this->config->getValue(self::API_TOKEN);
             $quote = $this->checkoutSession->getQuote();
-            $merchantUrl = $this->_url->getUrl('moneris/order/postback');
+            $merchantUrl = $this->_url->getUrl('tonder/order/postback');
             $cardData = $payload['cardData'] ?? null;
             $token = '';
             if (isset($payload['use_vault']) && $payload['use_vault']) {

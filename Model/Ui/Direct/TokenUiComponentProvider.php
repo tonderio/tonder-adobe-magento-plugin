@@ -57,7 +57,7 @@ class TokenUiComponentProvider implements TokenUiComponentProviderInterface
     public function getComponentForToken(PaymentTokenInterface $paymentToken)
     {
         $jsonDetails = $this->_jsonFramework->unserialize($paymentToken->getTokenDetails());
-        $connectionType = $this->config->getValue('payment/moneris/connection_type', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        $connectionType = $this->config->getValue('payment/tonder/connection_type', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
         $component = $this->componentFactory->create(
             [
                 'config' => [
@@ -66,7 +66,7 @@ class TokenUiComponentProvider implements TokenUiComponentProviderInterface
                     TokenUiComponentProviderInterface::COMPONENT_PUBLIC_HASH => $paymentToken->getPublicHash(),
                     'connectionType' => $connectionType
                 ],
-                'name' => 'Tonder_Moneris/js/view/payment/method-renderer/vault'
+                'name' => 'Tonder_Payment/js/view/payment/method-renderer/vault'
             ]
         );
 

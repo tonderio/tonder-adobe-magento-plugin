@@ -7,7 +7,7 @@ use Magento\Framework\View\Element\Template;
 
 class PaymentConfig extends Template
 {
-    const MONERIS_CVD_ENABLE_PATH = 'payment/moneris/cvd_enable';
+    const MONERIS_CVD_ENABLE_PATH = 'payment/tonder/cvd_enable';
 
     /**
      * @var ScopeConfigInterface

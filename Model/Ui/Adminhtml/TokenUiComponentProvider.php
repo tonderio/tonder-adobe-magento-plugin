@@ -45,7 +45,7 @@ class TokenUiComponentProvider implements TokenUiComponentProviderInterface
                 'config' => [
                     TokenUiComponentProviderInterface::COMPONENT_DETAILS => $data,
                     TokenUiComponentProviderInterface::COMPONENT_PUBLIC_HASH => $paymentToken->getPublicHash(),
-                    'template' => 'Tonder_Moneris::form/vault.phtml'
+                    'template' => 'Tonder_Payment::form/vault.phtml'
                 ],
                 'name' => Template::class
             ]

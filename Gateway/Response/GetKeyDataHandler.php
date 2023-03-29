@@ -72,7 +72,7 @@ class GetKeyDataHandler implements HandlerInterface
         $paymentToken = $this->getVaultPaymentToken($response, $handlingSubject);
         $paymentToken->setCustomerId($handlingSubject['cust_id']);
         $paymentToken->setIsActive(true);
-        $paymentToken->setPaymentMethodCode('moneris');
+        $paymentToken->setPaymentMethodCode('tonder');
         $paymentToken->setIsVisible(true);
         $paymentToken->setPublicHash($this->generatePublicHash($paymentToken));
 

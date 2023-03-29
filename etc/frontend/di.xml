@@ -16,8 +16,8 @@
     </type>
     <type name="Tonder\Payment\Model\Ui\Direct\ConfigProvider">
         <arguments>
-            <argument name="config" xsi:type="object">MonerisConfig</argument>
-            <argument name="vaultConfig" xsi:type="object">MonerisVaultConfig</argument>
+            <argument name="config" xsi:type="object">TonderConfig</argument>
+            <argument name="vaultConfig" xsi:type="object">TonderVaultConfig</argument>
         </arguments>
     </type>
     <type name="Magento\Checkout\Model\CompositeConfigProvider">
@@ -29,46 +29,46 @@
     </type>
     <type name="Tonder\Payment\Controller\Order\GetOrderData">
         <arguments>
-            <argument name="commandPool" xsi:type="object">MonerisNetCommandPool</argument>
+            <argument name="commandPool" xsi:type="object">TonderNetCommandPool</argument>
         </arguments>
     </type>
     <type name="Tonder\Payment\Controller\Payment\CompleteUs">
         <arguments>
-            <argument name="commandPool" xsi:type="object">MonerisNetCommandPool</argument>
+            <argument name="commandPool" xsi:type="object">TonderNetCommandPool</argument>
         </arguments>
     </type>
     <type name="Tonder\Payment\Controller\Payment\Complete">
         <arguments>
-            <argument name="commandPool" xsi:type="object">MonerisNetCommandPool</argument>
+            <argument name="commandPool" xsi:type="object">TonderNetCommandPool</argument>
         </arguments>
     </type>
     <type name="Tonder\Payment\Controller\Order\Cancel">
         <arguments>
-            <argument name="commandPool" xsi:type="object">MonerisNetCommandPool</argument>
+            <argument name="commandPool" xsi:type="object">TonderNetCommandPool</argument>
         </arguments>
     </type>
     <type name="Tonder\Payment\Controller\Key\GetKeyData">
         <arguments>
-            <argument name="commandPool" xsi:type="object">MonerisNetCommandPool</argument>
+            <argument name="commandPool" xsi:type="object">TonderNetCommandPool</argument>
         </arguments>
     </type>
     <type name="Magento\Vault\Model\Ui\TokensConfigProvider">
         <arguments>
             <argument name="tokenUiComponentProviders" xsi:type="array">
-                <item name="moneris" xsi:type="object">Tonder\Payment\Model\Ui\Direct\TokenUiComponentProvider</item>
+                <item name="tonder" xsi:type="object">Tonder\Payment\Model\Ui\Direct\TokenUiComponentProvider</item>
             </argument>
         </arguments>
     </type>
     <type name="Magento\Multishipping\Model\Checkout\Type\Multishipping\PlaceOrderPool">
         <arguments>
             <argument name="services" xsi:type="array">
-                <item name="moneris" xsi:type="string">Tonder\Payment\Model\Multishipping\PlaceOrder</item>
+                <item name="tonder" xsi:type="string">Tonder\Payment\Model\Multishipping\PlaceOrder</item>
             </argument>
         </arguments>
     </type>
     <type name="Tonder\Payment\Controller\Order\CardLookup">
         <arguments>
-            <argument name="config" xsi:type="object">MonerisConfig</argument>
+            <argument name="config" xsi:type="object">TonderConfig</argument>
         </arguments>
     </type>
 </config>

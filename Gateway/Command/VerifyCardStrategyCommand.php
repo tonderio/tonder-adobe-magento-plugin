@@ -20,17 +20,17 @@ use Magento\Payment\Gateway\Command\CommandPoolInterface;
 class VerifyCardStrategyCommand implements CommandInterface
 {
     /**
-     * Moneris pre authorize command
+     * Tonder pre authorize command
      */
     const PRE_AUTH = 'pre_auth';
 
     /**
-     * Moneris Vault Capture Command
+     * Tonder Vault Capture Command
      */
     const VAULT_AUTHORIZE = 'vault_authorize';
 
     /**
-     * Moneris Verify Card Command
+     * Tonder Verify Card Command
      */
     const VERIFY_CARD = 'verify_card';
 
