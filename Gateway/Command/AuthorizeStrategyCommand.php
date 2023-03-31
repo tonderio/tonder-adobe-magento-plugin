@@ -72,21 +72,21 @@ class AuthorizeStrategyCommand implements CommandInterface
         ContextHelper::assertOrderPayment($payment);
 
 
-        $this->avsAndCvdCondition($commandSubject, $payment);
+//        $this->avsAndCvdCondition($commandSubject, $payment);
 
-        if ($this->config->getValue('kount_enable') &&
-            $this->config->getValue('connection_type') == self::DIRECT_TYPE) {
-            $this->commandPool
-                ->get(self::CHECK_KOUNT)
-                ->execute($commandSubject);
-        }
-
-        if ($payment->getAdditionalInformation('public_hash')
-            && empty($payment->getAdditionalInformation('cc_type'))) {
-            return $this->commandPool
-                ->get(self::VAULT_AUTHORIZE)
-                ->execute($commandSubject);
-        }
+//        if ($this->config->getValue('kount_enable') &&
+//            $this->config->getValue('connection_type') == self::DIRECT_TYPE) {
+//            $this->commandPool
+//                ->get(self::CHECK_KOUNT)
+//                ->execute($commandSubject);
+//        }
+//
+//        if ($payment->getAdditionalInformation('public_hash')
+//            && empty($payment->getAdditionalInformation('cc_type'))) {
+//            return $this->commandPool
+//                ->get(self::VAULT_AUTHORIZE)
+//                ->execute($commandSubject);
+//        }
 
         return $this->commandPool
             ->get(self::PRE_AUTH)
