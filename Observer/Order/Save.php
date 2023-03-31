@@ -67,7 +67,7 @@ class Save implements ObserverInterface
             $additionalInfo = $order->getPayment()->getAdditionalInformation();
 
             if ($order->getPayment() &&
-                $order->getPayment()->getMethod() == \Tonder\Payment\Block\Payment::MONERIS_CODE &&
+                $order->getPayment()->getMethod() == \Tonder\Payment\Block\Payment::TONDER_CODE &&
                 !$order->hasCreditmemos() &&
                 isset($additionalInfo['order_action'])
             ) {

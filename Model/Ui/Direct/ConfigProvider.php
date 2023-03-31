@@ -62,7 +62,7 @@ class ConfigProvider implements ConfigProviderInterface
     {
         return [
             'payment' => [
-                Payment::MONERIS_CODE => [
+                Payment::TONDER_CODE => [
                     'connectionType' => $this->config->getValue('connection_type'),
                     'cvd' => (int)$this->config->getValue('cvd_enable'),
                     'orderCancelUrl' => $this->urlBuilder->getUrl(

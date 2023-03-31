@@ -12,7 +12,7 @@ use Magento\Payment\Gateway\ConfigInterface;
  */
 class Payment extends Template
 {
-    const MONERIS_CODE = 'tonder';
+    const TONDER_CODE = 'tonder';
     /**
      * @var ConfigInterface
      */
@@ -48,7 +48,7 @@ class Payment extends Template
     {
         return $this->_jsonFramework->serialize(
             [
-                'code' => self::MONERIS_CODE,
+                'code' => self::TONDER_CODE,
             ]
         );
     }
@@ -66,7 +66,7 @@ class Payment extends Template
      */
     public function getCode()
     {
-        return self::MONERIS_CODE;
+        return self::TONDER_CODE;
     }
 
     /**

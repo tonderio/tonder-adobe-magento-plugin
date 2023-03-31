@@ -3,6 +3,7 @@ namespace Tonder\Payment\Model\Config;
 
 use Magento\Backend\App\ConfigInterface;
 use Magento\Backend\Block\Template\Context;
+use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 class Config extends \Magento\Config\Block\System\Config\Form\Field
@@ -27,11 +28,11 @@ class Config extends \Magento\Config\Block\System\Config\Form\Field
     }
 
     /**
-     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
+     * @param AbstractElement $element
      * @return string
      * @throws NoSuchEntityException
      */
-    protected function _renderValue(\Magento\Framework\Data\Form\Element\AbstractElement $element)
+    protected function _renderValue(AbstractElement $element)
     {
         $field_config = $element->getData('field_config');
         if (!($id = $field_config['id'])) {
@@ -39,23 +40,16 @@ class Config extends \Magento\Config\Block\System\Config\Form\Field
         }
         $approved_url = $this->_urlBuilder->getBaseUrl() . 'tonder/payment/complete';
         $declined_url = $this->_urlBuilder->getBaseUrl() . 'tonder/order/cancel';
-        $response_url = $this->_urlBuilder->getBaseUrl() . 'tonder/payment/completeus';
         switch ($id) {
-            case 'approved_url':
-                $element->addData([
-                    'value' => $approved_url
-                ]);
-                break;
             case 'cancel_url':
             case 'declined_url':
                 $element->addData([
                     'value' => $declined_url
                 ]);
                 break;
-            case 'response_url':
             default:
                 $element->addData([
-                    'value' => $response_url
+                    'value' => $approved_url
                 ]);
                 break;
         }

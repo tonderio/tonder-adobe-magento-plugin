@@ -19,7 +19,7 @@ class CardRenderer extends AbstractCardRenderer
      */
     public function canRender(PaymentTokenInterface $token)
     {
-        return $token->getPaymentMethodCode() === Payment::MONERIS_CODE;
+        return $token->getPaymentMethodCode() === Payment::TONDER_CODE;
     }
 
     /**

@@ -108,6 +108,13 @@
 					<label>New Order Status</label>
 					<source_model>Magento\Sales\Model\Config\Source\Order\Status</source_model>
 				</field>
+				<field id="payment_action" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>Payment Action</label>
+					<source_model>Tonder\Payment\Model\Adminhtml\Source\PaymentAction</source_model>
+					<depends>
+						<field id="connection_type">direct</field>
+					</depends>
+				</field>
 				<field id="cctypes" translate="label" type="multiselect" sortOrder="35" showInDefault="1" showInWebsite="1" showInStore="0">
 					<label>Credit Card Types</label>
 					<source_model>Magento\Payment\Model\Source\Cctype</source_model>

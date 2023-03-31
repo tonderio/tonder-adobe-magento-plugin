@@ -61,7 +61,7 @@ class TokenUiComponentProvider implements TokenUiComponentProviderInterface
         $component = $this->componentFactory->create(
             [
                 'config' => [
-                    'code' => Payment::MONERIS_CODE,
+                    'code' => Payment::TONDER_CODE,
                     TokenUiComponentProviderInterface::COMPONENT_DETAILS => $jsonDetails,
                     TokenUiComponentProviderInterface::COMPONENT_PUBLIC_HASH => $paymentToken->getPublicHash(),
                     'connectionType' => $connectionType

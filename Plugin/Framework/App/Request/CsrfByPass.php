@@ -13,7 +13,6 @@ class CsrfByPass
 {
     const BY_PASS_URI = [
         '/tonder/payment/complete',
-        '/tonder/payment/completeus',
         '/tonder/order/cancel'
     ];
 

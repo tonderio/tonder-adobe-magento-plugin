@@ -18,7 +18,7 @@ use Psr\Log\LoggerInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Complete extends CompleteUs
+class Complete extends Action
 {
     /**
      * @var ConfigInterface
@@ -28,6 +28,25 @@ class Complete extends CompleteUs
      * @var Json
      */
     protected $_jsonFramework;
+
+    /**
+     * @var CommandPoolInterface
+     */
+    protected $commandPool;
+
+    /**
+     * @var LoggerInterface
+     */
+    protected $logger;
+
+    /**
+     * @var PaymentDataObjectFactory
+     */
+    protected $paymentDataObjectFactory;
+    /**
+     * @var Order
+     */
+    protected $order;
 
     /**
      * Constructor
@@ -49,9 +68,11 @@ class Complete extends CompleteUs
         Order $order,
         Json $_jsonFramework
     ) {
-        parent::__construct($context, $commandPool, $logger, $paymentDataObjectFactory, $order);
-        $this->config = $config;
-        $this->_jsonFramework = $_jsonFramework;
+        parent::__construct($context);
+        $this->commandPool = $commandPool;
+        $this->logger = $logger;
+        $this->paymentDataObjectFactory = $paymentDataObjectFactory;
+        $this->order = $order;
     }
 
     /**
@@ -90,5 +111,29 @@ class Complete extends CompleteUs
         return $resultRedirect;
     }
 
+    /**
+     * @param $resultRedirect
+     * @param $message
+     * @return mixed
+     */
+    protected function processException($resultRedirect, $message)
+    {
+        $this->logger->debug($message);
+        $this->messageManager->addError($message);
+        $resultRedirect->setPath('tonder/order/cancel');
+        return $resultRedirect;
+    }
 
+    /**
+     * @throws \Magento\Framework\Exception\NotFoundException
+     * @throws \Magento\Payment\Gateway\Command\CommandException
+     */
+    protected function orderPayment($order, $params)
+    {
+        $payment = $order->getPayment();
+        $arguments['payment'] = $this->paymentDataObjectFactory->create($payment);
+        $arguments['response'] = $params;
+
+        $this->commandPool->get('complete')->execute($arguments);
+    }
 }

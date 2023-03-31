@@ -32,11 +32,6 @@
             <argument name="commandPool" xsi:type="object">TonderNetCommandPool</argument>
         </arguments>
     </type>
-    <type name="Tonder\Payment\Controller\Payment\CompleteUs">
-        <arguments>
-            <argument name="commandPool" xsi:type="object">TonderNetCommandPool</argument>
-        </arguments>
-    </type>
     <type name="Tonder\Payment\Controller\Payment\Complete">
         <arguments>
             <argument name="commandPool" xsi:type="object">TonderNetCommandPool</argument>
