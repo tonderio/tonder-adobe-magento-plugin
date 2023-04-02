@@ -115,6 +115,62 @@
 						<field id="active">1</field>
 					</depends>
 				</field>
+				<field id="sf_client_id" translate="label" type="obscure" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>SkyFlow Client ID</label>
+					<backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+					<validate>required-entry no-whitespace</validate>
+					<depends>
+						<field id="active">1</field>
+					</depends>
+				</field>
+				<field id="sf_client_name" translate="label" type="obscure" sortOrder="45" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>SkyFlow Client Name</label>
+					<backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+					<validate>required-entry</validate>
+					<depends>
+						<field id="active">1</field>
+					</depends>
+				</field>
+				<field id="sf_key_id" translate="label" type="obscure" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>SkyFlow Key ID</label>
+					<backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+					<validate>required-entry no-whitespace</validate>
+					<depends>
+						<field id="active">1</field>
+					</depends>
+				</field>
+				<field id="sf_token_uri" translate="label" type="obscure" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>SkyFlow Token URI</label>
+					<backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+					<validate>required-entry no-whitespace</validate>
+					<depends>
+						<field id="active">1</field>
+					</depends>
+				</field>
+				<field id="sf_private_key" translate="label" type="obscure" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>SkyFlow Private Key</label>
+					<backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+					<validate>required-entry</validate>
+					<depends>
+						<field id="active">1</field>
+					</depends>
+				</field>
+				<field id="sf_vault_url" translate="label" type="obscure" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>SkyFlow Vault URL</label>
+					<backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+					<validate>required-entry no-whitespace</validate>
+					<depends>
+						<field id="active">1</field>
+					</depends>
+				</field>
+				<field id="sf_vault_id" translate="label" type="obscure" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>SkyFlow Vault ID</label>
+					<backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+					<validate>required-entry no-whitespace</validate>
+					<depends>
+						<field id="active">1</field>
+					</depends>
+				</field>
 				<field id="cctypes" translate="label" type="multiselect" sortOrder="35" showInDefault="1" showInWebsite="1" showInStore="0">
 					<label>Credit Card Types</label>
 					<source_model>Magento\Payment\Model\Source\Cctype</source_model>
@@ -124,19 +180,19 @@
 <!--					<config_path>payment/tonder_vault/active</config_path>-->
 <!--					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>-->
 <!--				</field>-->
-				<field id="allowspecific" type="allowspecific" sortOrder="40" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+				<field id="allowspecific" type="allowspecific" sortOrder="400" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
 					<label>Payment from Applicable Countries</label>
 					<source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
 				</field>
-				<field id="specificcountry" type="multiselect" sortOrder="50" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+				<field id="specificcountry" type="multiselect" sortOrder="500" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
 					<label>Payment from Applicable Countries</label>
 					<source_model>Magento\Directory\Model\Config\Source\Country</source_model>
 					<can_be_empty>1</can_be_empty>
 				</field>
-				<field id="sort_order" type="text" sortOrder="60" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+				<field id="sort_order" type="text" sortOrder="600" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
 					<label>Sort Order</label>
 				</field>
-				<field id="instructions" type="textarea" sortOrder="70" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+				<field id="instructions" type="textarea" sortOrder="700" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
 					<label>Instructions</label>
 				</field>
 			</group>

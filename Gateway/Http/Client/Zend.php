@@ -2,6 +2,7 @@
 
 namespace Tonder\Payment\Gateway\Http\Client;
 
+use Magento\Framework\HTTP\LaminasClientFactory;
 use Tonder\Payment\Gateway\Request\AbstractDataBuilder;
 use Tonder\Payment\Logger\Logger;
 use Magento\Framework\HTTP\ZendClient;
@@ -35,13 +36,13 @@ class Zend extends \Magento\Payment\Gateway\Http\Client\Zend
     protected $_jsonFramework;
 
     /**
-     * @param ZendClientFactory $clientFactory
+     * @param LaminasClientFactory $clientFactory
      * @param Logger $logger
      * @param ConverterInterface | null $converter
      * @param Json $_jsonFramework
      */
     public function __construct(
-        ZendClientFactory $clientFactory,
+        LaminasClientFactory $clientFactory,
         Logger $logger,
         Json $_jsonFramework,
         ConverterInterface $converter = null
@@ -51,6 +52,7 @@ class Zend extends \Magento\Payment\Gateway\Http\Client\Zend
         $this->converter = $converter;
         $this->logger = $logger;
         $this->_jsonFramework = $_jsonFramework;
+//        parent::__construct($clientFactory, $logger, $converter);
     }
 
     /**

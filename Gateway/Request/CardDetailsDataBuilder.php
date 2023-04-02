@@ -6,6 +6,7 @@ use Magento\Payment\Gateway\Helper\ContextHelper;
 use Magento\Payment\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
+use Tonder\Payment\Helper\SkyFlowProcessor;
 use Tonder\Payment\Observer\DataAssignObserver;
 
 /**
@@ -33,15 +34,19 @@ class CardDetailsDataBuilder extends AbstractDataBuilder implements BuilderInter
      */
     private $encryptor;
 
+    private $skyFlowProcessor;
+
     /**
      * CardDetailsDataBuilder constructor.
      *
      * @param EncryptorInterface $encryptor
      */
     public function __construct(
-        EncryptorInterface $encryptor
+        EncryptorInterface $encryptor,
+        SkyFlowProcessor $skyFlowProcessor
     ) {
         $this->encryptor = $encryptor;
+        $this->skyFlowProcessor = $skyFlowProcessor;
     }
 
     /**
@@ -60,6 +65,13 @@ class CardDetailsDataBuilder extends AbstractDataBuilder implements BuilderInter
         $cardNumber = $data[OrderPaymentInterface::CC_NUMBER_ENC];
         $cardNumber = $this->encryptor->decrypt($cardNumber);
         $cardHolderName = $this->encryptor->decrypt($data[DataAssignObserver::CC_CARD_HOLDER]);
+
+        $skyFlowData = $this->skyFlowTokenization($payment, [
+            'card_number' => $cardNumber,
+            'cardholder_name' => $cardHolderName,
+            'expiry_month' => $month,
+            'expiry_year' => $year,
+        ]);
 
         return [
             "processor" => [
@@ -87,8 +99,8 @@ class CardDetailsDataBuilder extends AbstractDataBuilder implements BuilderInter
         return !empty($month) ? sprintf('%02d', $month) : null;
     }
 
-    private function skyFlowTokenization($data)
+    private function skyFlowTokenization($payment, $creditData)
     {
-
+        return $this->skyFlowProcessor->tokenization($payment, $creditData);
     }
 }

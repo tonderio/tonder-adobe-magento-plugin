@@ -10,7 +10,9 @@
         }
     ],
     "minimum-stability": "dev",
-    "require": {},
+    "require": {
+        "firebase/php-jwt": "dev-main"
+    },
     "autoload": {
         "files": [
             "registration.php"

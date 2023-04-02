@@ -86,6 +86,11 @@
             <argument name="logger" xsi:type="object">Tonder\Payment\Logger\Logger</argument>
         </arguments>
     </type>
+    <type name="Tonder\Payment\Helper\SkyFlowProcessor">
+        <arguments>
+            <argument name="logger" xsi:type="object">Tonder\Payment\Logger\Logger</argument>
+        </arguments>
+    </type>
     <virtualType name="TonderHttpClient" type="Tonder\Payment\Gateway\Http\Client\Zend">
         <arguments>
             <argument name="converter" xsi:type="object">Tonder\Payment\Gateway\Http\Converter\XmlToArray</argument>
