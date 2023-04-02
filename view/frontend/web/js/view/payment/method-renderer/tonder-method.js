@@ -137,6 +137,11 @@ define(
             isMultiShipping: function () {
                 return false;
             },
+            getData: function () {
+                var data = this._super();
+                data['additional_data']['cc_card_holder_name'] = this.creditCardHolderName();
+                return data;
+            },
 
             saveKey: function () {
                 var self = this;

@@ -5,7 +5,6 @@ use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Payment\Gateway\ConfigInterface;
 use Magento\Framework\ObjectManagerInterface;
-use Tonder\Payment\Model\Adminhtml\Source\ConnectionType;
 
 /**
  * Class Adapter
@@ -13,7 +12,8 @@ use Tonder\Payment\Model\Adminhtml\Source\ConnectionType;
 class Adapter implements MethodInterface
 {
     const DIRECT_FACADE = 'TonderFacade';
-    const REDIRECT_FACADE = 'TonderNetFacade';
+
+    const METHOD_CODE = 'tonder';
 
     /**
      * @var ConfigInterface
@@ -48,10 +48,7 @@ class Adapter implements MethodInterface
     private function getPaymentInstance()
     {
         if (!isset($this->paymentInstance)) {
-            $facadeName = $this->config->getValue('connection_type') == ConnectionType::CONNECTION_TYPE_DIRECT
-                ? self::DIRECT_FACADE
-                : self::REDIRECT_FACADE;
-            $this->paymentInstance = $this->objectManager->create($facadeName);
+            $this->paymentInstance = $this->objectManager->create(self::DIRECT_FACADE);
         }
 
         return $this->paymentInstance;
@@ -391,5 +388,11 @@ class Adapter implements MethodInterface
     public function getConfigPaymentAction()
     {
         return $this->getPaymentInstance()->getConfigPaymentAction();
+    }
+
+    public function getInstructions()
+    {
+        $instructions = $this->getPaymentInstance()->getConfigData('instructions');
+        return $instructions !== null ? trim($instructions) : '';
     }
 }

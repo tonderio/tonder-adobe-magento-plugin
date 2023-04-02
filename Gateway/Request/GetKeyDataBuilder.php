@@ -30,8 +30,6 @@ class GetKeyDataBuilder extends AbstractDataBuilder implements BuilderInterface
             $type => [
                 self::CUST_ID => $buildSubject[self::CUST_ID],
                 self::EMAIL => $buildSubject[self::EMAIL],
-                CardDetailsDataBuilder::PAN => $buildSubject[CardDetailsDataBuilder::PAN],
-                CardDetailsDataBuilder::EXPIRY_DATE => $buildSubject[CardDetailsDataBuilder::EXPIRY_DATE],
                 TransactionDataBuilder::CRYPT_TYPE => '7',
             ]
         ];

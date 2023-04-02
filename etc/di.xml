@@ -110,8 +110,6 @@
         <arguments>
             <argument name="handlers" xsi:type="array">
                 <item name="default" xsi:type="string">TonderDefaultValueHandler</item>
-                <item name="can_initialize" xsi:type="string">Tonder\Payment\Gateway\Config\CanInitializeHandler</item>
-                <item name="can_use_internal" xsi:type="string">Tonder\Payment\Gateway\Config\CanUseInternalHandler</item>
             </argument>
         </arguments>
     </virtualType>
@@ -357,7 +355,6 @@
     <virtualType name="TonderDataBuilder" type="Magento\Payment\Gateway\Request\BuilderComposite">
         <arguments>
             <argument name="builders" xsi:type="array">
-                <item name="merchant" xsi:type="string">Tonder\Payment\Gateway\Request\MerchantDataBuilder</item>
                 <item name="card_details" xsi:type="string">Tonder\Payment\Gateway\Request\CardDetailsDataBuilder</item>
                 <item name="transaction" xsi:type="string">Tonder\Payment\Gateway\Request\TransactionDataBuilder</item>
                 <item name="amount" xsi:type="string">Tonder\Payment\Gateway\Request\AmountDataBuilder</item>

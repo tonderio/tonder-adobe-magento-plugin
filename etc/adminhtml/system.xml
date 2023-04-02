@@ -108,22 +108,22 @@
 					<label>New Order Status</label>
 					<source_model>Magento\Sales\Model\Config\Source\Order\Status</source_model>
 				</field>
-				<field id="payment_action" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+				<field id="payment_action" translate="label" type="select" sortOrder="32" showInDefault="1" showInWebsite="1" showInStore="1">
 					<label>Payment Action</label>
 					<source_model>Tonder\Payment\Model\Adminhtml\Source\PaymentAction</source_model>
 					<depends>
-						<field id="connection_type">direct</field>
+						<field id="active">1</field>
 					</depends>
 				</field>
 				<field id="cctypes" translate="label" type="multiselect" sortOrder="35" showInDefault="1" showInWebsite="1" showInStore="0">
 					<label>Credit Card Types</label>
 					<source_model>Magento\Payment\Model\Source\Cctype</source_model>
 				</field>
-				<field id="tonder_vault_active" translate="label" type="select" sortOrder="35" showInDefault="1" showInWebsite="1" showInStore="1">
-					<label>Enable Vault Payment</label>
-					<config_path>payment/tonder_vault/active</config_path>
-					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-				</field>
+<!--				<field id="tonder_vault_active" translate="label" type="select" sortOrder="35" showInDefault="1" showInWebsite="1" showInStore="1">-->
+<!--					<label>Enable Vault Payment</label>-->
+<!--					<config_path>payment/tonder_vault/active</config_path>-->
+<!--					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>-->
+<!--				</field>-->
 				<field id="allowspecific" type="allowspecific" sortOrder="40" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
 					<label>Payment from Applicable Countries</label>
 					<source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>

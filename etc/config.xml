@@ -4,7 +4,7 @@
         <payment>
             <tonder>
                 <active>1</active>
-                <model>Tonder\Payment\Model\Payment\Tonder</model>
+                <model>Tonder\Payment\Model\Method\Adapter</model>
                 <order_status>pending</order_status>
                 <title>Tonder</title>
                 <allowspecific>0</allowspecific>

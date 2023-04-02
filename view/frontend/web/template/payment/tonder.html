@@ -31,6 +31,25 @@
                 'context': context()
             }, 'validation':[]}">
             <fieldset data-bind="attr: {class: 'fieldset payment items ccard ' + getCode(), id: 'payment_form_' + getCode()}">
+                <div class="field cardholder_name required" style="width: 225px;">
+                    <label data-bind="attr: {for: getCode() + '_cc_cardholder_name'}" class="label">
+                        <span><!-- ko i18n: 'Credit Cardholder Name'--><!-- /ko --></span>
+                    </label>
+                    <div class="control">
+                        <input type="text" name="payment[cc_cardholder_name]" class="input-text" style="text-transform: uppercase;" value=""
+                               data-validate="{'validate-alphanum-with-spaces': true, 'validate-no-empty': true}" maxlength="45"
+                               data-bind="attr: {
+                                    autocomplete: off,
+                                    id: getCode() + 'cc_cardholder_name'},
+                                    title: $t('Cardholder Name'),
+                                    'data-container': getCode() + '-cc-cardholder-name',
+                                    enable: isActive($parents),
+                                    valueUpdate: 'keyup',
+                                    value: creditCardHolderName,
+                                    'data-validate': JSON.stringify({required:true}),
+                                     event: { blur: validateInput.bind($data, $element)}">
+                    </div>
+                </div>
                 <!-- ko if: (isShowLegend())-->
                 <legend class="legend">
                     <span><!-- ko i18n: 'Credit Card Information'--><!-- /ko --></span>

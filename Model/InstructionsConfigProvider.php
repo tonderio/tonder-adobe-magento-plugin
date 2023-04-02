@@ -5,7 +5,7 @@ namespace Tonder\Payment\Model;
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Framework\Escaper;
 use Magento\Payment\Helper\Data as PaymentHelper;
-use Tonder\Payment\Model\Payment\Tonder;
+use Tonder\Payment\Model\Method\Adapter;
 
 class InstructionsConfigProvider implements ConfigProviderInterface
 {
@@ -13,7 +13,7 @@ class InstructionsConfigProvider implements ConfigProviderInterface
      * @var string[]
      */
     protected $methodCodes = [
-        Tonder::METHOD_CODE,
+        Adapter::METHOD_CODE,
     ];
 
     /**

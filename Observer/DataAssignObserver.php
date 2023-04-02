@@ -15,6 +15,7 @@ class DataAssignObserver extends AbstractDataAssignObserver
     const CC_NUMBER = 'cc_number';
     const CC_CID = 'cc_cid';
     const CC_CID_ENC = 'cc_cid_enc';
+    const CC_CARD_HOLDER = 'cc_card_holder';
 
     /**
      * @var array
@@ -22,6 +23,7 @@ class DataAssignObserver extends AbstractDataAssignObserver
     protected $additionalInformationList = [
         self::CC_NUMBER,
         self::CC_CID,
+        self::CC_CARD_HOLDER,
         OrderPaymentInterface::CC_TYPE,
         OrderPaymentInterface::CC_EXP_MONTH,
         OrderPaymentInterface::CC_EXP_YEAR,
@@ -46,7 +48,15 @@ class DataAssignObserver extends AbstractDataAssignObserver
 
         foreach ($this->additionalInformationList as $additionalInformationKey) {
             $value = $additionalData[$additionalInformationKey] ?? null;
+            if ($additionalInformationKey == self::CC_CARD_HOLDER) {
+                $value = $data->getData('additional_data/cc_card_holder_name');
+                $paymentInfo->setAdditionalInformation(
+                    self::CC_CARD_HOLDER,
+                    $paymentInfo->encrypt($value)
+                );
 
+                continue;
+            }
             if ($value === null) {
                 continue;
             }

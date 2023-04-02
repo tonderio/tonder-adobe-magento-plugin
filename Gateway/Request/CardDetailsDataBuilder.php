@@ -6,6 +6,7 @@ use Magento\Payment\Gateway\Helper\ContextHelper;
 use Magento\Payment\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
+use Tonder\Payment\Observer\DataAssignObserver;
 
 /**
  * Class CardDetailsDataBuilder
@@ -14,19 +15,18 @@ use Magento\Sales\Api\Data\OrderPaymentInterface;
  */
 class CardDetailsDataBuilder extends AbstractDataBuilder implements BuilderInterface
 {
+    const SKYFLOW_ID = 'skyflow_id';
 
-    /**
-     * The card number that is to be processed for this transaction.
-     * (Not required when processing using an existing CustomerTokenID with TokenPayment method).
-     * This should be the encrypted value if using Client Side Encryption.
-     */
-    const PAN = 'pan';
+    const CARD_NUMBER = 'card_number';
 
-    /**
-     * The month that the card expires.
-     * (Not required when processing using an existing Customer TokenID with TokenPayment method)
-     */
-    const EXPIRY_DATE = 'expdate';
+    const CARDHOLDER_NAME = 'cardholder_name';
+
+    const CVV = 'cvv';
+
+    const EXPIRATION_MONTH = 'expiration_month';
+
+    const EXPIRATION_YEAR = 'expiration_year';
+
 
     /**
      * @var EncryptorInterface
@@ -58,12 +58,22 @@ class CardDetailsDataBuilder extends AbstractDataBuilder implements BuilderInter
         $month = $this->formatMonth($data[OrderPaymentInterface::CC_EXP_MONTH]);
         $year = substr($data[OrderPaymentInterface::CC_EXP_YEAR], 2, 3);
         $cardNumber = $data[OrderPaymentInterface::CC_NUMBER_ENC];
+        $cardNumber = $this->encryptor->decrypt($cardNumber);
+        $cardHolderName = $this->encryptor->decrypt($data[DataAssignObserver::CC_CARD_HOLDER]);
 
         return [
-            self::REPLACE_KEY => [
-
-                self::PAN => $this->encryptor->decrypt($cardNumber),
-                self::EXPIRY_DATE => $year . $month
+            "processor" => [
+                "id" => 2,
+                "resourcetype" => "StripeBusinessConnection",
+                "processor_type" => "CHECKOUT"
+            ],
+            "card" => [
+                self::SKYFLOW_ID => 123,
+                self::CARD_NUMBER => "",
+                self::CARDHOLDER_NAME => "",
+                self::CVV => "",
+                self::EXPIRATION_MONTH => $month,
+                self::EXPIRATION_YEAR => $year,
             ]
         ];
     }
@@ -75,5 +85,10 @@ class CardDetailsDataBuilder extends AbstractDataBuilder implements BuilderInter
     private function formatMonth($month)
     {
         return !empty($month) ? sprintf('%02d', $month) : null;
+    }
+
+    private function skyFlowTokenization($data)
+    {
+
     }
 }

@@ -3,7 +3,7 @@
     <type name="Magento\Payment\Model\CcGenericConfigProvider">
         <arguments>
             <argument name="methodCodes" xsi:type="array">
-                <item name="tonder_gateway_config_provider" xsi:type="const">Tonder\Payment\Model\Payment\Tonder::METHOD_CODE</item>
+                <item name="tonder_gateway_config_provider" xsi:type="const">Tonder\Payment\Model\Method\Adapter::METHOD_CODE</item>
             </argument>
         </arguments>
     </type>
