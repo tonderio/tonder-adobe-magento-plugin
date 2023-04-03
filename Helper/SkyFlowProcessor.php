@@ -3,7 +3,8 @@
 namespace Tonder\Payment\Helper;
 
 use Firebase\JWT\JWT;
-use Laminas\Http\Client;
+use Magento\Framework\HTTP\ZendClient;
+use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Encryption\EncryptorInterface;
@@ -11,7 +12,6 @@ use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Payment\Gateway\Command\CommandException;
 use Magento\Sales\Model\Order\Payment;
 use Psr\Log\LoggerInterface;
-use Laminas\Http\ClientFactory;
 
 class SkyFlowProcessor extends AbstractHelper
 {
@@ -21,7 +21,7 @@ class SkyFlowProcessor extends AbstractHelper
     private $encryptor;
 
     /**
-     * @var ClientFactory
+     * @var ZendClientFactory
      */
     private $clientFactory;
 
@@ -37,13 +37,13 @@ class SkyFlowProcessor extends AbstractHelper
 
     /**
      * @param EncryptorInterface $encryptor
-     * @param ClientFactory $clientFactory
+     * @param ZendClientFactory $clientFactory
      * @param SerializerInterface $serializer
      * @param Context $context
      */
     public function __construct(
         EncryptorInterface $encryptor,
-        ClientFactory $clientFactory,
+        ZendClientFactory $clientFactory,
         SerializerInterface $serializer,
         LoggerInterface $logger,
         Context $context
@@ -65,7 +65,7 @@ class SkyFlowProcessor extends AbstractHelper
     {
         $accessToken = $this->requestToken($payment);
         $methodInstance = $payment->getMethodInstance();
-        /** @var Client $client */
+        /** @var ZendClient $client */
         $client = $this->clientFactory->create();
         $client->setMethod('POST');
         $data = [
@@ -76,7 +76,7 @@ class SkyFlowProcessor extends AbstractHelper
                 ]
             ]
         ];
-        $client->setRawBody($this->serializer->serialize($data));
+        $client->setRawData($this->serializer->serialize($data));
 
         $client->setUri(
             $this->encryptor->decrypt($methodInstance->getConfigData('sf_vault_url')).
@@ -95,14 +95,14 @@ class SkyFlowProcessor extends AbstractHelper
         ]);
 
         try {
-            $response = $client->send();
+            $response = $client->request();
             $body = $this->serializer->unserialize($response->getBody());
             if (isset($body['records'][0]['skyflow_id'])) {
                 return $body['records'][0];
             }
             $this->logger->error($response->getBody());
         } catch (\Exception $exception) {
-            $this->logger->error($client->getResponse()->getBody());
+            $this->logger->error($client->getLastResponse()->getBody());
             $this->logger->error($exception->getMessage());
         }
 
@@ -142,15 +142,15 @@ class SkyFlowProcessor extends AbstractHelper
             'assertion' => $signedJwt
         ];
 
-        /** @var Client $client */
+        /** @var ZendClient $client */
         $client = $this->clientFactory->create();
         $client->setMethod('POST');
-        $client->setRawBody($this->serializer->serialize($data));
+        $client->setRawData($this->serializer->serialize($data));
 
         $client->setUri($sfData['tokenURI']);
 
         try {
-            $response = $client->send();
+            $response = $client->request();
             $body = $this->serializer->unserialize($response->getBody());
             if (isset($body['accessToken'])) {
                 return $body['accessToken'];

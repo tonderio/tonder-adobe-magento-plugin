@@ -2,11 +2,10 @@
 
 namespace Tonder\Payment\Gateway\Http\Client;
 
-use Laminas\HTTP\Client;
-use Laminas\Http\Client\Exception\RuntimeException;
-use Laminas\HTTP\ClientFactory;
-use Magento\Framework\HTTP\LaminasClientFactory;
+use Magento\Framework\HTTP\ZendClient;
+use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Payment\Gateway\Http\ClientException;
 use Tonder\Payment\Gateway\Request\AbstractDataBuilder;
 use Tonder\Payment\Logger\Logger;
 use Magento\Framework\Serialize\Serializer\Json;
@@ -40,15 +39,17 @@ class Zend extends \Magento\Payment\Gateway\Http\Client\Zend
      * @var SerializerInterface
      */
     private $serializer;
+
     /**
-     * @param ClientFactory $clientFactory
-     * @param Logger $logger
-     * @param ConverterInterface | null $converter
+     * @param ZendClientFactory $clientFactory
+     * @param \Magento\Payment\Model\Method\Logger $logger
+     * @param Logger $logger2
      * @param Json $_jsonFramework
+     * @param SerializerInterface $serializer
+     * @param ConverterInterface|null $converter
      */
     public function __construct(
-        LaminasClientFactory                 $clientFactory,
-        ClientFactory                        $clientFactory2,
+        ZendClientFactory                 $clientFactory,
         \Magento\Payment\Model\Method\Logger $logger,
         Logger                               $logger2,
         Json                                 $_jsonFramework,
@@ -56,12 +57,12 @@ class Zend extends \Magento\Payment\Gateway\Http\Client\Zend
         ConverterInterface                   $converter = null
 
     ) {
-        $this->clientFactory = $clientFactory2;
+        $this->clientFactory = $clientFactory;
         $this->converter = $converter;
         $this->logger = $logger2;
         $this->serializer = $serializer;
         $this->_jsonFramework = $_jsonFramework;
-//        parent::__construct($clientFactory, $logger, $converter);
+        parent::__construct($clientFactory, $logger, $converter);
     }
 
     /**
@@ -74,28 +75,28 @@ class Zend extends \Magento\Payment\Gateway\Http\Client\Zend
             'request_url' => $transferObject->getUri()
         ];
         $result = [];
-        /** @var Client $client */
+        /** @var ZendClient $client */
         $client = $this->clientFactory->create();
         $client->setMethod($transferObject->getMethod());
-        $client->setRawBody($transferObject->getBody());
+        $client->setRawData($transferObject->getBody());
 
         $client->setHeaders($transferObject->getHeaders());
         $client->setUri($transferObject->getUri());
         $client->setEncType('application/json');
         $result = [];
         try {
-            $response = $client->send();
+            $response = $client->request();
             try {
                 $result = $this->serializer->unserialize($response->getBody());
             } catch (\Exception $e) {
                 $result['Message'] = "Invalid body returned!";
             }
-            $result['ResponseCode'] = $response->getStatusCode();
-            $result['ResponseMessage'] = $response->getReasonPhrase();
+            $result['ResponseCode'] = $response->getStatus();
+            $result['ResponseMessage'] = $response->getMessage();
             $result['Message'] .= " Details: " . $result['ResponseCode'] . " - " . $result['ResponseMessage'];
             $logInfo['response_body'] = $response->getBody();
         } catch (\RuntimeException $e) {
-            throw new \Magento\Payment\Gateway\Http\ClientException(
+            throw new ClientException(
                 __($e->getMessage())
             );
         } catch (\Exception $e) {
