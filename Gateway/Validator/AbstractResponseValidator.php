@@ -72,7 +72,7 @@ abstract class AbstractResponseValidator extends AbstractValidator
      */
     protected function validateErrors(array $response)
     {
-        return $response[self::RESPONSE_CODE] != 'null' && (int)$response[self::RESPONSE_CODE] < 50;
+        return $response[self::RESPONSE_CODE] != 'null' && (int)$response[self::RESPONSE_CODE] == 200;
     }
 
     /**
