@@ -5,6 +5,7 @@ namespace Tonder\Payment\Gateway\Http\Client;
 use Laminas\HTTP\Client;
 use Laminas\Http\Client\Exception\RuntimeException;
 use Laminas\HTTP\ClientFactory;
+use Magento\Framework\HTTP\LaminasClientFactory;
 use Magento\Framework\Serialize\SerializerInterface;
 use Tonder\Payment\Gateway\Request\AbstractDataBuilder;
 use Tonder\Payment\Logger\Logger;
@@ -46,16 +47,18 @@ class Zend extends \Magento\Payment\Gateway\Http\Client\Zend
      * @param Json $_jsonFramework
      */
     public function __construct(
-        ClientFactory $clientFactory,
-        Logger $logger,
-        Json $_jsonFramework,
-        SerializerInterface $serializer,
-        ConverterInterface $converter = null
+        LaminasClientFactory                 $clientFactory,
+        ClientFactory                        $clientFactory2,
+        \Magento\Payment\Model\Method\Logger $logger,
+        Logger                               $logger2,
+        Json                                 $_jsonFramework,
+        SerializerInterface                  $serializer,
+        ConverterInterface                   $converter = null
 
     ) {
-        $this->clientFactory = $clientFactory;
+        $this->clientFactory = $clientFactory2;
         $this->converter = $converter;
-        $this->logger = $logger;
+        $this->logger = $logger2;
         $this->serializer = $serializer;
         $this->_jsonFramework = $_jsonFramework;
 //        parent::__construct($clientFactory, $logger, $converter);
