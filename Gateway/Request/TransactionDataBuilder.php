@@ -29,16 +29,14 @@ class TransactionDataBuilder extends AbstractDataBuilder implements BuilderInter
     {
         $paymentDO = SubjectReader::readPayment($buildSubject);
         $order = $paymentDO->getOrder();
-        $data = [
-            self::ORDER_ID => $order->getOrderIncrementId(),
-            self::CRYPT_TYPE => '7'
-        ];
 
-        if ($order->getCustomerId()) {
-            $data[self::CUSTOMER_ID] = (string)$order->getCustomerId();
-        }
         return [
-            self::REPLACE_KEY => $data
+            "description" => 'Payment for order #'. $order->getOrderIncrementId(),
+            "device_session_id" => "",
+            "token_id" => "",
+            "order_id" => $order->getOrderIncrementId(),
+            "business_id" => $order->getOrderIncrementId(),
+            "payment_id" => $order->getOrderIncrementId()
         ];
     }
 }

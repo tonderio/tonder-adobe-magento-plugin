@@ -2,11 +2,12 @@
 
 namespace Tonder\Payment\Gateway\Http\Client;
 
-use Magento\Framework\HTTP\LaminasClientFactory;
+use Laminas\HTTP\Client;
+use Laminas\Http\Client\Exception\RuntimeException;
+use Laminas\HTTP\ClientFactory;
+use Magento\Framework\Serialize\SerializerInterface;
 use Tonder\Payment\Gateway\Request\AbstractDataBuilder;
 use Tonder\Payment\Logger\Logger;
-use Magento\Framework\HTTP\ZendClient;
-use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Payment\Gateway\Http\ConverterInterface;
 use Magento\Payment\Gateway\Http\TransferInterface;
@@ -17,7 +18,7 @@ use Magento\Payment\Gateway\Http\TransferInterface;
 class Zend extends \Magento\Payment\Gateway\Http\Client\Zend
 {
     /**
-     * @var ZendClientFactory
+     * @var ClientFactory
      */
     private $clientFactory;
 
@@ -34,23 +35,28 @@ class Zend extends \Magento\Payment\Gateway\Http\Client\Zend
      * @var Json
      */
     protected $_jsonFramework;
-
     /**
-     * @param LaminasClientFactory $clientFactory
+     * @var SerializerInterface
+     */
+    private $serializer;
+    /**
+     * @param ClientFactory $clientFactory
      * @param Logger $logger
      * @param ConverterInterface | null $converter
      * @param Json $_jsonFramework
      */
     public function __construct(
-        LaminasClientFactory $clientFactory,
+        ClientFactory $clientFactory,
         Logger $logger,
         Json $_jsonFramework,
+        SerializerInterface $serializer,
         ConverterInterface $converter = null
 
     ) {
         $this->clientFactory = $clientFactory;
         $this->converter = $converter;
         $this->logger = $logger;
+        $this->serializer = $serializer;
         $this->_jsonFramework = $_jsonFramework;
 //        parent::__construct($clientFactory, $logger, $converter);
     }
@@ -60,37 +66,35 @@ class Zend extends \Magento\Payment\Gateway\Http\Client\Zend
      */
     public function placeRequest(TransferInterface $transferObject)
     {
-        $requestBodyXml = simplexml_load_string($transferObject->getBody());
-        $requestBodyArray = $this->_jsonFramework->unserialize($this->_jsonFramework->serialize($requestBodyXml));
         $logInfo = [
-            'request_body' => $this->maskData($requestBodyArray),
+            'request_body' => $this->maskData($transferObject->getBody()),
             'request_url' => $transferObject->getUri()
         ];
         $result = [];
-        /** @var ZendClient $client */
+        /** @var Client $client */
         $client = $this->clientFactory->create();
-        $client->setConfig($transferObject->getClientConfig());
         $client->setMethod($transferObject->getMethod());
-        $client->setRawData($transferObject->getBody());
+        $client->setRawBody($transferObject->getBody());
 
         $client->setHeaders($transferObject->getHeaders());
-        $client->setUrlEncodeBody($transferObject->shouldEncode());
         $client->setUri($transferObject->getUri());
-
+        $client->setEncType('application/json');
+        $result = [];
         try {
-            $response = $client->request();
-            $result = $this->converter
-                ? $this->converter->convert($response->getBody())
-                : [$response->getBody()];
-            $logInfo['response_body'] = $result;
-            if ($result['ResponseCode'] > "050" && $result['ResponseCode'] < "099") {
-                $result['Message'] = "Your credit card information is incorrect. Please try again!";
+            $response = $client->send();
+            try {
+                $result = $this->serializer->unserialize($response->getBody());
+            } catch (\Exception $e) {
+                $result['Message'] = "Invalid body returned!";
             }
-        } catch (\Zend_Http_Client_Exception $e) {
+            $result['ResponseCode'] = $response->getStatusCode();
+            $result['ResponseMessage'] = $response->getReasonPhrase();
+            $logInfo['response_body'] = $response->getBody();
+        } catch (\RuntimeException $e) {
             throw new \Magento\Payment\Gateway\Http\ClientException(
                 __($e->getMessage())
             );
-        } catch (\Magento\Payment\Gateway\Http\ConverterException $e) {
+        } catch (\Exception $e) {
             throw $e;
         } finally {
             $this->logger->info('Info log: ', $logInfo);

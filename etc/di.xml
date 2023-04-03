@@ -363,13 +363,8 @@
                 <item name="card_details" xsi:type="string">Tonder\Payment\Gateway\Request\CardDetailsDataBuilder</item>
                 <item name="transaction" xsi:type="string">Tonder\Payment\Gateway\Request\TransactionDataBuilder</item>
                 <item name="amount" xsi:type="string">Tonder\Payment\Gateway\Request\AmountDataBuilder</item>
-                <item name="avs" xsi:type="string">Tonder\Payment\Gateway\Request\AVSDataBuilder</item>
-                <item name="cvd" xsi:type="string">Tonder\Payment\Gateway\Request\CVDDataBuilder</item>
                 <item name="customer" xsi:type="string">Tonder\Payment\Gateway\Request\CustomerDataBuilder</item>
-                <item name="billing_address" xsi:type="string">Tonder\Payment\Gateway\Request\BillingAddressDataBuilder</item>
-                <item name="shipping_address" xsi:type="string">Tonder\Payment\Gateway\Request\ShippingAddressDataBuilder</item>
                 <item name="items" xsi:type="string">Tonder\Payment\Gateway\Request\ItemsDataBuilder</item>
-                <item name="cavv" xsi:type="string">Tonder\Payment\Gateway\Request\CavvDataBuilder</item>
             </argument>
         </arguments>
     </virtualType>

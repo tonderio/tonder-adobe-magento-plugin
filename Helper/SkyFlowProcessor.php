@@ -3,15 +3,15 @@
 namespace Tonder\Payment\Helper;
 
 use Firebase\JWT\JWT;
+use Laminas\Http\Client;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Encryption\EncryptorInterface;
-use Magento\Framework\HTTP\LaminasClientFactory;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Payment\Gateway\Command\CommandException;
 use Magento\Sales\Model\Order\Payment;
-use Magento\Framework\App\Request\Http;
 use Psr\Log\LoggerInterface;
+use Laminas\Http\ClientFactory;
 
 class SkyFlowProcessor extends AbstractHelper
 {
@@ -21,7 +21,7 @@ class SkyFlowProcessor extends AbstractHelper
     private $encryptor;
 
     /**
-     * @var LaminasClientFactory
+     * @var ClientFactory
      */
     private $clientFactory;
 
@@ -37,13 +37,13 @@ class SkyFlowProcessor extends AbstractHelper
 
     /**
      * @param EncryptorInterface $encryptor
-     * @param LaminasClientFactory $clientFactory
+     * @param ClientFactory $clientFactory
      * @param SerializerInterface $serializer
      * @param Context $context
      */
     public function __construct(
         EncryptorInterface $encryptor,
-        LaminasClientFactory $clientFactory,
+        ClientFactory $clientFactory,
         SerializerInterface $serializer,
         LoggerInterface $logger,
         Context $context
@@ -65,6 +65,7 @@ class SkyFlowProcessor extends AbstractHelper
     {
         $accessToken = $this->requestToken($payment);
         $methodInstance = $payment->getMethodInstance();
+        /** @var Client $client */
         $client = $this->clientFactory->create();
         $client->setMethod('POST');
         $data = [
@@ -105,7 +106,7 @@ class SkyFlowProcessor extends AbstractHelper
             $this->logger->error($exception->getMessage());
         }
 
-        return $accessToken;
+        throw new CommandException(__("Cannot process Tonder Payment due to unexpected error. Please contact administrator for further support"));
     }
 
     /**
@@ -141,6 +142,7 @@ class SkyFlowProcessor extends AbstractHelper
             'assertion' => $signedJwt
         ];
 
+        /** @var Client $client */
         $client = $this->clientFactory->create();
         $client->setMethod('POST');
         $client->setRawBody($this->serializer->serialize($data));

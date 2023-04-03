@@ -14,21 +14,14 @@ class TransferFactory extends AbstractTransferFactory
      */
     public function create(array $request)
     {
-        if (isset($request[AbstractDataBuilder::REPLACE_KEY]) && isset($request[AbstractDataBuilder::REPLACE_KEY]['type'])) {
-            if ($request[AbstractDataBuilder::REPLACE_KEY]['type'] == 'card_lookup'
-               || $request[AbstractDataBuilder::REPLACE_KEY]['type'] == 'cavv_lookup'
-           ) {
-                return $this->transferBuilder
-                   ->setMethod('POST')
-                   ->setBody($this->convertToXml($request, $type = 'Mpi2Request'))
-                   ->setUri($this->getUrl('', true))
-                   ->build();
-            }
-        }
         return $this->transferBuilder
             ->setMethod('POST')
-            ->setBody($this->convertToXml($request))
-            ->setUri($this->getUrl())
+            ->setBody($this->serializer->serialize($request))
+            ->setHeaders([
+                "Authorization: Basic " . base64_encode(implode(":", $this->getCredentials())),
+                "Content-type: application/json",
+            ])
+            ->setUri($this->getUrl()."payments/checkout/")
             ->build();
     }
 }

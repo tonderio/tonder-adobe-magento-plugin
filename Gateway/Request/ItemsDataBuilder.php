@@ -40,38 +40,26 @@ class ItemsDataBuilder extends AbstractDataBuilder implements BuilderInterface
         $paymentDO = SubjectReader::readPayment($buildSubject);
 
         $order = $paymentDO->getOrder();
-        return [
-            self::REPLACE_KEY => [
-                CustomerDataBuilder::CUSTOMER => [
-                    self::ITEMS => $this->prepareItems($order->getItems())
-                ]
-            ]
-        ];
-    }
 
-    /**
-     * @param \Magento\Sales\Api\Data\OrderItemInterface[]|null $items
-     * @return array
-     */
-    private function prepareItems($items)
-    {
-        $result = [];
-        $multiCurrency = $this->scopeConfig->getValue('payment/tonder/multi_currency', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        $result = [
+            'id_product' => [],
+            'quantity_product' => 0,
+            'id_ship' => 0,
+            'instance_id_ship' => 2,
+            'cost_ship' => 0,
+            'title_ship' => 'shipping',
+        ];
 
         /** @var \Magento\Sales\Model\Order\Item $item */
 
-        foreach ($items as $item) {
+        foreach ($order->getItems() as $item) {
             if (!$item->getParentItem()) {
-                $extendAmount = $multiCurrency ? number_format($item->getPrice(), 2) : number_format($item->getBasePrice(), 2);
-                $result[] = [
-                    self::SKU => $item->getSku(),
-                    self::QUANTITY => number_format($item->getQtyOrdered(), 0),
-                    self::UNIT_COST => $extendAmount,
-                    self::NAME => $item->getName()
-                ];
+                $result['id_product'][] = $item->getProductId();
+                $result['quantity_product'] += $item->getQtyOrdered();
             }
-
         }
+
+        $result['id_product'] = implode(",", $result['id_product']);
 
         return $result;
     }

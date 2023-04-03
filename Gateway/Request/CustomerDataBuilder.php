@@ -1,4 +1,5 @@
 <?php
+
 namespace Tonder\Payment\Gateway\Request;
 
 use Magento\Payment\Gateway\ConfigInterface;
@@ -31,7 +32,7 @@ class CustomerDataBuilder extends AbstractDataBuilder implements BuilderInterfac
     {
         $paymentDO = SubjectReader::readPayment($buildSubject);
 
-        $order = $paymentDO->getOrder();
+        $order          = $paymentDO->getOrder();
         $billingAddress = $order->getBillingAddress();
 
         if (!$billingAddress) {
@@ -39,12 +40,10 @@ class CustomerDataBuilder extends AbstractDataBuilder implements BuilderInterfac
         }
 
         return [
-            self::REPLACE_KEY => [
-                self::CUSTOMER => [
-                    self::EMAIL => $billingAddress->getEmail(),
-                    self::INSTRUCTIONS => 'Magento 2 Tonder Payment'
-                ]
-            ]
+            'name' => $billingAddress->getFirstname(),
+            'last_name' => $billingAddress->getLastname(),
+            'email_client' => $billingAddress->getEmail(),
+            'phone_number' => $billingAddress->getTelephone()
         ];
     }
 }

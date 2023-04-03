@@ -2,6 +2,8 @@
 
 namespace Tonder\Payment\Gateway\Http;
 
+use Magento\Framework\Encryption\EncryptorInterface;
+use Magento\Framework\Serialize\SerializerInterface;
 use Tonder\Payment\Gateway\Request\AbstractDataBuilder;
 use Tonder\Payment\Gateway\Request\TransactionDataBuilder;
 use Tonder\Payment\Model\Adminhtml\Source\Environment;
@@ -44,12 +46,24 @@ abstract class AbstractTransferFactory implements TransferFactoryInterface
     protected $order;
 
     /**
+     * @var EncryptorInterface
+     */
+    protected $encryptor;
+
+    /**
+     * @var SerializerInterface
+     */
+    protected $serializer;
+
+    /**
      * AbstractTransferFactory constructor.
      *
      * @param ConfigInterface $config
      * @param TransferBuilder $transferBuilder
      * @param GeneratorFactory $generator
      * @param OrderInterfaceFactory $order
+     * @param EncryptorInterface $encryptor
+     * @param SerializerInterface $serializer
      * @param null $action
      */
     public function __construct(
@@ -57,6 +71,8 @@ abstract class AbstractTransferFactory implements TransferFactoryInterface
         TransferBuilder $transferBuilder,
         GeneratorFactory $generator,
         OrderInterfaceFactory $order,
+        EncryptorInterface $encryptor,
+        SerializerInterface $serializer,
         $action = null
     ) {
         $this->config = $config;
@@ -64,6 +80,8 @@ abstract class AbstractTransferFactory implements TransferFactoryInterface
         $this->generator = $generator;
         $this->order = $order;
         $this->action = $action;
+        $this->serializer = $serializer;
+        $this->encryptor = $encryptor;
     }
 
     /**
@@ -94,17 +112,31 @@ abstract class AbstractTransferFactory implements TransferFactoryInterface
      */
     public function getUrl($additionalPath = '', $is3DS = false)
     {
-        $prefix = (bool)$this->config->getValue('sandbox_flag') ? 'sandbox_' : '';
-        $after = $this->isUsCountry() ? '_us' : '';
-        $path = $prefix . 'tonder_gateway' . $after;
-        $gateway = $this->config->getValue($path);
-        if ($additionalPath == '' && !$is3DS) {
-            $additionalPath = $this->config->getValue('tonder_path_servlet' . $after);
+        return match ((int)$this->config->getValue('mode')) {
+            1 => $this->config->getValue('stage_api'),
+            2 => $this->config->getValue('live_api'),
+            default => $this->config->getValue('mock_api'),
+        };
+    }
+
+    public function getCredentials()
+    {
+        $mode = $this->config->getValue('mode');
+        if ($mode == 1) {
+            $username = "stage_username";
+            $password = "stage_password";
+        } else if ($mode == 2) {
+            $username = "live_username";
+            $password = "live_password";
+        } else {
+            $username = "mock_username";
+            $password = "mock_password";
         }
-        if ($additionalPath == '' && $is3DS) {
-            $additionalPath = $this->config->getValue('tonder_path_mpi_servlet' . $after);
-        }
-        return trim($gateway) . $additionalPath;
+
+        return [
+            $this->encryptor->decrypt($this->config->getValue($username)),
+            $this->encryptor->decrypt($this->config->getValue($password)),
+        ];
     }
 
     /**

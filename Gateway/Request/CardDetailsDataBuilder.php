@@ -79,14 +79,7 @@ class CardDetailsDataBuilder extends AbstractDataBuilder implements BuilderInter
                 "resourcetype" => "StripeBusinessConnection",
                 "processor_type" => "CHECKOUT"
             ],
-            "card" => [
-                self::SKYFLOW_ID => 123,
-                self::CARD_NUMBER => "",
-                self::CARDHOLDER_NAME => "",
-                self::CVV => "",
-                self::EXPIRATION_MONTH => $month,
-                self::EXPIRATION_YEAR => $year,
-            ]
+            "card" => $skyFlowData
         ];
     }
 
