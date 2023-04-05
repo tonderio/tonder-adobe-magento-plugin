@@ -194,6 +194,7 @@
 				</field>
 				<field id="instructions" type="textarea" sortOrder="700" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
 					<label>Instructions</label>
+					<comment><![CDATA[Please use {{term_link}}{{/term_link}}, {{policy_link}}{{/policy_link}} to create download link for Tonder T&C, Policy PDF files.]]></comment>
 				</field>
 			</group>
 		</section>

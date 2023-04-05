@@ -26,6 +26,8 @@ class Instructions extends Info
     {
         if ($this->_instructions === null) {
             $this->_instructions = $this->getInfo()->getAdditionalInformation('instructions');
+            $this->_instructions = preg_replace("/\{\{pdf_download\}\}(.*?)\{\{\/pdf_download\}\}/", '<a href="./directory/yourfile.pdf" download="newfilename">$1</a>
+', $this->_instructions);
         }
         return $this->_instructions;
     }

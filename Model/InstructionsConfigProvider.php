@@ -4,6 +4,7 @@ namespace Tonder\Payment\Model;
 
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Framework\Escaper;
+use Magento\Framework\View\Asset\Repository;
 use Magento\Payment\Helper\Data as PaymentHelper;
 use Tonder\Payment\Model\Method\Adapter;
 
@@ -27,14 +28,25 @@ class InstructionsConfigProvider implements ConfigProviderInterface
     protected $escaper;
 
     /**
+     * Asset service
+     *
+     * @var Repository
+     */
+    protected $assetRepo;
+
+    /**
      * @param PaymentHelper $paymentHelper
      * @param Escaper $escaper
+     * @param Repository $assetRepo
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
         PaymentHelper $paymentHelper,
-        Escaper $escaper
+        Escaper $escaper,
+        Repository $assetRepo
     ) {
         $this->escaper = $escaper;
+        $this->assetRepo = $assetRepo;
         foreach ($this->methodCodes as $code) {
             $this->methods[$code] = $paymentHelper->getMethodInstance($code);
         }
@@ -48,7 +60,15 @@ class InstructionsConfigProvider implements ConfigProviderInterface
         $config = [];
         foreach ($this->methodCodes as $code) {
             if ($this->methods[$code]->isAvailable()) {
-                $config['payment']['instructions'][$code] = $this->getInstructions($code);
+                $instructions = $this->getInstructions($code);
+                $policyLink = $this->assetRepo->getUrl('Tonder_Payment::pdf/policy.pdf');
+                $instructions = preg_replace("/\{\{policy_link\}\}(.*?)\{\{\/policy_link\}\}/", '<a href="'. $policyLink .'" download="'. __("Policy") .'">$1</a>
+', $instructions);
+                $termLink = $this->assetRepo->getUrl('Tonder_Payment::pdf/term-and-condition.pdf');
+                $instructions = preg_replace("/\{\{term_link\}\}(.*?)\{\{\/term_link\}\}/", '<a href="'. $termLink .'" download="'. __("Term-and-Condition") .'">$1</a>
+', $instructions);
+                $config['payment']['instructions'][$code] = $instructions;
+
             }
         }
         return $config;
