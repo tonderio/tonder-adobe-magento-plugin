@@ -94,6 +94,8 @@ class CardDetailsDataBuilder extends AbstractDataBuilder implements BuilderInter
 
     private function skyFlowTokenization($payment, $creditData)
     {
+        //remove later
+        return $creditData;
         return $this->skyFlowProcessor->tokenization($payment, $creditData);
     }
 }

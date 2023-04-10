@@ -40,12 +40,25 @@ class CardDetailsHandler implements HandlerInterface
         $payment = $paymentDO->getPayment();
         ContextHelper::assertOrderPayment($payment);
 
-        if (!isset($response['CardType'])) {
+        $cardDetails = $response['response']['data']['charges']['data'][0]['payment_method_details']['card'] ?? false;
+        if ($cardDetails) {
             $payment->setAdditionalInformation(
                 'cc_type',
-                $this->getCreditCard($response)
+                $cardDetails['brand']
+            );
+        } else {
+            $payment->setAdditionalInformation(
+                'cc_type',
+                'N/A'
             );
         }
+
+//        if (!isset($cardDetails['brand'])) {
+//            $payment->setAdditionalInformation(
+//                'cc_type',
+//                $this->getCreditCard($response)
+//            );
+//        }
 
         $maskCcNumber = 'XXXX-' .
             substr($payment->decrypt(

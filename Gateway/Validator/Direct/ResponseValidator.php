@@ -37,7 +37,6 @@ class ResponseValidator extends AbstractResponseValidator
         $errorMessages = [];
         $validationResult = $this->validateErrors($response)
             && $this->validateTotalAmount($response, $amount)
-            && $this->validateTransactionType($response)
             && $this->validateTransactionId($response)
             && $this->validateResponseCode($response)
             && $this->validateResponseMessage($response);

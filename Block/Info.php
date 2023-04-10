@@ -38,6 +38,8 @@ class Info extends ConfigurableInfo
                 return __('Response Code');
             case 'approve_messages':
                 return __('Approve Message');
+            case 'error_messages':
+                return __('Message');
             case 'kount_response_code':
                 return __('Kount');
             case 'avs_response_code':

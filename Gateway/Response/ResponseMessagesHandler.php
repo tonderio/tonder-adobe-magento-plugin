@@ -22,7 +22,7 @@ class ResponseMessagesHandler implements HandlerInterface
         ContextHelper::assertOrderPayment($payment);
 
         $responseCode = $response['ResponseCode'];
-        $messages = $response['Message'];
+        $messages = $response['message'];
         $state = $this->getState($responseCode);
 
         if ($state) {

@@ -26,6 +26,8 @@
                 <can_authorize>1</can_authorize>
                 <can_capture>1</can_capture>
                 <can_refund>1</can_refund>
+                <paymentInfoKeys>transaction_type,card_number,cc_type,card_expiry_date,transaction_id,response_code,reference_num,error_messages</paymentInfoKeys>
+                <privateInfoKeys>card_expiry_date,cc_cid_enc,cc_card_holder</privateInfoKeys>
             </tonder>
         </payment>
         <csp>

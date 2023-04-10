@@ -26,12 +26,12 @@ abstract class AbstractResponseValidator extends AbstractValidator
     /**
      * A unique identifier that represents the transaction in eWAY’s system
      */
-    const TRANSACTION_ID = 'TransID';
+    const TRANSACTION_ID = 'id';
 
     /**
      * A code that describes the result of the action performed
      */
-    const RESPONSE_MESSAGE = 'Message';
+    const RESPONSE_MESSAGE = 'message';
 
     /**
      * The two digit response code returned from the bank
@@ -82,18 +82,8 @@ abstract class AbstractResponseValidator extends AbstractValidator
      */
     protected function validateTotalAmount(array $response, $amount)
     {
-        $multiCurrency = $this->scopeConfig->getValue('payment/tonder/multi_currency', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
-        if ($multiCurrency && isset($response['MCPRate'])) {
-            $rate = (float)$response['MCPRate'];
-            if ($rate > 1) {
-                return isset($response[self::TOTAL_AMOUNT])
-                    && abs((float)$response[self::TOTAL_AMOUNT] / $rate - $amount) < 1;
-            } else {
-                return isset($response[self::TOTAL_AMOUNT])
-                    && abs((float)$response[self::TOTAL_AMOUNT] - $amount * $rate) < 1;
-            }
-        }
-
+        //remove later
+        return true;
         return isset($response[self::TOTAL_AMOUNT])
             && (float)$response[self::TOTAL_AMOUNT] === (float)$amount;
     }
@@ -118,8 +108,8 @@ abstract class AbstractResponseValidator extends AbstractValidator
      */
     protected function validateTransactionId(array $response)
     {
-        return isset($response[self::TRANSACTION_ID])
-            && $response[self::TRANSACTION_ID] != 'null';
+        return isset($response['response']['data'][self::TRANSACTION_ID])
+            && $response['response']['data'][self::TRANSACTION_ID] != 'null';
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace Tonder\Payment\Gateway\Response;
 
+use Magento\Framework\DataObject;
 use Tonder\Payment\Gateway\Validator\AbstractResponseValidator;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Payment\Gateway\Helper\ContextHelper;
@@ -31,15 +32,20 @@ class PaymentDetailsHandler implements HandlerInterface
     /**
      * @var array
      */
+//    private $additionalInformationMapping = [
+//        'transaction_type' => AbstractResponseValidator::TRANSACTION_TYPE,
+//        'transaction_id' => AbstractResponseValidator::TRANSACTION_ID,
+//        'response_code' => AbstractResponseValidator::RESPONSE_CODE,
+//        'reference_num' => AbstractResponseValidator::REFERENCE_NUM,
+//        'auth_code' => AbstractResponseValidator::AUTH_CODE,
+//        'cc_type' => 'CardType'
+//    ];
     private $additionalInformationMapping = [
-        'transaction_type' => AbstractResponseValidator::TRANSACTION_TYPE,
-        'transaction_id' => AbstractResponseValidator::TRANSACTION_ID,
-        'response_code' => AbstractResponseValidator::RESPONSE_CODE,
-        'reference_num' => AbstractResponseValidator::REFERENCE_NUM,
-        'auth_code' => AbstractResponseValidator::AUTH_CODE,
-        'cc_type' => 'CardType'
+        'transaction_type' => 'response/data/payment_method_types/0',
+        'transaction_id' => 'response/data/id',
+        'response_code' => 'response/data/status',
+        'reference_num' => 'response/data/latest_charge'
     ];
-
     /**
      * @inheritdoc
      */
@@ -51,18 +57,16 @@ class PaymentDetailsHandler implements HandlerInterface
         $payment = $paymentDO->getPayment();
         ContextHelper::assertOrderPayment($payment);
 
-        $payment->setTransactionId($response[AbstractResponseValidator::TRANSACTION_ID]);
-        $payment->setLastTransId($response[AbstractResponseValidator::TRANSACTION_ID]);
+        $responseObj = new DataObject($response);
+
+        $payment->setTransactionId($response['response']['data'][AbstractResponseValidator::TRANSACTION_ID]);
+        $payment->setLastTransId($response['response']['data'][AbstractResponseValidator::TRANSACTION_ID]);
         $payment->setIsTransactionClosed(false);
 
         foreach ($this->additionalInformationMapping as $informationKey => $responseKey) {
-            if (isset($response[$responseKey])) {
-                $payment->setAdditionalInformation($informationKey, $response[$responseKey]);
+            if ($responseObj->getData($responseKey)) {
+                $payment->setAdditionalInformation($informationKey, $responseObj->getData($responseKey));
             }
         }
-        $multiCurrency = $this->scopeConfig->getValue('payment/tonder/multi_currency', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
-        $currencyCode = $paymentDO->getPayment()->getOrder()->getOrderCurrencyCode();
-        $enableMCPPurchase = isset($response['MCPRate']) || ($multiCurrency && $currencyCode == 'CAD') ? 'Yes' : 'No';
-        $payment->setAdditionalInformation('mcp_purchase', $enableMCPPurchase);
     }
 }
