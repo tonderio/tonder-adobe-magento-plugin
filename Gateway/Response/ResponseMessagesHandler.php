@@ -43,7 +43,7 @@ class ResponseMessagesHandler implements HandlerInterface
      */
     protected function getState($responseCode)
     {
-        if ($responseCode == 'null' || (int)$responseCode >= 50) {
+        if ($responseCode == 'null' || (int)$responseCode != 200) {
             return false;
         }
         return true;

@@ -21,7 +21,7 @@ class TransferFactory extends AbstractTransferFactory
                 "Authorization: Basic " . base64_encode(implode(":", $this->getCredentials())),
                 "Content-type: application/json",
             ])
-            ->setUri($this->getUrl()."payments/checkout/")
+            ->setUri($this->getUrl()."checkout-router/")
             ->build();
     }
 }
