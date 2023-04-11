@@ -30,13 +30,21 @@ class TransactionDataBuilder extends AbstractDataBuilder implements BuilderInter
         $paymentDO = SubjectReader::readPayment($buildSubject);
         $order = $paymentDO->getOrder();
 
+        $methodInstance = $paymentDO->getPayment()->getMethodInstance();
+        if ($order->getCustomerId()) {
+            $customerId = (string)$order->getCustomerId();
+        } else {
+            $customerId = session_id();
+        }
+
         return [
             "description" => 'Payment for order #'. $order->getOrderIncrementId(),
-            "device_session_id" => "",
+            "device_session_id" => session_id(),
             "token_id" => "",
             "order_id" => $order->getOrderIncrementId(),
-            "business_id" => $order->getOrderIncrementId(),
-            "payment_id" => $order->getOrderIncrementId()
+            "business_id" => $methodInstance->getConfigData('merchant_id'),
+            "client_id" => $customerId,
+            "payment_id" => 495
         ];
     }
 }

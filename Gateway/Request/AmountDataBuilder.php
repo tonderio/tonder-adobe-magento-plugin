@@ -20,7 +20,7 @@ class AmountDataBuilder extends AbstractDataBuilder implements BuilderInterface
     public function build(array $buildSubject)
     {
         return [
-            self::AMOUNT => sprintf('%.2F', SubjectReader::readAmount($buildSubject))
+            self::AMOUNT => (float)sprintf('%.2F', SubjectReader::readAmount($buildSubject))
         ];
     }
 }

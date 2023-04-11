@@ -104,6 +104,13 @@
 						<field id="active">1</field>
 					</depends>
 				</field>
+				<field id="merchant_id" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>Merchant ID</label>
+					<validate>required-entry no-whitespace</validate>
+					<depends>
+						<field id="active">1</field>
+					</depends>
+				</field>
 				<field id="order_status" type="select" sortOrder="30" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
 					<label>New Order Status</label>
 					<source_model>Magento\Sales\Model\Config\Source\Order\Status</source_model>

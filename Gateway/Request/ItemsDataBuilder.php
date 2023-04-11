@@ -44,9 +44,8 @@ class ItemsDataBuilder extends AbstractDataBuilder implements BuilderInterface
         $result = [
             'id_product' => [],
             'quantity_product' => 0,
-            'id_ship' => 0,
-            'instance_id_ship' => 2,
-            'cost_ship' => 0,
+            'id_ship' => "0",
+            'instance_id_ship' => "2",
             'title_ship' => 'shipping',
         ];
 

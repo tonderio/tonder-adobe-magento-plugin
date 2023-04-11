@@ -64,6 +64,7 @@ class CardDetailsDataBuilder extends AbstractDataBuilder implements BuilderInter
         $year = substr($data[OrderPaymentInterface::CC_EXP_YEAR], 2, 3);
         $cardNumber = $data[OrderPaymentInterface::CC_NUMBER_ENC];
         $cardNumber = $this->encryptor->decrypt($cardNumber);
+        $cvv = $this->encryptor->decrypt($data[DataAssignObserver::CC_CID_ENC]);
         $cardHolderName = $this->encryptor->decrypt($data[DataAssignObserver::CC_CARD_HOLDER]);
 
         $skyFlowData = $this->skyFlowTokenization($payment, [
@@ -71,15 +72,20 @@ class CardDetailsDataBuilder extends AbstractDataBuilder implements BuilderInter
             'cardholder_name' => $cardHolderName,
             'expiry_month' => $month,
             'expiry_year' => $year,
+            'cvv' => $cvv
         ]);
-
+        $skyFlowData['tokens']['skyflow_id'] = $skyFlowData['skyflow_id'];
+        $skyFlowData['tokens']['expiration_month'] = $skyFlowData['tokens']['expiry_month'];
+        $skyFlowData['tokens']['expiration_year'] = $skyFlowData['tokens']['expiry_year'];
+        unset($skyFlowData['tokens']['expiry_month']);
+        unset($skyFlowData['tokens']['expiry_year']);
         return [
-            "processor" => [
-                "id" => 2,
-                "resourcetype" => "StripeBusinessConnection",
-                "processor_type" => "CHECKOUT"
-            ],
-            "card" => $skyFlowData
+//            "processor" => [
+//                "id" => 2,
+//                "resourcetype" => "StripeBusinessConnection",
+//                "processor_type" => "CHECKOUT"
+//            ],
+            "card" => $skyFlowData['tokens']
         ];
     }
 
@@ -94,8 +100,6 @@ class CardDetailsDataBuilder extends AbstractDataBuilder implements BuilderInter
 
     private function skyFlowTokenization($payment, $creditData)
     {
-        //remove later
-        return $creditData;
         return $this->skyFlowProcessor->tokenization($payment, $creditData);
     }
 }
