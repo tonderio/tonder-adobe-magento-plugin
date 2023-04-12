@@ -56,6 +56,13 @@ abstract class AbstractTransferFactory implements TransferFactoryInterface
     protected $serializer;
 
     /**
+     * Url Path
+     *
+     * @var string
+     */
+    private $path;
+
+    /**
      * AbstractTransferFactory constructor.
      *
      * @param ConfigInterface $config
@@ -65,6 +72,7 @@ abstract class AbstractTransferFactory implements TransferFactoryInterface
      * @param EncryptorInterface $encryptor
      * @param SerializerInterface $serializer
      * @param null $action
+     * @param string $path
      */
     public function __construct(
         ConfigInterface $config,
@@ -73,13 +81,15 @@ abstract class AbstractTransferFactory implements TransferFactoryInterface
         OrderInterfaceFactory $order,
         EncryptorInterface $encryptor,
         SerializerInterface $serializer,
-        $action = null
+        $action = null,
+        $path = ''
     ) {
         $this->config = $config;
         $this->transferBuilder = $transferBuilder;
         $this->generator = $generator;
         $this->order = $order;
         $this->action = $action;
+        $this->path = $path;
         $this->serializer = $serializer;
         $this->encryptor = $encryptor;
     }
@@ -90,6 +100,11 @@ abstract class AbstractTransferFactory implements TransferFactoryInterface
     private function getAction()
     {
         return $this->action;
+    }
+
+    private function getPath()
+    {
+        return $this->path;
     }
 
     /**
@@ -112,11 +127,13 @@ abstract class AbstractTransferFactory implements TransferFactoryInterface
      */
     public function getUrl($additionalPath = '', $is3DS = false)
     {
-        return match ((int)$this->config->getValue('mode')) {
+        $baseUrl = match ((int)$this->config->getValue('mode')) {
             1 => $this->config->getValue('stage_api'),
             2 => $this->config->getValue('live_api'),
             default => $this->config->getValue('mock_api'),
         };
+
+        return $baseUrl.$this->getPath();
     }
 
     public function getCredentials()

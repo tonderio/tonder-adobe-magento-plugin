@@ -87,8 +87,11 @@ class Zend extends \Magento\Payment\Gateway\Http\Client\Zend
             $response = $client->request();
             try {
                 $result = $this->serializer->unserialize($response->getBody());
+                if (!isset($result['message'])) {
+                    $result['message'] = "";
+                }
             } catch (\Exception $e) {
-                $result['Message'] = "Invalid body returned!";
+                $result['message'] = "Invalid body returned!";
             }
             $result['ResponseCode'] = $response->getStatus();
             $result['ResponseMessage'] = $response->getMessage();

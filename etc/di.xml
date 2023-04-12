@@ -35,6 +35,11 @@
             <argument name="config" xsi:type="object">TonderConfig</argument>
         </arguments>
     </type>
+    <type name="Tonder\Payment\Gateway\Http\RefundTransferFactory">
+        <arguments>
+            <argument name="config" xsi:type="object">TonderConfig</argument>
+        </arguments>
+    </type>
     <type name="Tonder\Payment\Gateway\Response\AVSHandler">
         <arguments>
             <argument name="config" xsi:type="object">TonderConfig</argument>
@@ -381,6 +386,7 @@
     <virtualType name="TonderAuthorizeTransferFactory" type="Tonder\Payment\Gateway\Http\TransferFactory">
         <arguments>
             <argument name="action" xsi:type="const">Tonder\Payment\Gateway\Request\AbstractDataBuilder::AUTHORIZE</argument>
+            <argument name="path" xsi:type="string">checkout-router</argument>
         </arguments>
     </virtualType>
     <virtualType name="TonderDirectResponseHandler" type="Magento\Payment\Gateway\Response\HandlerChain">
@@ -418,6 +424,7 @@
     <virtualType name="TonderPreAuthTransferFactory" type="Tonder\Payment\Gateway\Http\TransferFactory">
         <arguments>
             <argument name="action" xsi:type="const">Tonder\Payment\Gateway\Request\AbstractDataBuilder::PRE_AUTH_CAPTURE</argument>
+            <argument name="path" xsi:type="string">checkout-router</argument>
         </arguments>
     </virtualType>
     <virtualType name="TonderCaptureDataBuilder" type="Magento\Payment\Gateway\Request\BuilderComposite">
@@ -509,9 +516,10 @@
             <argument name="handler" xsi:type="object">TonderRefundResponseHandler</argument>
         </arguments>
     </virtualType>
-    <virtualType name="TonderRefundTransferFactory" type="Tonder\Payment\Gateway\Http\TransferFactory">
+    <virtualType name="TonderRefundTransferFactory" type="Tonder\Payment\Gateway\Http\RefundTransferFactory">
         <arguments>
             <argument name="action" xsi:type="const">Tonder\Payment\Gateway\Request\AbstractDataBuilder::REFUND</argument>
+            <argument name="path" xsi:type="string">business/%1/payments/%2/refunds</argument>
         </arguments>
     </virtualType>
     <virtualType name="TonderRefundDataBuilder" type="Magento\Payment\Gateway\Request\BuilderComposite">
@@ -519,7 +527,7 @@
             <argument name="builders" xsi:type="array">
                 <item name="merchant" xsi:type="string">Tonder\Payment\Gateway\Request\MerchantDataBuilder</item>
                 <item name="transaction_id" xsi:type="string">Tonder\Payment\Gateway\Request\TransactionIdDataBuilder</item>
-                <item name="transaction" xsi:type="string">Tonder\Payment\Gateway\Request\TransactionDataBuilder</item>
+<!--                <item name="transaction" xsi:type="string">Tonder\Payment\Gateway\Request\TransactionDataBuilder</item>-->
                 <item name="amount" xsi:type="string">Tonder\Payment\Gateway\Request\RefundAmountDataBuilder</item>
             </argument>
         </arguments>

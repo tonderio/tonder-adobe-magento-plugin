@@ -17,6 +17,11 @@ class MerchantDataBuilder extends AbstractDataBuilder implements BuilderInterfac
     const STORE_ID = 'store_id';
 
     /**
+     * Merchant ID
+     */
+    const MERCHANT_ID = 'merchant_id';
+
+    /**
      * Api Token
      */
     const API_TOKEN = 'api_token';
@@ -45,8 +50,7 @@ class MerchantDataBuilder extends AbstractDataBuilder implements BuilderInterfac
     {
         $storeId = $buildSubject['payment']->getPayment()->getOrder()->getStoreId();
         return [
-            self::STORE_ID => $this->config->getValue(self::STORE_ID, $storeId),
-            self::API_TOKEN => $this->config->getValue(self::API_TOKEN, $storeId)
+            self::MERCHANT_ID => $this->config->getValue(self::MERCHANT_ID, $storeId),
         ];
     }
 }
