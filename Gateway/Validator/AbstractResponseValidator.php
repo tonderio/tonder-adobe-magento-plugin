@@ -108,8 +108,8 @@ abstract class AbstractResponseValidator extends AbstractValidator
      */
     protected function validateTransactionId(array $response)
     {
-        return isset($response['response']['data'][self::TRANSACTION_ID])
-            && $response['response']['data'][self::TRANSACTION_ID] != 'null';
+        return isset($response[0][self::TRANSACTION_ID])
+            && $response[0][self::TRANSACTION_ID] != 'null';
     }
 
     /**

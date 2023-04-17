@@ -136,6 +136,11 @@ abstract class AbstractTransferFactory implements TransferFactoryInterface
         return $baseUrl.$this->getPath();
     }
 
+    public function getToken()
+    {
+        return $this->encryptor->decrypt($this->config->getValue('token'));
+    }
+
     public function getCredentials()
     {
         $mode = $this->config->getValue('mode');

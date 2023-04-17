@@ -19,7 +19,7 @@ class TransactionRefundHandler implements HandlerInterface
         $paymentDO = SubjectReader::readPayment($handlingSubject);
         /** @var Payment $orderPayment */
         $orderPayment = $paymentDO->getPayment();
-        $orderPayment->setTransactionId($response[AbstractResponseValidator::TRANSACTION_ID]);
+        $orderPayment->setTransactionId($response[0]['transaction_reference']);
 
         $orderPayment->setIsTransactionClosed(true);
         $orderPayment->setShouldCloseParentTransaction(!$orderPayment->getCreditmemo()->getInvoice()->canRefund());

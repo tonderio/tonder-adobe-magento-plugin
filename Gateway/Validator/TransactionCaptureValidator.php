@@ -28,11 +28,6 @@ class TransactionCaptureValidator extends AbstractResponseValidator
     {
         $response = SubjectReader::readResponse($validationSubject);
         $amount = SubjectReader::readAmount($validationSubject);
-        $paymentData = $validationSubject['payment']->getPayment();
-        $paymentAdditionalInformation = $paymentData->getAdditionalInformation();
-        if (isset($paymentAdditionalInformation['mcp_purchase']) && $paymentAdditionalInformation['mcp_purchase'] == 'Yes') {
-            $amount = round($paymentData->getAmountOrdered(), 2);
-        }
 
         $errorMessages = [];
         $validationResult = $this->validateErrors($response)
@@ -55,17 +50,7 @@ class TransactionCaptureValidator extends AbstractResponseValidator
      */
     protected function validateTotalAmount(array $response, $amount)
     {
-        if (isset($response['MCPRate'])) {
-            $rate = (float)$response['MCPRate'];
-            if ($rate > 1) {
-                return isset($response[self::TOTAL_AMOUNT])
-                    && abs((float)$response[self::TOTAL_AMOUNT] / $rate - $amount) < 1;
-            } else {
-                return isset($response[self::TOTAL_AMOUNT])
-                    && abs((float)$response[self::TOTAL_AMOUNT] - $amount * $rate) < 1;
-            }
-        }
-        return isset($response[self::TOTAL_AMOUNT])
-            && (float)$response[self::TOTAL_AMOUNT] === (float)$amount;
+        return isset($response[0]['amount'])
+            && (float)$response[0]['amount'] === (float)$amount;
     }
 }

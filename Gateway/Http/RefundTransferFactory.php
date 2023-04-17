@@ -16,16 +16,16 @@ class RefundTransferFactory extends AbstractTransferFactory
     public function create(array $request)
     {
         $url = $this->getUrl();
-//        $url = __($url, $request[MerchantDataBuilder::MERCHANT_ID], $request[TransactionIdDataBuilder::TRANSACTION_ID]);
-        $url = __($url, 23, 23);
+        $url = __($url, $request[MerchantDataBuilder::MERCHANT_ID], $request[TransactionIdDataBuilder::TRANSACTION_CHARGE]);
         unset($request[MerchantDataBuilder::MERCHANT_ID]);
         unset($request[TransactionIdDataBuilder::TRANSACTION_ID]);
+        unset($request[TransactionIdDataBuilder::TRANSACTION_CHARGE]);
 
         return $this->transferBuilder
             ->setMethod('POST')
             ->setBody($this->serializer->serialize($request))
             ->setHeaders([
-                "Authorization: Basic " . base64_encode(implode(":", $this->getCredentials())),
+                "Authorization: Token " . $this->getToken(),
                 "Content-type: application/json",
             ])
             ->setUri($url)

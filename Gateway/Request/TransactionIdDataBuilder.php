@@ -15,6 +15,8 @@ class TransactionIdDataBuilder extends AbstractDataBuilder implements BuilderInt
      */
     const TRANSACTION_ID = 'transaction_id';
 
+    const TRANSACTION_CHARGE = 'transaction_charge';
+
     /**
      * @inheritdoc
      */
@@ -23,7 +25,8 @@ class TransactionIdDataBuilder extends AbstractDataBuilder implements BuilderInt
         $paymentDO = SubjectReader::readPayment($buildSubject);
 
         return [
-            self::TRANSACTION_ID => $paymentDO->getPayment()->getParentTransactionId()
+            self::TRANSACTION_ID => $paymentDO->getPayment()->getParentTransactionId(),
+            self::TRANSACTION_CHARGE => $paymentDO->getPayment()->getAdditionalInformation('reference_num')
         ];
     }
 }
