@@ -18,7 +18,7 @@ class TransferFactory extends AbstractTransferFactory
             ->setMethod('POST')
             ->setBody($this->serializer->serialize($request))
             ->setHeaders([
-                "Authorization: Basic " . base64_encode(implode(":", $this->getCredentials())),
+                "Authorization: Token " . $this->getToken(),
                 "Content-type: application/json",
             ])
             ->setUri($this->getUrl())

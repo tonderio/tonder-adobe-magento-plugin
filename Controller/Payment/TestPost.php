@@ -23,7 +23,7 @@ class TestPost extends Action
             CURLOPT_CUSTOMREQUEST => 'POST',
             CURLOPT_POSTFIELDS => $postData['body_data'],
             CURLOPT_HTTPHEADER => array(
-                'Authorization: Basic '. base64_encode($postData['username'] . ":". $postData['password']),
+                'Authorization: Token '. $postData['token'],
                 'Content-Type: application/json'
             ),
         ));

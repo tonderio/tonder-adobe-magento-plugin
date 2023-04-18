@@ -386,7 +386,7 @@
     <virtualType name="TonderAuthorizeTransferFactory" type="Tonder\Payment\Gateway\Http\TransferFactory">
         <arguments>
             <argument name="action" xsi:type="const">Tonder\Payment\Gateway\Request\AbstractDataBuilder::AUTHORIZE</argument>
-            <argument name="path" xsi:type="string">checkout-router</argument>
+            <argument name="path" xsi:type="string">checkout-router/</argument>
         </arguments>
     </virtualType>
     <virtualType name="TonderDirectResponseHandler" type="Magento\Payment\Gateway\Response\HandlerChain">
@@ -424,7 +424,7 @@
     <virtualType name="TonderPreAuthTransferFactory" type="Tonder\Payment\Gateway\Http\TransferFactory">
         <arguments>
             <argument name="action" xsi:type="const">Tonder\Payment\Gateway\Request\AbstractDataBuilder::PRE_AUTH_CAPTURE</argument>
-            <argument name="path" xsi:type="string">checkout-router</argument>
+            <argument name="path" xsi:type="string">checkout-router/</argument>
         </arguments>
     </virtualType>
     <virtualType name="TonderCaptureDataBuilder" type="Magento\Payment\Gateway\Request\BuilderComposite">
@@ -465,6 +465,7 @@
     <virtualType name="TonderSaleTransferFactory" type="Tonder\Payment\Gateway\Http\TransferFactory">
         <arguments>
             <argument name="action" xsi:type="const">Tonder\Payment\Gateway\Request\AbstractDataBuilder::PURCHASE</argument>
+            <argument name="path" xsi:type="string">checkout-router/</argument>
         </arguments>
     </virtualType>
     <virtualType name="TonderCaptureResponseHandler" type="Magento\Payment\Gateway\Response\HandlerChain">
