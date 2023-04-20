@@ -50,4 +50,10 @@ class ResponseValidator extends AbstractResponseValidator
 
         return $this->createResult($validationResult, $errorMessages);
     }
+
+    protected function validateTransactionId(array $response)
+    {
+        return isset($response['response']['data'][self::TRANSACTION_ID])
+            && $response['response']['data'][self::TRANSACTION_ID] != 'null';
+    }
 }

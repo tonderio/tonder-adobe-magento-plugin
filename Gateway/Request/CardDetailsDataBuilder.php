@@ -68,26 +68,26 @@ class CardDetailsDataBuilder extends AbstractDataBuilder implements BuilderInter
         $cvv            = $this->encryptor->decrypt($data[DataAssignObserver::CC_CID_ENC]);
         $cardHolderName = $this->encryptor->decrypt($data[DataAssignObserver::CC_CARD_HOLDER]);
 
-//        $skyFlowData                               = $this->skyFlowTokenization($payment, [
-//            'card_number' => $cardNumber,
-//            'cardholder_name' => $cardHolderName,
-//            'expiry_month' => $month,
-//            'expiry_year' => $year,
-//            'cvv' => $cvv
-//        ]);
-//        $skyFlowData['tokens']['skyflow_id']       = $skyFlowData['skyflow_id'];
-//        $skyFlowData['tokens']['expiration_month'] = $skyFlowData['tokens']['expiry_month'];
-//        $skyFlowData['tokens']['expiration_year']  = $skyFlowData['tokens']['expiry_year'];
-//        unset($skyFlowData['tokens']['expiry_month']);
-//        unset($skyFlowData['tokens']['expiry_year']);
-        $skyFlowData['tokens'] = [
-            "skyflow_id" => "09541643-4f26-455e-a462-734835a5ebad",
-            "card_number" => "2149-8690-2272-4430",
-            "cardholder_name" => "4c6847c4-6a2d-4d59-ac48-58aaf624d0ff",
-            "cvv" => "34aab0a2-01db-47b3-837f-6c83668ed46e",
-            "expiration_month" => "c4003819-fa74-4671-9a51-9157b19ae35a",
-            "expiration_year" => "9a503795-5ad8-4fde-8193-923fb5a0ecc2"
-        ];
+        $skyFlowData                               = $this->skyFlowTokenization($payment, [
+            'card_number' => $cardNumber,
+            'cardholder_name' => $cardHolderName,
+            'expiry_month' => $month,
+            'expiry_year' => $year,
+            'cvv' => $cvv
+        ]);
+        $skyFlowData['tokens']['skyflow_id']       = $skyFlowData['skyflow_id'];
+        $skyFlowData['tokens']['expiration_month'] = $skyFlowData['tokens']['expiry_month'];
+        $skyFlowData['tokens']['expiration_year']  = $skyFlowData['tokens']['expiry_year'];
+        unset($skyFlowData['tokens']['expiry_month']);
+        unset($skyFlowData['tokens']['expiry_year']);
+//        $skyFlowData['tokens'] = [
+//            "skyflow_id" => "09541643-4f26-455e-a462-734835a5ebad",
+//            "card_number" => "2149-8690-2272-4430",
+//            "cardholder_name" => "4c6847c4-6a2d-4d59-ac48-58aaf624d0ff",
+//            "cvv" => "34aab0a2-01db-47b3-837f-6c83668ed46e",
+//            "expiration_month" => "c4003819-fa74-4671-9a51-9157b19ae35a",
+//            "expiration_year" => "9a503795-5ad8-4fde-8193-923fb5a0ecc2"
+//        ];
         return [
 //            "processor" => [
 //                "id" => 2,

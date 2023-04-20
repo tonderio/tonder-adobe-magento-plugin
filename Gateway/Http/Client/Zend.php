@@ -97,6 +97,7 @@ class Zend extends \Magento\Payment\Gateway\Http\Client\Zend
             $result['ResponseMessage'] = $response->getMessage();
 
             $result['message'] .= " Details: " . $result['ResponseCode'] . " - " . $result['ResponseMessage'];
+            $logInfo['response_body'] = $response->getBody();
 
         } catch (\RuntimeException $e) {
             throw new ClientException(
