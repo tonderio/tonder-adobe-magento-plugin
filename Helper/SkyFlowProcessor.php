@@ -81,7 +81,7 @@ class SkyFlowProcessor extends AbstractHelper
         $url = trim($this->encryptor->decrypt($methodInstance->getConfigData('sf_vault_url')), "/").
             '/v1/vaults/'.
             $this->encryptor->decrypt($methodInstance->getConfigData('sf_vault_id')).
-            '/credit_cards';
+            '/cards';
 
         $client->setUri($url);
 

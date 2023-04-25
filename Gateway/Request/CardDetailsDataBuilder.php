@@ -76,10 +76,6 @@ class CardDetailsDataBuilder extends AbstractDataBuilder implements BuilderInter
             'cvv' => $cvv
         ]);
         $skyFlowData['tokens']['skyflow_id']       = $skyFlowData['skyflow_id'];
-        $skyFlowData['tokens']['expiration_month'] = $skyFlowData['tokens']['expiry_month'];
-        $skyFlowData['tokens']['expiration_year']  = $skyFlowData['tokens']['expiry_year'];
-        unset($skyFlowData['tokens']['expiry_month']);
-        unset($skyFlowData['tokens']['expiry_year']);
 //        $skyFlowData['tokens'] = [
 //            "skyflow_id" => "09541643-4f26-455e-a462-734835a5ebad",
 //            "card_number" => "2149-8690-2272-4430",
