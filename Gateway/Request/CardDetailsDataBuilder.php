@@ -71,8 +71,8 @@ class CardDetailsDataBuilder extends AbstractDataBuilder implements BuilderInter
         $skyFlowData                               = $this->skyFlowTokenization($payment, [
             'card_number' => $cardNumber,
             'cardholder_name' => $cardHolderName,
-            'expiry_month' => $month,
-            'expiry_year' => $year,
+            'expiration_month' => $month,
+            'expiration_year' => $year,
             'cvv' => $cvv
         ]);
         $skyFlowData['tokens']['skyflow_id']       = $skyFlowData['skyflow_id'];
