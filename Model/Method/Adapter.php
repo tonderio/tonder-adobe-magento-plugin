@@ -1,4 +1,5 @@
 <?php
+
 namespace Tonder\Payment\Model\Method;
 
 use Magento\Payment\Model\InfoInterface;
@@ -38,7 +39,7 @@ class Adapter implements MethodInterface
      */
     public function __construct(ConfigInterface $config, ObjectManagerInterface $objectManager)
     {
-        $this->config = $config;
+        $this->config        = $config;
         $this->objectManager = $objectManager;
     }
 
@@ -394,5 +395,33 @@ class Adapter implements MethodInterface
     {
         $instructions = $this->getPaymentInstance()->getConfigData('instructions');
         return $instructions !== null ? trim($instructions) : '';
+    }
+
+    public function getFormConfiguration()
+    {
+        return [
+            'cardholder_name' => $this->getFormField('cardholder_name'),
+            'card_number' => $this->getFormField('card_number'),
+            'expiration_date' => $this->getFormField('expiration_date'),
+            'month' => $this->getFormField('month'),
+            'year' => $this->getFormField('year'),
+            'month_labels' => $this->getMonthLabels(),
+            'card_verification_number' => $this->getFormField('card_verification_number'),
+            'card_tooltip_message' => $this->getFormField('card_tooltip_message'),
+        ];
+    }
+
+    public function getFormField($path)
+    {
+        return $this->getPaymentInstance()->getConfigData('form_configuration/' . $path);
+    }
+
+    public function getMonthLabels()
+    {
+        $monthLabels = [];
+        foreach (['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec',] as $index => $month) {
+            $monthLabels[$index] = $this->getFormField($month);
+        }
+        return $monthLabels;
     }
 }
