@@ -2,8 +2,8 @@
 
 namespace Tonder\Payment\Gateway\Http\Client;
 
-use Laminas\HTTP\ClientFactory;
-use Magento\Framework\HTTP\LaminasClientFactory;
+use Laminas\Http\ClientFactory;
+use Magento\Framework\Http\LaminasClientFactory;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Payment\Gateway\Http\ClientException;
 use Tonder\Payment\Gateway\Request\AbstractDataBuilder;
