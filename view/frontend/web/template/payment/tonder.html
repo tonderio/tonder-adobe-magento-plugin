@@ -33,7 +33,7 @@
             <fieldset data-bind="attr: {class: 'fieldset payment items ccard ' + getCode(), id: 'payment_form_' + getCode()}">
                 <div class="field cardholder_name required" style="width: 225px;">
                     <label data-bind="attr: {for: getCode() + '_cc_cardholder_name'}" class="label">
-                        <span><!-- ko i18n: 'Credit Cardholder Name'--><!-- /ko --></span>
+                        <span><!-- ko i18n: getFormFieldLabel('cardholder_name') || 'Credit Cardholder Name'--><!-- /ko --></span>
                     </label>
                     <div class="control">
                         <input type="text" name="payment[cc_cardholder_name]" class="input-text" style="text-transform: uppercase;" value=""
@@ -41,7 +41,7 @@
                                data-bind="attr: {
                                     autocomplete: off,
                                     id: getCode() + 'cc_cardholder_name'},
-                                    title: $t('Cardholder Name'),
+                                    title: getFormFieldLabel('cardholder_name') || $t('Cardholder Name'),
                                     'data-container': getCode() + '-cc-cardholder-name',
                                     enable: isActive($parents),
                                     valueUpdate: 'keyup',
@@ -85,7 +85,7 @@
                 </div>
                 <div class="field number required">
                     <label data-bind="attr: {for: getCode() + '_cc_number'}" class="label">
-                        <span><!-- ko i18n: 'Credit Card Number'--><!-- /ko --></span>
+                        <span><!-- ko i18n: getFormFieldLabel('card_number') || 'Credit Card Number'--><!-- /ko --></span>
                     </label>
                     <div class="control">
                         <input type="number" name="payment[cc_number]" class="input-text" value=""
@@ -95,7 +95,7 @@
                                data-bind="attr: {
                                     autocomplete: off,
                                     id: getCode() + '_cc_number',
-                                    title: $t('Credit Card Number'),
+                                    title: getFormFieldLabel('card_number') || $t('Credit Card Number'),
                                     'data-container': getCode() + '-cc-number',
                                     'data-validate': JSON.stringify({'required-number':true, 'validate-card-type':getCcAvailableTypesValues(), 'validate-card-number':'#' + getCode() + '_cc_type', 'validate-cc-type':'#' + getCode() + '_cc_type'})},
                               enable: isActive($parents),
@@ -105,7 +105,7 @@
                 </div>
                 <div class="field date required" data-bind="attr: {id: getCode() + '_cc_type_exp_div'}">
                     <label data-bind="attr: {for: getCode() + '_expiration'}" class="label">
-                        <span><!-- ko i18n: 'Expiration Date'--><!-- /ko --></span>
+                        <span><!-- ko i18n: getFormFieldLabel('expiration_date') || 'Expiration Date'--><!-- /ko --></span>
                     </label>
                     <div class="control">
                         <div class="fields group group-2">
@@ -118,7 +118,7 @@
                                             options: getCcMonthsValues(),
                                             optionsValue: 'value',
                                             optionsText: 'month',
-                                            optionsCaption: $t('Month'),
+                                            optionsCaption: getFormFieldLabel('month') || $t('Month'),
                                             value: creditCardExpMonth,
                                             event: { blur: validateInput.bind($data, $element)}">
                                     </select>
@@ -133,7 +133,7 @@
                                            options: getCcYearsValues(),
                                            optionsValue: 'value',
                                            optionsText: 'year',
-                                           optionsCaption: $t('Year'),
+                                           optionsCaption: getFormFieldLabel('year') || $t('Year'),
                                            value: creditCardExpYear,
                                            event: { blur: validateInput.bind($data, $element)}">
                                     </select>
@@ -145,7 +145,7 @@
                 <!-- ko if: (hasVerification())-->
                 <div class="field cvv required" data-bind="attr: {id: getCode() + '_cc_type_cvv_div'}">
                     <label data-bind="attr: {for: getCode() + '_cc_cid'}" class="label">
-                        <span><!-- ko i18n: 'Card Verification Number'--><!-- /ko --></span>
+                        <span><!-- ko i18n: getFormFieldLabel('card_verification_number') || 'Card Verification Number'--><!-- /ko --></span>
                     </label>
                     <div class="control _with-tooltip">
                         <input type="number"
@@ -157,7 +157,7 @@
                                oncut="return false;"
                                onpaste="return false;"
                                data-bind="attr: {id: getCode() + '_cc_cid',
-                        title: $t('Card Verification Number'),
+                        title: getFormFieldLabel('card_verification_number') || $t('Card Verification Number'),
                         'data-container': getCode() + '-cc-cvv',
                         'data-validate': JSON.stringify({'required-number':true, 'validate-card-cvv':'#' + getCode() + '_cc_type'})},
                         enable: isActive($parents),
@@ -167,8 +167,8 @@
                 <span class="field-tooltip-action action-cvv"
                       tabindex="0"
                       data-toggle="dropdown"
-                      data-bind="attr: {title: $t('What is this?')}, mageInit: {'dropdown':{'activeClass': '_active'}}">
-                    <span><!-- ko i18n: 'What is this?'--><!-- /ko --></span>
+                      data-bind="attr: {title: getFormFieldLabel('card_tooltip_message') || $t('What is this?')}, mageInit: {'dropdown':{'activeClass': '_active'}}">
+                    <span><!-- ko i18n: getFormFieldLabel('card_tooltip_message') || 'What is this?'--><!-- /ko --></span>
                 </span>
                             <div class="field-tooltip-content"
                                  data-target="dropdown"
