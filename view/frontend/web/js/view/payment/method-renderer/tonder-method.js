@@ -266,6 +266,55 @@ define(
             getInstructions: function () {
                 return window.checkoutConfig.payment.instructions[this.item.method];
             },
+
+            /**
+             * Get payment icons
+             * @param {String} type
+             * @returns {Boolean}
+             */
+            getIcons: function (type) {
+                return window.checkoutConfig.payment.tonder_ccform.icons.hasOwnProperty(type) ?
+                    window.checkoutConfig.payment.tonder_ccform.icons[type]
+                    : false;
+            },
+
+            /**
+             * Get payment field label
+             * @param {String} field
+             * @returns {Boolean}
+             */
+            getFormFieldLabel: function (field) {
+                return window.checkoutConfig.payment.tonder_ccform.form_configuration.hasOwnProperty(field) ?
+                    window.checkoutConfig.payment.tonder_ccform.form_configuration[field]
+                    : false;
+            },
+
+            /**
+             * Get month label
+             * @param {String} field
+             * @returns {Boolean}
+             */
+            getMonthLabel: function (field) {
+                return window.checkoutConfig.payment.tonder_ccform.form_configuration.month_labels.hasOwnProperty(field) ?
+                    window.checkoutConfig.payment.tonder_ccform.form_configuration.month_labels[field]
+                    : false;
+            },
+
+            /**
+             * Get list of available month values
+             * @returns {Object}
+             */
+            getCcMonthsValues: function () {
+                var self = this;
+                return _.map(self.getCcMonths(), function (value, key) {
+                    value = self.getMonthLabel(Number(key) - 1) || value;
+
+                    return {
+                        'value': key,
+                        'month': value
+                    };
+                });
+            },
         });
     }
 );
