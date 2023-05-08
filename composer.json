@@ -2,7 +2,10 @@
     "name": "tonder/module-payment",
     "description": "Tonder Payment Integration for Magento2.4.6",
     "type": "magento2-module",
-    "license": "proprietary",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
     "authors": [
         {
             "name": "Mage2Gen",
@@ -11,7 +14,9 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "firebase/php-jwt": "dev-main"
+        "firebase/php-jwt": "dev-main",
+        "php": "~7.4.0||~8.1.0",
+        "magento/framework": "103.0.*"
     },
     "autoload": {
         "files": [
