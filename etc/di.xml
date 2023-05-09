@@ -101,7 +101,6 @@
                 <item name="initialize" xsi:type="string">Tonder\Payment\Gateway\Command\InitializeCommand</item>
                 <item name="authorize" xsi:type="string">TonderAuthorizeStrategyCommand</item>
                 <item name="pre_auth" xsi:type="string">TonderDirectGatewayCommand</item>
-                <item name="pre_auth_capture" xsi:type="string">TonderPreAuthCaptureCommand</item>
                 <item name="capture" xsi:type="string">TonderCaptureStrategyCommand</item>
                 <item name="cancel_order" xsi:type="string">Magento\Payment\Gateway\Command\NullCommand</item>
                 <item name="sale" xsi:type="string">TonderSaleGatewayCommand</item>
@@ -181,8 +180,6 @@
                 <item name="payment_details" xsi:type="string">Tonder\Payment\Gateway\Response\PaymentDetailsHandler</item>
                 <item name="response_messages" xsi:type="string">Tonder\Payment\Gateway\Response\ResponseMessagesHandler</item>
                 <item name="card_details" xsi:type="string">Tonder\Payment\Gateway\Response\Direct\CardDetailsHandler</item>
-                <item name="avs" xsi:type="string">Tonder\Payment\Gateway\Response\AVSHandler</item>
-                <item name="cvd" xsi:type="string">Tonder\Payment\Gateway\Response\CVDHandler</item>
             </argument>
         </arguments>
     </virtualType>
