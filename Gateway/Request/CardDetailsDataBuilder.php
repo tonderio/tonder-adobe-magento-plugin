@@ -17,18 +17,7 @@ use Tonder\Payment\Observer\DataAssignObserver;
  */
 class CardDetailsDataBuilder extends AbstractDataBuilder implements BuilderInterface
 {
-    const SKYFLOW_ID = 'skyflow_id';
-
-    const CARD_NUMBER = 'card_number';
-
-    const CARDHOLDER_NAME = 'cardholder_name';
-
     const CVV = 'cvv';
-
-    const EXPIRATION_MONTH = 'expiration_month';
-
-    const EXPIRATION_YEAR = 'expiration_year';
-
 
     /**
      * @var EncryptorInterface
@@ -76,20 +65,12 @@ class CardDetailsDataBuilder extends AbstractDataBuilder implements BuilderInter
             'cvv' => $cvv
         ]);
         $skyFlowData['tokens']['skyflow_id']       = $skyFlowData['skyflow_id'];
-//        $skyFlowData['tokens'] = [
-//            "skyflow_id" => "09541643-4f26-455e-a462-734835a5ebad",
-//            "card_number" => "2149-8690-2272-4430",
-//            "cardholder_name" => "4c6847c4-6a2d-4d59-ac48-58aaf624d0ff",
-//            "cvv" => "34aab0a2-01db-47b3-837f-6c83668ed46e",
-//            "expiration_month" => "c4003819-fa74-4671-9a51-9157b19ae35a",
-//            "expiration_year" => "9a503795-5ad8-4fde-8193-923fb5a0ecc2"
-//        ];
+        $skyFlowData['tokens']['expiration_month'] = $skyFlowData['tokens']['expiry_month'];
+        $skyFlowData['tokens']['expiration_year']  = $skyFlowData['tokens']['expiry_year'];
+        unset($skyFlowData['tokens']['expiry_month']);
+        unset($skyFlowData['tokens']['expiry_year']);
+
         return [
-//            "processor" => [
-//                "id" => 2,
-//                "resourcetype" => "StripeBusinessConnection",
-//                "processor_type" => "CHECKOUT"
-//            ],
             "card" => $skyFlowData['tokens']
         ];
     }

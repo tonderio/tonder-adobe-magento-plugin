@@ -10,7 +10,6 @@ use Magento\Framework\Option\ArrayInterface;
 class ConnectionType implements ArrayInterface
 {
     const CONNECTION_TYPE_DIRECT = 'direct';
-    const CONNECTION_TYPE_SHARED = 'shared';
 
     /**
      * {@inheritdoc}

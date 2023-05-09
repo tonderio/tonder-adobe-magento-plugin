@@ -11,20 +11,11 @@ use Magento\Payment\Gateway\Request\BuilderInterface;
  */
 class MerchantDataBuilder extends AbstractDataBuilder implements BuilderInterface
 {
-    /**
-     * Store ID
-     */
-    const STORE_ID = 'store_id';
 
     /**
      * Merchant ID
      */
     const MERCHANT_ID = 'merchant_id';
-
-    /**
-     * Api Token
-     */
-    const API_TOKEN = 'api_token';
 
     /**
      * @var ConfigInterface

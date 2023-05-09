@@ -14,22 +14,11 @@
             </argument>
         </arguments>
     </type>
-    <type name="Tonder\Payment\Model\Ui\Direct\ConfigProvider">
-        <arguments>
-            <argument name="config" xsi:type="object">TonderConfig</argument>
-            <argument name="vaultConfig" xsi:type="object">TonderVaultConfig</argument>
-        </arguments>
-    </type>
     <type name="Magento\Checkout\Model\CompositeConfigProvider">
         <arguments>
             <argument name="configProviders" xsi:type="array">
                 <item name="tonder_instructions_config_provider" xsi:type="object">Tonder\Payment\Model\InstructionsConfigProvider</item>
             </argument>
-        </arguments>
-    </type>
-    <type name="Tonder\Payment\Controller\Order\GetOrderData">
-        <arguments>
-            <argument name="commandPool" xsi:type="object">TonderNetCommandPool</argument>
         </arguments>
     </type>
     <type name="Tonder\Payment\Controller\Payment\Complete">
@@ -38,11 +27,6 @@
         </arguments>
     </type>
     <type name="Tonder\Payment\Controller\Order\Cancel">
-        <arguments>
-            <argument name="commandPool" xsi:type="object">TonderNetCommandPool</argument>
-        </arguments>
-    </type>
-    <type name="Tonder\Payment\Controller\Key\GetKeyData">
         <arguments>
             <argument name="commandPool" xsi:type="object">TonderNetCommandPool</argument>
         </arguments>
@@ -59,11 +43,6 @@
             <argument name="services" xsi:type="array">
                 <item name="tonder" xsi:type="string">Tonder\Payment\Model\Multishipping\PlaceOrder</item>
             </argument>
-        </arguments>
-    </type>
-    <type name="Tonder\Payment\Controller\Order\CardLookup">
-        <arguments>
-            <argument name="config" xsi:type="object">TonderConfig</argument>
         </arguments>
     </type>
 </config>

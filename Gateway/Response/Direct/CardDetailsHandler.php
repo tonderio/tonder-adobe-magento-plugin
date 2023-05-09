@@ -53,13 +53,6 @@ class CardDetailsHandler implements HandlerInterface
             );
         }
 
-//        if (!isset($cardDetails['brand'])) {
-//            $payment->setAdditionalInformation(
-//                'cc_type',
-//                $this->getCreditCard($response)
-//            );
-//        }
-
         $maskCcNumber = 'XXXX-' .
             substr($payment->decrypt(
                 $payment->getAdditionalInformation(OrderPaymentInterface::CC_NUMBER_ENC)

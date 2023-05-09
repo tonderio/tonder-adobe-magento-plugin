@@ -20,16 +20,6 @@ class CaptureStrategyCommand extends AuthorizeStrategyCommand
     const SALE = 'sale';
 
     /**
-     * Tonder Direct capture command
-     */
-    const PRE_AUTH_CAPTURE = 'pre_auth_capture';
-
-    /**
-     * Tonder Vault Capture Command
-     */
-    const VAULT_CAPTURE = 'vault_capture';
-
-    /**
      * @var \Magento\Framework\App\RequestInterface
      */
     protected $request;
@@ -60,32 +50,6 @@ class CaptureStrategyCommand extends AuthorizeStrategyCommand
         /** @var Order\Payment $payment */
         $payment = $paymentObject->getPayment();
         ContextHelper::assertOrderPayment($payment);
-
-        $this->avsAndCvdCondition($commandSubject, $payment);
-
-        if ($this->config->getValue('kount_enable')
-            && $this->config->getValue('connection_type') == self::DIRECT_TYPE
-            && !$payment->getAdditionalInformation('kount_transaction_id')) {
-            $this->commandPool
-                ->get(self::CHECK_KOUNT)
-                ->execute($commandSubject);
-        }
-
-
-        if ($payment instanceof Order\Payment
-            && $payment->getAuthorizationTransaction()
-        ) {
-            return $this->commandPool
-                ->get(self::PRE_AUTH_CAPTURE)
-                ->execute($commandSubject);
-        }
-
-        if ($payment->getAdditionalInformation('public_hash')
-            && empty($payment->getAdditionalInformation('cc_type'))) {
-            return $this->commandPool
-                ->get(self::VAULT_CAPTURE)
-                ->execute($commandSubject);
-        }
 
         return $this->commandPool
             ->get(self::SALE)

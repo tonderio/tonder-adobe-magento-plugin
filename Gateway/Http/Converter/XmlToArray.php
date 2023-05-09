@@ -35,6 +35,7 @@ class XmlToArray implements ConverterInterface
         LoggerInterface $logger
     ) {
         $this->parser = $parser;
+        $this->logger = $logger;
     }
 
     /**
@@ -54,10 +55,6 @@ class XmlToArray implements ConverterInterface
         $result = $this->parser->xmlToArray();
         if (!empty($result['response']['receipt'])) {
             return $result['response']['receipt'];
-        } elseif (!empty($result['Mpi2Response']['receipt'])) {
-            return $result['Mpi2Response']['receipt'];
-        } elseif (!empty($result['Mpi2Response'])) {
-            return $result['Mpi2Response'];
         } elseif (!empty($result['response'])) {
             return $result['response'];
         } else {

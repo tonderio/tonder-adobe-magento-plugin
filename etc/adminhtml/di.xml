@@ -1,11 +1,6 @@
 <?xml version="1.0"?>
 
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <type name="Tonder\Payment\Block\Payment">
-        <arguments>
-            <argument name="config" xsi:type="object">TonderConfig</argument>
-        </arguments>
-    </type>
     <type name="Tonder\Payment\Block\Info">
         <arguments>
             <argument name="data" xsi:type="array">

@@ -122,15 +122,6 @@ class Zend extends \Magento\Payment\Gateway\Http\Client\Zend
             $requestBodyArray = $this->updateRequestLogInfo($requestBodyArray, AbstractDataBuilder::PURCHASE);
         } elseif (isset($requestBodyArray[AbstractDataBuilder::AUTHORIZE])) {
             $requestBodyArray = $this->updateRequestLogInfo($requestBodyArray, AbstractDataBuilder::AUTHORIZE);
-        } elseif (isset($requestBodyArray[AbstractDataBuilder::CARD_VERIFICATION])) {
-            $requestBodyArray = $this->updateRequestLogInfo($requestBodyArray, AbstractDataBuilder::CARD_VERIFICATION);
-        } elseif (isset($requestBodyArray[AbstractDataBuilder::KOUNT_INQUIRY])) {
-            $pan = $requestBodyArray[AbstractDataBuilder::KOUNT_INQUIRY]['payment_token'];
-            if ($pan != '') {
-                $requestBodyArray[AbstractDataBuilder::KOUNT_INQUIRY]['payment_token'] = substr_replace($pan, '***', 3, -3);
-            }
-        } elseif ($type = $this->checkRequest3DSecure($requestBodyArray)) {
-            $requestBodyArray = $this->updateRequestLogInfo($requestBodyArray, $type);
         }
         return $requestBodyArray;
     }
@@ -145,29 +136,6 @@ class Zend extends \Magento\Payment\Gateway\Http\Client\Zend
         $pan = $requestBodyArray[$type]['pan'];
         $requestBodyArray[$type]['pan'] = substr_replace($pan, '***', 3, -3);
         $requestBodyArray[$type]['expdate'] = '****';
-        if (isset($requestBodyArray[$type]['cvd_info'])) {
-            $requestBodyArray[$type]['cvd_info']['cvd_value'] = '***';
-        }
         return $requestBodyArray;
-    }
-
-    /**
-     * @param $requestBodyArray
-     * @return mixed|string
-     */
-    public function checkRequest3DSecure($requestBodyArray)
-    {
-        $typesRequest = [
-            AbstractDataBuilder::CARD_LOOKUP,
-            AbstractDataBuilder::CAVV_PREAUTH,
-            AbstractDataBuilder::CAVV_PURCHASE
-        ];
-
-        foreach ($typesRequest as $type) {
-            if (isset($requestBodyArray[$type]) && isset($requestBodyArray[$type]['pan'])) {
-                return $type;
-            }
-        }
-        return '';
     }
 }

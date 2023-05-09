@@ -15,7 +15,6 @@ class ItemsDataBuilder extends AbstractDataBuilder implements BuilderInterface
     const ITEMS = 'items';
     const SKU = 'product_code';
     const QUANTITY = 'quantity';
-    const UNIT_COST = 'extended_amount';
     const NAME = 'name';
 
     /**

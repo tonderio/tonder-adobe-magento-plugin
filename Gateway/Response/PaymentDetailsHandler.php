@@ -32,14 +32,6 @@ class PaymentDetailsHandler implements HandlerInterface
     /**
      * @var array
      */
-//    private $additionalInformationMapping = [
-//        'transaction_type' => AbstractResponseValidator::TRANSACTION_TYPE,
-//        'transaction_id' => AbstractResponseValidator::TRANSACTION_ID,
-//        'response_code' => AbstractResponseValidator::RESPONSE_CODE,
-//        'reference_num' => AbstractResponseValidator::REFERENCE_NUM,
-//        'auth_code' => AbstractResponseValidator::AUTH_CODE,
-//        'cc_type' => 'CardType'
-//    ];
     private $additionalInformationMapping = [
         'transaction_type' => 'response/data/payment_method_types/0',
         'transaction_id' => 'response/data/id',

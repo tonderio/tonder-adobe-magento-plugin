@@ -5,11 +5,6 @@
             <argument name="methodCode" xsi:type="string">tonder</argument>
         </arguments>
     </virtualType>
-    <virtualType name="TonderVaultConfig" type="Tonder\Payment\Model\Config\PaymentConfig">
-        <arguments>
-            <argument name="methodCode" xsi:type="string">tonder_cc_vault</argument>
-        </arguments>
-    </virtualType>
     <virtualType name="TonderZendHttpClient" type="Tonder\Payment\Gateway\Http\Client\Zend">
         <arguments>
             <argument name="converter" xsi:type="object">Tonder\Payment\Gateway\Http\Converter\XmlToArray</argument>
@@ -36,46 +31,6 @@
         </arguments>
     </type>
     <type name="Tonder\Payment\Gateway\Http\RefundTransferFactory">
-        <arguments>
-            <argument name="config" xsi:type="object">TonderConfig</argument>
-        </arguments>
-    </type>
-    <type name="Tonder\Payment\Gateway\Response\AVSHandler">
-        <arguments>
-            <argument name="config" xsi:type="object">TonderConfig</argument>
-        </arguments>
-    </type>
-    <type name="Tonder\Payment\Gateway\Request\AVSDataBuilder">
-        <arguments>
-            <argument name="config" xsi:type="object">TonderConfig</argument>
-        </arguments>
-    </type>
-    <type name="Tonder\Payment\Gateway\Request\CVDDataBuilder">
-        <arguments>
-            <argument name="config" xsi:type="object">TonderConfig</argument>
-        </arguments>
-    </type>
-    <type name="Tonder\Payment\Gateway\Request\KountDataBuilder">
-        <arguments>
-            <argument name="config" xsi:type="object">TonderConfig</argument>
-        </arguments>
-    </type>
-    <type name="Tonder\Payment\Gateway\Request\Vault\AVSDataBuilder">
-        <arguments>
-            <argument name="config" xsi:type="object">TonderConfig</argument>
-        </arguments>
-    </type>
-    <type name="Tonder\Payment\Gateway\Request\Vault\CVDDataBuilder">
-        <arguments>
-            <argument name="config" xsi:type="object">TonderConfig</argument>
-        </arguments>
-    </type>
-    <type name="Tonder\Payment\Gateway\Response\CVDHandler">
-        <arguments>
-            <argument name="config" xsi:type="object">TonderConfig</argument>
-        </arguments>
-    </type>
-    <type name="Tonder\Payment\Gateway\Response\KountHandler">
         <arguments>
             <argument name="config" xsi:type="object">TonderConfig</argument>
         </arguments>
@@ -128,16 +83,6 @@
             <argument name="configInterface" xsi:type="object">TonderConfig</argument>
         </arguments>
     </virtualType>
-    <type name="Tonder\Payment\Gateway\Config\CanInitializeHandler">
-        <arguments>
-            <argument name="config" xsi:type="object">TonderConfig</argument>
-        </arguments>
-    </type>
-    <type name="Tonder\Payment\Gateway\Config\CanUseInternalHandler">
-        <arguments>
-            <argument name="config" xsi:type="object">TonderConfig</argument>
-        </arguments>
-    </type>
     <virtualType name="TonderValidatorPool" type="Magento\Payment\Gateway\Validator\ValidatorPool">
         <arguments>
             <argument name="validators" xsi:type="array">
@@ -154,178 +99,19 @@
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="initialize" xsi:type="string">Tonder\Payment\Gateway\Command\InitializeCommand</item>
-                <item name="verify_card" xsi:type="string">TonderVerifyCardCommand</item>
-                <item name="vault_verify_card" xsi:type="string">TonderVaultVerifyCardCommand</item>
-                <item name="check_kount" xsi:type="string">TonderKountCommand</item>
                 <item name="authorize" xsi:type="string">TonderAuthorizeStrategyCommand</item>
                 <item name="pre_auth" xsi:type="string">TonderDirectGatewayCommand</item>
                 <item name="pre_auth_capture" xsi:type="string">TonderPreAuthCaptureCommand</item>
                 <item name="capture" xsi:type="string">TonderCaptureStrategyCommand</item>
                 <item name="cancel_order" xsi:type="string">Magento\Payment\Gateway\Command\NullCommand</item>
                 <item name="sale" xsi:type="string">TonderSaleGatewayCommand</item>
-                <item name="vault_sale" xsi:type="string">TonderVaultSaleCommand</item>
                 <item name="void" xsi:type="string">TonderVoidGatewayCommand</item>
                 <item name="refund" xsi:type="string">TonderRefundGatewayCommand</item>
-                <item name="vault_capture" xsi:type="string">TonderVaultCaptureCommand</item>
-                <item name="vault_authorize" xsi:type="string">TonderVaultPreAuthCommand</item>
-                <item name="get_key" xsi:type="string">TonderGetKeyGatewayCommand</item>
-                <item name="purchase_order" xsi:type="string">Magento\Payment\Gateway\Command\NullCommand</item>
-                <item name="three_d_secure" xsi:type="string">TonderCavvStrategyCommand</item>
-                <item name="cavv_purchase" xsi:type="string">TonderPurchaseStrategyCommand</item>
-                <item name="cavv_preauth" xsi:type="string">TonderPreAuthStrategyCommand</item>
-                <item name="cavv_vault_purchase" xsi:type="string">TonderCavvVaultPurchaseStrategyCommand</item>
-                <item name="cavv_vault_preauth" xsi:type="string">TonderCavvVaultPreAuthStrategyCommand</item>
-            </argument>
-        </arguments>
-    </virtualType>
-    <!--    Kount-->
-    <virtualType name="TonderKountCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
-        <arguments>
-            <argument name="requestBuilder" xsi:type="object">TonderKountBuilder</argument>
-            <argument name="transferFactory" xsi:type="object">TonderKountTransferFactory</argument>
-            <argument name="client" xsi:type="object">TonderZendHttpClient</argument>
-            <argument name="handler" xsi:type="object">TonderKountHandler</argument>
-            <argument name="validator" xsi:type="object">Tonder\Payment\Gateway\Validator\Direct\KountResponseValidator</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="TonderKountBuilder" type="Magento\Payment\Gateway\Request\BuilderComposite">
-        <arguments>
-            <argument name="builders" xsi:type="array">
-                <item name="merchant" xsi:type="string">Tonder\Payment\Gateway\Request\MerchantDataBuilder</item>
-                <item name="kount" xsi:type="string">Tonder\Payment\Gateway\Request\KountDataBuilder</item>
-            </argument>
-        </arguments>
-    </virtualType>
-    <!--    transferFactory-->
-    <virtualType name="TonderKountTransferFactory" type="Tonder\Payment\Gateway\Http\TransferFactory">
-        <arguments>
-            <argument name="action" xsi:type="const">Tonder\Payment\Gateway\Request\AbstractDataBuilder::KOUNT_INQUIRY</argument>
-        </arguments>
-    </virtualType>
-    <!--    handler-->
-    <virtualType name="TonderKountHandler" type="Magento\Payment\Gateway\Response\HandlerChain">
-        <arguments>
-            <argument name="handlers" xsi:type="array">
-                <item name="kount" xsi:type="string">Tonder\Payment\Gateway\Response\KountHandler</item>
             </argument>
         </arguments>
     </virtualType>
 
-    <!--    End Kount-->
-
-    <!-- Vault Authorization&Capture command -->
-    <virtualType name="TonderVaultSaleCommand" type="TonderVaultCaptureCommand">
-        <arguments>
-            <argument name="requestBuilder" xsi:type="object">TonderVaultSaleRequest</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="TonderVaultSaleRequest" type="Magento\Payment\Gateway\Request\BuilderComposite">
-        <arguments>
-            <argument name="builders" xsi:type="array">
-                <item name="authorize" xsi:type="string">TonderVaultCaptureRequest</item>
-            </argument>
-        </arguments>
-    </virtualType>
-
-    <!-- Start implement 3D Secure   -->
-
-    <virtualType name="TonderCavvStrategyCommand" type="Tonder\Payment\Gateway\Command\CavvStrategyCommand">
-        <arguments>
-            <argument name="commandPool" xsi:type="object">TonderCommandPool</argument>
-        </arguments>
-    </virtualType>
-
-    <virtualType name="TonderPurchaseStrategyCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
-        <arguments>
-            <argument name="requestBuilder" xsi:type="object">TonderDataBuilder</argument>
-            <argument name="transferFactory" xsi:type="object">TonderCavvTransferFactory</argument>
-            <argument name="client" xsi:type="object">TonderZendHttpClient</argument>
-            <argument name="handler" xsi:type="object">TonderCaptureResponseHandler</argument>
-            <argument name="commandPool" xsi:type="object">TonderCommandPool</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="TonderCavvTransferFactory" type="Tonder\Payment\Gateway\Http\TransferFactory">
-        <arguments>
-            <argument name="action" xsi:type="const">Tonder\Payment\Gateway\Request\AbstractDataBuilder::CAVV_PURCHASE</argument>
-        </arguments>
-    </virtualType>
-    <type name="Tonder\Payment\Controller\Order\AbstractPostBack">
-        <arguments>
-            <argument name="config" xsi:type="object">TonderConfig</argument>
-            <argument name="commandPool" xsi:type="object">TonderCommandPool</argument>
-        </arguments>
-    </type>
-    <type name="Tonder\Payment\Gateway\Command\CavvStrategyCommand">
-        <arguments>
-            <argument name="config" xsi:type="object">TonderConfig</argument>
-        </arguments>
-    </type>
-    <!-- Start preAuth with 3d secure   -->
-    <virtualType name="TonderPreAuthStrategyCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
-        <arguments>
-            <argument name="requestBuilder" xsi:type="object">TonderDataBuilder</argument>
-            <argument name="transferFactory" xsi:type="object">TonderPreAuthStrategyTransferFactory</argument>
-            <argument name="client" xsi:type="object">TonderZendHttpClient</argument>
-            <argument name="handler" xsi:type="object">TonderCaptureResponseHandler</argument>
-            <argument name="validator" xsi:type="object">Tonder\Payment\Gateway\Validator\Direct\ResponseValidator</argument>
-            <argument name="commandPool" xsi:type="object">TonderCommandPool</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="TonderPreAuthStrategyTransferFactory" type="Tonder\Payment\Gateway\Http\TransferFactory">
-        <arguments>
-            <argument name="action" xsi:type="const">Tonder\Payment\Gateway\Request\AbstractDataBuilder::CAVV_PREAUTH</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="TonderCavvVaultPurchaseStrategyCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
-        <arguments>
-            <argument name="requestBuilder" xsi:type="object">TonderVaultCaptureRequest</argument>
-            <argument name="transferFactory" xsi:type="object">TonderCavvVaultPurchaseTransferFactory</argument>
-            <argument name="client" xsi:type="object">TonderHttpClient</argument>
-            <argument name="validator" xsi:type="object">Tonder\Payment\Gateway\Validator\VaultDataValidator</argument>
-            <argument name="handler" xsi:type="object">TonderVaultResponseHandler</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="TonderCavvVaultPurchaseTransferFactory" type="Tonder\Payment\Gateway\Http\TransferFactory">
-        <arguments>
-            <argument name="action" xsi:type="const">Tonder\Payment\Gateway\Request\AbstractDataBuilder::CAVV_VAULT_PURCHASE</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="TonderCavvVaultPreAuthStrategyCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
-        <arguments>
-            <argument name="requestBuilder" xsi:type="object">TonderVaultCaptureRequest</argument>
-            <argument name="transferFactory" xsi:type="object">TonderCavvVaultPreAuthTransferFactory</argument>
-            <argument name="client" xsi:type="object">TonderHttpClient</argument>
-            <argument name="validator" xsi:type="object">Tonder\Payment\Gateway\Validator\VaultDataValidator</argument>
-            <argument name="handler" xsi:type="object">TonderVaultResponseHandler</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="TonderCavvVaultPreAuthTransferFactory" type="Tonder\Payment\Gateway\Http\TransferFactory">
-        <arguments>
-            <argument name="action" xsi:type="const">Tonder\Payment\Gateway\Request\AbstractDataBuilder::CAVV_VAULT_PREAUTH</argument>
-        </arguments>
-    </virtualType>
-
-    <!-- End preAuth with 3d secure   -->
-    <!-- End implement 3D Secure  -->
     <!-- Start Authorize Command -->
-    <virtualType name="TonderVerifyCardCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
-        <arguments>
-            <argument name="requestBuilder" xsi:type="object">TonderVerifyCardBuilder</argument>
-            <argument name="transferFactory" xsi:type="object">TonderVerifyCardTransferFactory</argument>
-            <argument name="client" xsi:type="object">TonderZendHttpClient</argument>
-            <argument name="handler" xsi:type="object">TonderCardVerifyHandler</argument>
-            <argument name="validator" xsi:type="object">Tonder\Payment\Gateway\Validator\Direct\VerifyCardResponseValidator</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="TonderVaultVerifyCardCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
-        <arguments>
-            <argument name="requestBuilder" xsi:type="object">TonderVaultVerifyCardBuilder</argument>
-            <argument name="transferFactory" xsi:type="object">TonderVaultVerifyCardTransferFactory</argument>
-            <argument name="client" xsi:type="object">TonderZendHttpClient</argument>
-            <argument name="handler" xsi:type="object">TonderCardVerifyHandler</argument>
-            <argument name="validator" xsi:type="object">Tonder\Payment\Gateway\Validator\Direct\VerifyCardResponseValidator</argument>
-        </arguments>
-    </virtualType>
     <virtualType name="TonderAuthorizeStrategyCommand" type="Tonder\Payment\Gateway\Command\AuthorizeStrategyCommand">
         <arguments>
             <argument name="commandPool" xsi:type="object">TonderCommandPool</argument>
@@ -340,28 +126,6 @@
             <argument name="validator" xsi:type="object">Tonder\Payment\Gateway\Validator\Direct\ResponseValidator</argument>
         </arguments>
     </virtualType>
-    <virtualType name="TonderVerifyCardBuilder" type="Magento\Payment\Gateway\Request\BuilderComposite">
-        <arguments>
-            <argument name="builders" xsi:type="array">
-                <item name="merchant" xsi:type="string">Tonder\Payment\Gateway\Request\MerchantDataBuilder</item>
-                <item name="card_details" xsi:type="string">Tonder\Payment\Gateway\Request\CardDetailsDataBuilder</item>
-                <item name="transaction" xsi:type="string">Tonder\Payment\Gateway\Request\VerificationCardTransactionDataBuilder</item>
-                <item name="avs" xsi:type="string">Tonder\Payment\Gateway\Request\AVSDataBuilder</item>
-                <item name="cvd" xsi:type="string">Tonder\Payment\Gateway\Request\CVDDataBuilder</item>
-            </argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="TonderVaultVerifyCardBuilder" type="Magento\Payment\Gateway\Request\BuilderComposite">
-        <arguments>
-            <argument name="builders" xsi:type="array">
-                <item name="merchant" xsi:type="string">Tonder\Payment\Gateway\Request\MerchantDataBuilder</item>
-                <item name="transaction" xsi:type="string">Tonder\Payment\Gateway\Request\Vault\VerificationCardTransactionDataBuilder</item>
-                <item name="avs" xsi:type="string">Tonder\Payment\Gateway\Request\AVSDataBuilder</item>
-                <item name="cvd" xsi:type="string">Tonder\Payment\Gateway\Request\CVDDataBuilder</item>
-            </argument>
-        </arguments>
-    </virtualType>
-
     <virtualType name="TonderDataBuilder" type="Magento\Payment\Gateway\Request\BuilderComposite">
         <arguments>
             <argument name="builders" xsi:type="array">
@@ -371,16 +135,6 @@
                 <item name="customer" xsi:type="string">Tonder\Payment\Gateway\Request\CustomerDataBuilder</item>
                 <item name="items" xsi:type="string">Tonder\Payment\Gateway\Request\ItemsDataBuilder</item>
             </argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="TonderVerifyCardTransferFactory" type="Tonder\Payment\Gateway\Http\TransferFactory">
-        <arguments>
-            <argument name="action" xsi:type="const">Tonder\Payment\Gateway\Request\AbstractDataBuilder::CARD_VERIFICATION</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="TonderVaultVerifyCardTransferFactory" type="Tonder\Payment\Gateway\Http\TransferFactory">
-        <arguments>
-            <argument name="action" xsi:type="const">Tonder\Payment\Gateway\Request\AbstractDataBuilder::CARD_VERIFICATION_VAULT</argument>
         </arguments>
     </virtualType>
     <virtualType name="TonderAuthorizeTransferFactory" type="Tonder\Payment\Gateway\Http\TransferFactory">
@@ -395,57 +149,10 @@
                 <item name="payment_details" xsi:type="string">Tonder\Payment\Gateway\Response\PaymentDetailsHandler</item>
                 <item name="response_messages" xsi:type="string">Tonder\Payment\Gateway\Response\ResponseMessagesHandler</item>
                 <item name="card_details" xsi:type="string">Tonder\Payment\Gateway\Response\Direct\CardDetailsHandler</item>
-<!--                <item name="avs" xsi:type="string">Tonder\Payment\Gateway\Response\AVSHandler</item>-->
-<!--                <item name="cvd" xsi:type="string">Tonder\Payment\Gateway\Response\CVDHandler</item>-->
-            </argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="TonderCardVerifyHandler" type="Magento\Payment\Gateway\Response\HandlerChain">
-        <arguments>
-            <argument name="handlers" xsi:type="array">
-                <item name="avs" xsi:type="string">Tonder\Payment\Gateway\Response\AVSHandler</item>
-                <item name="cvd" xsi:type="string">Tonder\Payment\Gateway\Response\CVDHandler</item>
-                <item name="response_messages" xsi:type="string">Tonder\Payment\Gateway\Response\ResponseMessagesHandler</item>
             </argument>
         </arguments>
     </virtualType>
     <!-- End Authorize Command -->
-
-    <!-- Start Capture Pre Capture Command -->
-    <virtualType name="TonderPreAuthCaptureCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
-        <arguments>
-            <argument name="requestBuilder" xsi:type="object">TonderCaptureDataBuilder</argument>
-            <argument name="transferFactory" xsi:type="object">TonderPreAuthTransferFactory</argument>
-            <argument name="client" xsi:type="object">TonderHttpClient</argument>
-            <argument name="validator" xsi:type="object">Tonder\Payment\Gateway\Validator\TransactionCaptureValidator</argument>
-            <argument name="handler" xsi:type="object">TonderPreAuthResponseHandler</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="TonderPreAuthTransferFactory" type="Tonder\Payment\Gateway\Http\TransferFactory">
-        <arguments>
-            <argument name="action" xsi:type="const">Tonder\Payment\Gateway\Request\AbstractDataBuilder::PRE_AUTH_CAPTURE</argument>
-            <argument name="path" xsi:type="string">checkout-router/</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="TonderCaptureDataBuilder" type="Magento\Payment\Gateway\Request\BuilderComposite">
-        <arguments>
-            <argument name="builders" xsi:type="array">
-                <item name="merchant" xsi:type="string">Tonder\Payment\Gateway\Request\MerchantDataBuilder</item>
-                <item name="transaction" xsi:type="string">Tonder\Payment\Gateway\Request\TransactionDataBuilder</item>
-                <item name="transaction_id" xsi:type="string">Tonder\Payment\Gateway\Request\TransactionIdDataBuilder</item>
-                <item name="comp_amount" xsi:type="string">Tonder\Payment\Gateway\Request\CompAmountDataBuilder</item>
-            </argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="TonderPreAuthResponseHandler" type="Magento\Payment\Gateway\Response\HandlerChain">
-        <arguments>
-            <argument name="handlers" xsi:type="array">
-                <item name="response_messages" xsi:type="string">Tonder\Payment\Gateway\Response\ResponseMessagesHandler</item>
-                <item name="card_details" xsi:type="string">Tonder\Payment\Gateway\Response\TransactionCaptureHandler</item>
-            </argument>
-        </arguments>
-    </virtualType>
-    <!-- End Capture Pre Capture Command -->
 
     <!-- Start Direct Capture(Sale) Command -->
     <virtualType name="TonderCaptureStrategyCommand" type="Tonder\Payment\Gateway\Command\CaptureStrategyCommand">
@@ -528,7 +235,6 @@
             <argument name="builders" xsi:type="array">
                 <item name="merchant" xsi:type="string">Tonder\Payment\Gateway\Request\MerchantDataBuilder</item>
                 <item name="transaction_id" xsi:type="string">Tonder\Payment\Gateway\Request\TransactionIdDataBuilder</item>
-<!--                <item name="transaction" xsi:type="string">Tonder\Payment\Gateway\Request\TransactionDataBuilder</item>-->
                 <item name="amount" xsi:type="string">Tonder\Payment\Gateway\Request\RefundAmountDataBuilder</item>
             </argument>
         </arguments>
@@ -541,133 +247,12 @@
             </argument>
         </arguments>
     </virtualType>
-    <type name="Tonder\Payment\Gateway\Helper\RefundHelper">
-        <arguments>
-            <argument name="transferFactory" xsi:type="object">TonderRefundTransferFactory</argument>
-            <argument name="client" xsi:type="object">TonderHttpClient</argument>
-            <argument name="config" xsi:type="object">TonderConfig</argument>
-        </arguments>
-    </type>
     <!-- End Refund Command -->
 
-    <!-- Tonder NET -->
-    <virtualType name="TonderNetFacade" type="Magento\Payment\Model\Method\Adapter">
-        <arguments>
-            <argument name="code" xsi:type="string">tonder</argument>
-            <argument name="formBlockType" xsi:type="string">Magento\Payment\Block\Form\Cc</argument>
-            <argument name="infoBlockType" xsi:type="string">Tonder\Payment\Block\Info</argument>
-            <argument name="valueHandlerPool" xsi:type="object">TonderValueHandlerPool</argument>
-            <argument name="validatorPool" xsi:type="object">TonderValidatorPool</argument>
-            <argument name="commandPool" xsi:type="object">TonderNetCommandPool</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="TonderNetCommandPool" type="Magento\Payment\Gateway\Command\CommandPool">
-        <arguments>
-            <argument name="commands" xsi:type="array">
-                <item name="initialize" xsi:type="string">Tonder\Payment\Gateway\Command\InitializeCommand</item>
-                <item name="authorize" xsi:type="string">Magento\Payment\Gateway\Command\NullCommand</item>
-                <item name="capture" xsi:type="string">TonderNetCaptureStrategyCommand</item>
-                <item name="sale" xsi:type="string">Magento\Payment\Gateway\Command\NullCommand</item>
-                <item name="pre_auth_capture" xsi:type="string">TonderPreAuthCaptureCommand</item>
-                <item name="complete" xsi:type="string">Tonder\Payment\Gateway\Command\Net\CompleteCommand</item>
-                <item name="cancel_order" xsi:type="string">Tonder\Payment\Gateway\Command\Net\CancelOrderCommand</item>
-                <item name="void" xsi:type="string">TonderVoidGatewayCommand</item>
-                <item name="refund" xsi:type="string">TonderRefundGatewayCommand</item>
-                <item name="get_key" xsi:type="string">TonderGetKeyGatewayCommand</item>
-            </argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="TonderNetCaptureStrategyCommand" type="Tonder\Payment\Gateway\Command\CaptureStrategyCommand">
-        <arguments>
-            <argument name="commandPool" xsi:type="object">TonderNetCommandPool</argument>
-        </arguments>
-    </virtualType>
-    <type name="Tonder\Payment\Gateway\Command\Net\UpdateDetailsCommand">
-        <arguments>
-            <argument name="config" xsi:type="object">TonderConfig</argument>
-            <argument name="validator" xsi:type="object">Tonder\Payment\Gateway\Validator\Net\UpdateDetailsValidator</argument>
-            <argument name="handler" xsi:type="object">Tonder\Payment\Gateway\Response\Net\UpdateDetailsHandler</argument>
-            <argument name="validatorUS" xsi:type="object">Tonder\Payment\Gateway\Validator\Net\UpdateDetailsValidatorUS</argument>
-            <argument name="handlerUS" xsi:type="object">Tonder\Payment\Gateway\Response\Net\UpdateDetailsHandlerUS</argument>
-        </arguments>
-    </type>
-    <type name="Tonder\Payment\Gateway\Command\Net\UpdateOrderCommand">
-        <arguments>
-            <argument name="config" xsi:type="object">TonderConfig</argument>
-        </arguments>
-    </type>
-    <!-- End Tonder NET -->
     <type name="Magento\Config\Block\System\Config\Form\Field">
         <plugin name="tonder_form_field_attribute_plugin" type="Tonder\Payment\Plugin\System\Config\FormFieldPlugin" sortOrder="0"/>
     </type>
 
-    <!-- Configuration for Vault Capture payments -->
-    <virtualType name="TonderVaultPaymentConfig" type="Tonder\Payment\Model\Config\PaymentConfig">
-        <arguments>
-            <argument name="methodCode" xsi:type="const">Tonder\Payment\Gateway\Request\AbstractDataBuilder::CC_VAULT_CODE</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="TonderVaultPaymentValueHandler" type="VaultPaymentDefaultValueHandler">
-        <arguments>
-            <argument name="configInterface" xsi:type="object">TonderVaultPaymentConfig</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="TonderVaultPaymentValueHandlerPool" type="VaultPaymentValueHandlerPool">
-        <arguments>
-            <argument name="handlers" xsi:type="array">
-                <item name="default" xsi:type="string">TonderVaultPaymentValueHandler</item>
-            </argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="TonderCreditCardVaultFacade" type="Magento\Vault\Model\Method\Vault">
-        <arguments>
-            <argument name="config" xsi:type="object">TonderVaultPaymentConfig</argument>
-            <argument name="valueHandlerPool" xsi:type="object">TonderVaultPaymentValueHandlerPool</argument>
-            <argument name="vaultProvider" xsi:type="object">TonderFacade</argument>
-            <argument name="code" xsi:type="const">Tonder\Payment\Gateway\Request\AbstractDataBuilder::CC_VAULT_CODE</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="TonderVaultCaptureCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
-        <arguments>
-            <argument name="requestBuilder" xsi:type="object">TonderVaultCaptureRequest</argument>
-            <argument name="transferFactory" xsi:type="object">TonderVaultCaptureTransferFactory</argument>
-            <argument name="client" xsi:type="object">TonderHttpClient</argument>
-            <argument name="validator" xsi:type="object">Tonder\Payment\Gateway\Validator\VaultDataValidator</argument>
-            <argument name="handler" xsi:type="object">TonderVaultResponseHandler</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="TonderVaultCaptureTransferFactory" type="Tonder\Payment\Gateway\Http\TransferFactory">
-        <arguments>
-            <argument name="action" xsi:type="const">Tonder\Payment\Gateway\Request\AbstractDataBuilder::VAULT_CAPTURE</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="TonderVaultCaptureRequest" type="Magento\Payment\Gateway\Request\BuilderComposite">
-        <arguments>
-            <argument name="builders" xsi:type="array">
-                <item name="merchant" xsi:type="string">Tonder\Payment\Gateway\Request\MerchantDataBuilder</item>
-                <item name="vault_details" xsi:type="string">Tonder\Payment\Gateway\Request\VaultDetailsDataBuilder</item>
-                <item name="amount" xsi:type="string">Tonder\Payment\Gateway\Request\AmountDataBuilder</item>
-                <item name="transaction" xsi:type="string">Tonder\Payment\Gateway\Request\TransactionDataBuilder</item>
-                <item name="customer" xsi:type="string">Tonder\Payment\Gateway\Request\CustomerDataBuilder</item>
-                <item name="billing_address" xsi:type="string">Tonder\Payment\Gateway\Request\BillingAddressDataBuilder</item>
-                <item name="shipping_address" xsi:type="string">Tonder\Payment\Gateway\Request\ShippingAddressDataBuilder</item>
-                <item name="items" xsi:type="string">Tonder\Payment\Gateway\Request\ItemsDataBuilder</item>
-                <item name="avs" xsi:type="string">Tonder\Payment\Gateway\Request\AVSDataBuilder</item>
-                <item name="cvd" xsi:type="string">Tonder\Payment\Gateway\Request\CVDDataBuilder</item>
-                <item name="cavv" xsi:type="string">Tonder\Payment\Gateway\Request\CavvDataBuilder</item>
-            </argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="TonderVaultResponseHandler" type="Magento\Payment\Gateway\Response\HandlerChain">
-        <arguments>
-            <argument name="handlers" xsi:type="array">
-                <item name="payment_details" xsi:type="string">Tonder\Payment\Gateway\Response\PaymentDetailsHandler</item>
-                <item name="response_messages" xsi:type="string">Tonder\Payment\Gateway\Response\ResponseMessagesHandler</item>
-                <item name="avs" xsi:type="string">Tonder\Payment\Gateway\Response\AVSHandler</item>
-                <item name="cvd" xsi:type="string">Tonder\Payment\Gateway\Response\CVDHandler</item>
-            </argument>
-        </arguments>
-    </virtualType>
     <virtualType name="TonderCommandManager" type="Magento\Payment\Gateway\Command\CommandManager">
         <arguments>
             <argument name="commandPool" xsi:type="object">TonderCommandPool</argument>
@@ -680,70 +265,13 @@
             </argument>
         </arguments>
     </type>
-    <!-- END Configuration for Vault Capture payments -->
 
-    <!-- Configuration for Vault Pre-Auth payments -->
-    <virtualType name="TonderVaultPreAuthCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
-        <arguments>
-            <argument name="requestBuilder" xsi:type="object">TonderVaultCaptureRequest</argument>
-            <argument name="transferFactory" xsi:type="object">TonderVaultPreAuthTransferFactory</argument>
-            <argument name="client" xsi:type="object">TonderHttpClient</argument>
-            <argument name="validator" xsi:type="object">Tonder\Payment\Gateway\Validator\VaultDataValidator</argument>
-            <argument name="handler" xsi:type="object">TonderVaultResponseHandler</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="TonderVaultPreAuthTransferFactory" type="Tonder\Payment\Gateway\Http\TransferFactory">
-        <arguments>
-            <argument name="action" xsi:type="const">Tonder\Payment\Gateway\Request\AbstractDataBuilder::VAULT_AUTHORIZE</argument>
-        </arguments>
-    </virtualType>
-    <!-- END Configuration for Vault Pre-Auth payments -->
-
-    <!-- Start get key -->
-    <virtualType name="TonderGetKeyGatewayCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
-        <arguments>
-            <argument name="requestBuilder" xsi:type="object">TonderGetKeyBuilder</argument>
-            <argument name="transferFactory" xsi:type="object">TonderGetKeyTransferFactory</argument>
-            <argument name="client" xsi:type="object">TonderHttpClient</argument>
-            <argument name="validator" xsi:type="object">Tonder\Payment\Gateway\Validator\GetKeyValidator</argument>
-            <argument name="handler" xsi:type="object">TonderGetKeyResponseHandler</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="TonderGetKeyBuilder" type="Magento\Payment\Gateway\Request\BuilderComposite">
-        <arguments>
-            <argument name="builders" xsi:type="array">
-                <item name="get_key" xsi:type="string">Tonder\Payment\Gateway\Request\GetKeyDataBuilder</item>
-                <item name="avs" xsi:type="string">Tonder\Payment\Gateway\Request\Vault\AVSDataBuilder</item>
-                <item name="cvd" xsi:type="string">Tonder\Payment\Gateway\Request\Vault\CVDDataBuilder</item>
-            </argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="TonderGetKeyTransferFactory" type="Tonder\Payment\Gateway\Http\TransferFactory">
-        <arguments>
-            <argument name="action" xsi:type="const">Tonder\Payment\Gateway\Request\AbstractDataBuilder::GET_KEY</argument>
-        </arguments>
-    </virtualType>
-
-    <type name="Tonder\Payment\Gateway\Response\GetKeyDataHandler">
-        <arguments>
-            <argument name="paymentTokenFactory" xsi:type="object">Magento\Vault\Model\CreditCardTokenFactory</argument>
-        </arguments>
-    </type>
-
-    <virtualType name="TonderGetKeyResponseHandler" type="Magento\Payment\Gateway\Response\HandlerChain">
-        <arguments>
-            <argument name="handlers" xsi:type="array">
-                <item name="data" xsi:type="string">Tonder\Payment\Gateway\Response\GetKeyDataHandler</item>
-            </argument>
-        </arguments>
-    </virtualType>
-    <!-- End get key -->
     <!-- Csrf validator bypass -->
     <type name="Magento\Framework\App\Request\CsrfValidator">
         <plugin name="csrf_bypass" type="Tonder\Payment\Plugin\Framework\App\Request\CsrfByPass" sortOrder="0"/>
     </type>
 
-    <!-- Moneric log   -->
+    <!-- Tonder log   -->
     <type name="Tonder\Payment\Logger\Handler">
         <arguments>
             <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
