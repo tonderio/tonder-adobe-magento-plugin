@@ -78,9 +78,9 @@ class SkyFlowProcessor extends AbstractHelper
         ];
         $client->setRawBody($this->serializer->serialize($data));
 
-        $url = trim($this->encryptor->decrypt($methodInstance->getConfigData('sf_vault_url')), "/").
+        $url = trim($methodInstance->getConfigData('sf_vault_url'), "/").
             '/v1/vaults/'.
-            $this->encryptor->decrypt($methodInstance->getConfigData('sf_vault_id')).
+            $methodInstance->getConfigData('sf_vault_id').
             '/cards';
 
         $client->setUri($url);
@@ -118,11 +118,11 @@ class SkyFlowProcessor extends AbstractHelper
         $methodInstance = $payment->getMethodInstance();
 
         $sfData = [
-            'clientID' => $this->encryptor->decrypt($methodInstance->getConfigData('sf_client_id')),
-            'clientName' => $this->encryptor->decrypt($methodInstance->getConfigData('sf_client_name')),
-            'tokenURI' => $this->encryptor->decrypt($methodInstance->getConfigData('sf_token_uri')),
-            'keyID' => $this->encryptor->decrypt($methodInstance->getConfigData('sf_key_id')),
-            'privateKey' => $this->encryptor->decrypt($methodInstance->getConfigData('sf_private_key')),
+            'clientID' => $methodInstance->getConfigData('sf_client_id'),
+            'clientName' => $methodInstance->getConfigData('sf_client_name'),
+            'tokenURI' => $methodInstance->getConfigData('sf_token_uri'),
+            'keyID' => $methodInstance->getConfigData('sf_key_id'),
+            'privateKey' => $methodInstance->getConfigData('sf_private_key'),
         ];
 
         $sfData['privateKey'] = str_replace("\\n", "\n", $sfData['privateKey']);
