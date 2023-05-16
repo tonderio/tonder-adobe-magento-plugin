@@ -15,7 +15,7 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "firebase/php-jwt": "dev-main",
+        "firebase/php-jwt": "~6.4.0",
         "php": "~8.1.0||~8.2.0",
         "magento/framework": "103.0.*"
     },
