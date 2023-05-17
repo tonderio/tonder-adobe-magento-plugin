@@ -30,11 +30,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $eventManager;
 
     /**
-     * @var \Magento\Sales\Model\Order\Email\Sender\OrderSender
-     */
-    protected $quoteSender;
-
-    /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
@@ -119,7 +114,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Framework\App\Response\Http $response,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Sales\Model\Order\Email\Sender\OrderSender $quoteSender,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Sales\Model\Order\CreditmemoFactory $creditmemoFactory,
         \Magento\Sales\Model\Service\CreditmemoService $creditmemoService,
@@ -138,7 +132,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $this->response = $response;
         $this->logger = $logger;
         $this->eventManager = $eventManager;
-        $this->orderSender = $quoteSender;
         $this->storeManager = $storeManager;
         $this->creditmemoFactory = $creditmemoFactory;
         $this->creditmemoService = $creditmemoService;
