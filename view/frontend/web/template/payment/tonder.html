@@ -100,7 +100,7 @@
                                     'data-validate': JSON.stringify({'required-number':true, 'validate-card-type':getCcAvailableTypesValues(), 'validate-card-number':'#' + getCode() + '_cc_type', 'validate-cc-type':'#' + getCode() + '_cc_type'})},
                               enable: isActive($parents),
                               value: creditCardNumber,
-                              event: { keyup: creditCardValidate, keydown: disableArrowKeys.bind($data, event), blur: validateInput.bind($data, $element) }"/>
+                              event: { keyup: creditCardValidate, keydown: disableArrowKeys.bind($data, event, 16), blur: validateInput.bind($data, $element) }"/>
                     </div>
                 </div>
                 <div class="field date required" data-bind="attr: {id: getCode() + '_cc_type_exp_div'}">

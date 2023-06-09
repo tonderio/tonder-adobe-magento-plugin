@@ -61,7 +61,12 @@ define(
                 return this;
             },
 
-            disableArrowKeys: function (event) {
+            disableArrowKeys: function (event, length = false) {
+                if (length && parseInt(event.key) >= 0 && parseInt(event.key) <= 9) {
+                    if ($(event.currentTarget).val().length >= length) {
+                        event.preventDefault();
+                    }
+                }
                 if ( event.which === 38 || event.which === 40 ) {
                     event.preventDefault();
                 } else {
@@ -176,6 +181,8 @@ define(
                 var availableTypesValues = this.getCcAvailableTypesValues();
                 var valid = false;
                 var value = $('#tonder_cc_number').val();
+                value = value.slice(0, 16);
+                $('#tonder_cc_number').val(value);
                 var result = cardNumberValidator(value);
 
                 if (!result.isPotentiallyValid && !result.isValid) {
