@@ -52,7 +52,7 @@ class DataAssignObserver extends AbstractDataAssignObserver
                 $value = $data->getData('additional_data/cc_card_holder_name');
                 $paymentInfo->setAdditionalInformation(
                     self::CC_CARD_HOLDER,
-                    $paymentInfo->encrypt($value)
+                    $paymentInfo->encrypt((string)$value)
                 );
 
                 continue;
@@ -64,14 +64,14 @@ class DataAssignObserver extends AbstractDataAssignObserver
             if ($additionalInformationKey == self::CC_NUMBER) {
                 $paymentInfo->setAdditionalInformation(
                     OrderPaymentInterface::CC_NUMBER_ENC,
-                    $paymentInfo->encrypt($value)
+                    $paymentInfo->encrypt((string)$value)
                 );
 
                 continue;
             } elseif ($additionalInformationKey == self::CC_CID) {
                 $paymentInfo->setAdditionalInformation(
                     self::CC_CID_ENC,
-                    $paymentInfo->encrypt($value)
+                    $paymentInfo->encrypt((string)$value)
                 );
 
                 continue;
