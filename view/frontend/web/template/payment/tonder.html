@@ -6,10 +6,8 @@
 -->
 <div class="payment-method" data-bind="css: {'_active': (getCode() == isChecked())}">
     <div class="payment-method-title field choice">
-        <input type="radio"
-               name="payment[method]"
-               class="radio"
-               data-bind="attr: {'id': getCode()}, value: getCode(), checked: isChecked, click: selectPaymentMethod, visible: isRadioButtonVisible()"/>
+        <input type="radio" name="payment[method]" class="radio"
+            data-bind="attr: {'id': getCode()}, value: getCode(), checked: isChecked, click: selectPaymentMethod, visible: isRadioButtonVisible()" />
         <label data-bind="attr: {'for': getCode()}" class="label"><span data-bind="text: getTitle()"></span></label>
     </div>
     <div class="payment-method-content">
@@ -22,23 +20,21 @@
             <!--/ko-->
         </div>
 
-        <form id="co-transparent-form-tonder"
-              class="form"
-              method="post"
-              action="#"
-              novalidate="novalidate" data-bind="mageInit: {
+        <form id="co-transparent-form-tonder" class="form" method="post" action="#" novalidate="novalidate" data-bind="mageInit: {
             'transparent':{
                 'context': context()
             }, 'validation':[]}">
-            <fieldset data-bind="attr: {class: 'fieldset payment items ccard ' + getCode(), id: 'payment_form_' + getCode()}">
-                <div class="field cardholder_name required" style="width: 225px;">
+            <fieldset
+                data-bind="attr: {class: 'fieldset payment items ccard ' + getCode(), id: 'payment_form_' + getCode()}">
+                <div class="field cardholder_name required" style="width: 225px">
                     <label data-bind="attr: {for: getCode() + '_cc_cardholder_name'}" class="label">
                         <span><!-- ko i18n: getFormFieldLabel('cardholder_name') || 'Credit Cardholder Name'--><!-- /ko --></span>
                     </label>
                     <div class="control">
-                        <input type="text" name="payment[cc_cardholder_name]" class="input-text" style="text-transform: uppercase;" value=""
-                               data-validate="{'validate-alphanum-with-spaces': true, 'validate-no-empty': true}" maxlength="45"
-                               data-bind="attr: {
+                        <input type="text" name="payment[cc_cardholder_name]" class="input-text"
+                            style="text-transform: uppercase" value=""
+                            data-validate="{'validate-alphanum-with-spaces': true, 'validate-no-empty': true}"
+                            maxlength="45" data-bind="attr: {
                                     autocomplete: off,
                                     id: getCode() + 'cc_cardholder_name'},
                                     title: getFormFieldLabel('cardholder_name') || $t('Cardholder Name'),
@@ -47,13 +43,14 @@
                                     valueUpdate: 'keyup',
                                     value: creditCardHolderName,
                                     'data-validate': JSON.stringify({required:true}),
-                                     event: { blur: validateInput.bind($data, $element)}">
+                                     event: { blur: validateInput.bind($data, $element)}" />
                     </div>
                 </div>
                 <!-- ko if: (isShowLegend())-->
                 <legend class="legend">
                     <span><!-- ko i18n: 'Credit Card Information'--><!-- /ko --></span>
-                </legend><br />
+                </legend>
+                <br />
                 <!-- /ko -->
                 <div class="field type">
                     <div class="control">
@@ -69,18 +66,14 @@
                         'alt': item.type,
                         'width': $parent.getIcons(item.value).width,
                         'height': $parent.getIcons(item.value).height
-                        }">
+                        }" />
                                 <!--/ko-->
                             </li>
                             <!--/ko-->
                         </ul>
-                        <input type="hidden"
-                               name="payment[cc_type]"
-                               class="input-text"
-                               value=""
-                               data-bind="attr: {id: getCode() + '_cc_type', 'data-container': getCode() + '-cc-type'},
+                        <input type="hidden" name="payment[cc_type]" class="input-text" value="" data-bind="attr: {id: getCode() + '_cc_type', 'data-container': getCode() + '-cc-type'},
                    value: creditCardType
-                   ">
+                   " />
                     </div>
                 </div>
                 <div class="field number required">
@@ -89,10 +82,8 @@
                     </label>
                     <div class="control">
                         <input type="number" name="payment[cc_number]" class="input-text" value=""
-                               oncopy="return false;"
-                               oncut="return false;"
-                               onpaste="return false;"
-                               data-bind="attr: {
+                            oncopy="return false;" oncut="return false;" onpaste="return false;"
+                            data-bind="attr: {
                                     autocomplete: off,
                                     id: getCode() + '_cc_number',
                                     title: getFormFieldLabel('card_number') || $t('Credit Card Number'),
@@ -100,7 +91,7 @@
                                     'data-validate': JSON.stringify({'required-number':true, 'validate-card-type':getCcAvailableTypesValues(), 'validate-card-number':'#' + getCode() + '_cc_type', 'validate-cc-type':'#' + getCode() + '_cc_type'})},
                               enable: isActive($parents),
                               value: creditCardNumber,
-                              event: { keyup: creditCardValidate, keydown: disableArrowKeys.bind($data, event, 16), blur: validateInput.bind($data, $element) }"/>
+                              event: { keyup: creditCardValidate, keydown: disableArrowKeys.bind($data, event, 16), blur: validateInput.bind($data, $element) }" />
                     </div>
                 </div>
                 <div class="field date required" data-bind="attr: {id: getCode() + '_cc_type_exp_div'}">
@@ -111,32 +102,26 @@
                         <div class="fields group group-2">
                             <div class="field no-label month">
                                 <div class="control">
-                                    <select  name="payment[cc_exp_month]"
-                                             class="select select-month"
-                                             data-bind="attr: {id: getCode() + '_expiration', 'data-container': getCode() + '-cc-month', 'data-validate': JSON.stringify({required:true, 'validate-cc-exp':'#' + getCode() + '_expiration_yr'})},
+                                    <select name="payment[cc_exp_month]" class="select select-month" data-bind="attr: {id: getCode() + '_expiration', 'data-container': getCode() + '-cc-month', 'data-validate': JSON.stringify({required:true, 'validate-cc-exp':'#' + getCode() + '_expiration_yr'})},
                                             enable: isActive($parents),
                                             options: getCcMonthsValues(),
                                             optionsValue: 'value',
                                             optionsText: 'month',
                                             optionsCaption: getFormFieldLabel('month') || $t('Month'),
                                             value: creditCardExpMonth,
-                                            event: { blur: validateInput.bind($data, $element)}">
-                                    </select>
+                                            event: { blur: validateInput.bind($data, $element)}"></select>
                                 </div>
                             </div>
                             <div class="field no-label year">
                                 <div class="control">
-                                    <select name="payment[cc_exp_year]"
-                                            class="select select-year"
-                                            data-bind="attr: {id: getCode() + '_expiration_yr', 'data-container': getCode() + '-cc-year', 'data-validate': JSON.stringify({required:true})},
+                                    <select name="payment[cc_exp_year]" class="select select-year" data-bind="attr: {id: getCode() + '_expiration_yr', 'data-container': getCode() + '-cc-year', 'data-validate': JSON.stringify({required:true})},
                                            enable: isActive($parents),
                                            options: getCcYearsValues(),
                                            optionsValue: 'value',
                                            optionsText: 'year',
                                            optionsCaption: getFormFieldLabel('year') || $t('Year'),
                                            value: creditCardExpYear,
-                                           event: { blur: validateInput.bind($data, $element)}">
-                                    </select>
+                                           event: { blur: validateInput.bind($data, $element)}"></select>
                                 </div>
                             </div>
                         </div>
@@ -148,32 +133,15 @@
                         <span><!-- ko i18n: getFormFieldLabel('card_verification_number') || 'Card Verification Number'--><!-- /ko --></span>
                     </label>
                     <div class="control _with-tooltip">
-                        <input type="number"
-                               autocomplete="off"
-                               class="input-text cvv"
-                               name="payment[cc_cid]"
-                               value=""
-                               oncopy="return false;"
-                               oncut="return false;"
-                               onpaste="return false;"
-                               data-bind="attr: {id: getCode() + '_cc_cid',
+                        <input type="number" autocomplete="off" class="input-text cvv" name="payment[cc_cid]" value=""
+                            oncopy="return false;" oncut="return false;" onpaste="return false;"
+                            data-bind="attr: {id: getCode() + '_cc_cid',
                         title: getFormFieldLabel('card_verification_number') || $t('Card Verification Number'),
                         'data-container': getCode() + '-cc-cvv',
                         'data-validate': JSON.stringify({'required-number':true, 'validate-card-cvv':'#' + getCode() + '_cc_type'})},
                         enable: isActive($parents),
                         value: creditCardVerificationNumber,
-                        event: { keydown: disableArrowKeys.bind($data, event), blur: validateInput.bind($data, $element) }" >
-                        <div class="field-tooltip toggle">
-                <span class="field-tooltip-action action-cvv"
-                      tabindex="0"
-                      data-toggle="dropdown"
-                      data-bind="attr: {title: getFormFieldLabel('card_tooltip_message') || $t('What is this?')}, mageInit: {'dropdown':{'activeClass': '_active'}}">
-                    <span><!-- ko i18n: getFormFieldLabel('card_tooltip_message') || 'What is this?'--><!-- /ko --></span>
-                </span>
-                            <div class="field-tooltip-content"
-                                 data-target="dropdown"
-                                 data-bind="html: getCvvImageUnsanitizedHtml()"></div>
-                        </div>
+                        event: { keydown: disableArrowKeys.bind($data, event), blur: validateInput.bind($data, $element) }" />
                     </div>
                 </div>
                 <!-- /ko -->
@@ -183,24 +151,20 @@
         <p data-bind="html: getInstructions()"></p>
         <div class="checkout-agreements-block">
             <!-- ko foreach: $parent.getRegion('before-place-order') -->
-                <!-- ko template: getTemplate() --><!-- /ko -->
+            <!-- ko template: getTemplate() --><!-- /ko -->
             <!--/ko-->
         </div>
         <div class="actions-toolbar">
             <div class="primary">
-                <button class="action primary checkout"
-                        type="submit"
-                        data-bind="
+                <button class="action primary checkout" type="submit" data-bind="
                         click: placeOrder,
                         attr: {title: $t('Place Order')},
                         css: {disabled: !isPlaceOrderActionAllowed()},
                         enable: (getCode() == isChecked())
-                        "
-                        disabled>
+                        " disabled>
                     <span data-bind="i18n: 'Place Order'"></span>
                 </button>
             </div>
         </div>
     </div>
 </div>
-        

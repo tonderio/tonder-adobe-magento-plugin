@@ -40,7 +40,6 @@ class ResponseValidator extends AbstractResponseValidator
             && $this->validateTransactionId($response)
             && $this->validateResponseCode($response)
             && $this->validateResponseMessage($response);
-
         if (!$this->validateErrors($response) && $this->validateResponseMessage($response)) {
             throw new LocalizedException(__($response[self::RESPONSE_MESSAGE]));
         }
@@ -49,11 +48,5 @@ class ResponseValidator extends AbstractResponseValidator
         }
 
         return $this->createResult($validationResult, $errorMessages);
-    }
-
-    protected function validateTransactionId(array $response)
-    {
-        return isset($response['response']['data'][self::TRANSACTION_ID])
-            && $response['response']['data'][self::TRANSACTION_ID] != 'null';
     }
 }

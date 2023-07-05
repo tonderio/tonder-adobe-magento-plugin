@@ -50,9 +50,10 @@ class PaymentDetailsHandler implements HandlerInterface
         ContextHelper::assertOrderPayment($payment);
 
         $responseObj = new DataObject($response);
+        $transctationId = $response["response"]["charges"]["data"][0][AbstractResponseValidator::TRANSACTION_ID] ?? "";
 
-        $payment->setTransactionId($response['response']['data'][AbstractResponseValidator::TRANSACTION_ID]);
-        $payment->setLastTransId($response['response']['data'][AbstractResponseValidator::TRANSACTION_ID]);
+        $payment->setTransactionId( $transctationId);
+        $payment->setLastTransId( $transctationId);
         $payment->setIsTransactionClosed(false);
 
         foreach ($this->additionalInformationMapping as $informationKey => $responseKey) {

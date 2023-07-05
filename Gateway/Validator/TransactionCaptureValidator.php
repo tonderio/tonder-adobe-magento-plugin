@@ -42,15 +42,4 @@ class TransactionCaptureValidator extends AbstractResponseValidator
 
         return $this->createResult($validationResult, $errorMessages);
     }
-
-    /**
-     * @param array $response
-     * @param array|number|string $amount
-     * @return bool
-     */
-    protected function validateTotalAmount(array $response, $amount)
-    {
-        return isset($response[0]['amount'])
-            && (float)$response[0]['amount'] === (float)$amount;
-    }
 }

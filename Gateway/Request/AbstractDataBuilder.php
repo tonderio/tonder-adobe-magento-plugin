@@ -5,8 +5,8 @@ namespace Tonder\Payment\Gateway\Request;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Payment\Gateway\ConfigInterface;
 use Magento\Payment\Gateway\Request\BuilderInterface;
-use Tonder\Payment\Model\Adminhtml\Source\Environment;
 use Magento\Payment\Model\Method\AbstractMethod;
+use Tonder\Payment\Model\Adminhtml\Source\Environment;
 
 /**
  * Class AbstractDataBuilder
@@ -61,7 +61,7 @@ abstract class AbstractDataBuilder implements BuilderInterface
     /**
      * Amount
      */
-    const AMOUNT = 'amount';
+    const AMOUNT = "amount";
 
     /**
      * Cardholder Amount

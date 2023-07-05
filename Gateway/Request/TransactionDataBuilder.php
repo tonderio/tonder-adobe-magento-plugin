@@ -16,7 +16,7 @@ class TransactionDataBuilder extends AbstractDataBuilder implements BuilderInter
 
     const ORDER_ID = 'order_id';
 
-    const AMOUNT = 'amount';
+    const AMOUNT = "amount";
 
     const CUSTOMER_ID = 'cust_id';
 

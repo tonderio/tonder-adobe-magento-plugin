@@ -15,7 +15,7 @@ abstract class AbstractResponseValidator extends AbstractValidator
     /**
      * The amount that was authorised for this transaction
      */
-    const TOTAL_AMOUNT = 'TransAmount';
+    const TOTAL_AMOUNT = "amount";
 
     /**
      * The transaction type that this transaction was processed under
@@ -26,7 +26,7 @@ abstract class AbstractResponseValidator extends AbstractValidator
     /**
      * A unique identifier that represents the transaction in eWAY’s system
      */
-    const TRANSACTION_ID = 'id';
+    const TRANSACTION_ID = "id";
 
     /**
      * A code that describes the result of the action performed
@@ -72,7 +72,7 @@ abstract class AbstractResponseValidator extends AbstractValidator
      */
     protected function validateErrors(array $response)
     {
-        return $response[self::RESPONSE_CODE] != 'null' && (int)$response[self::RESPONSE_CODE] == 200;
+        return $response[self::RESPONSE_CODE] !== 'null' && (int)$response[self::RESPONSE_CODE] === 200;
     }
 
     /**
@@ -82,35 +82,18 @@ abstract class AbstractResponseValidator extends AbstractValidator
      */
     protected function validateTotalAmount(array $response, $amount)
     {
-        //remove later
-        return true;
-        return isset($response[self::TOTAL_AMOUNT])
-            && (float)$response[self::TOTAL_AMOUNT] === (float)$amount;
+        return (float)$response["response"][self::TOTAL_AMOUNT] === (float)$amount;
     }
-
     /**
      * @param array $response
      * @return bool
      */
-    protected function validateTransactionType(array $response)
-    {
-        return isset($response[self::TRANSACTION_TYPE])
-            && ($response[self::TRANSACTION_TYPE] == '00'
-                || $response[self::TRANSACTION_TYPE] == '01'
-                || $response[self::TRANSACTION_TYPE] == '02'
-                || $response[self::TRANSACTION_TYPE] == '04'
-                || $response[self::TRANSACTION_TYPE] == '11');
-    }
 
-    /**
-     * @param array $response
-     * @return bool
-     */
     protected function validateTransactionId(array $response)
     {
-        return isset($response[0][self::TRANSACTION_ID])
-            && $response[0][self::TRANSACTION_ID] != 'null';
+        return isset($response["response"]["charges"]["data"][0][self::TRANSACTION_ID]);
     }
+
 
     /**
      * @param array $response

@@ -29,13 +29,4 @@ class VoidValidator extends AbstractResponseValidator
 
         return $this->createResult($validationResult, $errorMessages);
     }
-
-    /**
-     * @param array $response
-     * @return bool
-     */
-    protected function validateResponseCode(array $response)
-    {
-        return isset($response[self::RESPONSE_CODE]);
-    }
 }

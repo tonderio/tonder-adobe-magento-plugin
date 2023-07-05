@@ -127,13 +127,21 @@ abstract class AbstractTransferFactory implements TransferFactoryInterface
      */
     public function getUrl($additionalPath = '', $is3DS = false)
     {
-        $baseUrl = match ((int)$this->config->getValue('mode')) {
-            1 => $this->config->getValue('stage_api'),
-            2 => $this->config->getValue('live_api'),
-            default => $this->config->getValue('mock_api'),
-        };
+        $mode = (int)$this->config->getValue('mode');
+        $baseUrl = '';
 
-        return $baseUrl.$this->getPath();
+        switch ($mode) {
+            case 1:
+                $baseUrl = $this->config->getValue('stage_api');
+                break;
+            case 2:
+                $baseUrl = $this->config->getValue('live_api');
+                break;
+            default:
+                $baseUrl = $this->config->getValue('mock_api');
+                break;
+        }
+        return $baseUrl . $this->getPath();
     }
 
     public function getToken()

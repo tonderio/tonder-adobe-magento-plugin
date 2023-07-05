@@ -24,6 +24,7 @@ class RefundValidator extends TransactionCaptureValidator
         $amount = SubjectReader::readAmount($validationSubject);
         $paymentData = $validationSubject['payment']->getPayment();
         $paymentAdditionalInformation = $paymentData->getAdditionalInformation();
+
         if (isset($paymentAdditionalInformation['mcp_purchase']) && $paymentAdditionalInformation['mcp_purchase'] == 'Yes') {
             $amount = round($paymentData->getCreditMemo()->getGrandTotal(), 2);
         }
