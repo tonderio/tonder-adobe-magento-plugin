@@ -2,12 +2,14 @@
 declare(strict_types=1);
 namespace Tonder\Payment\Gateway\Http;
 
+use Tonder\Payment\Gateway\Request\TransactionCustomerExistDataBuilder;
 use Tonder\Payment\Gateway\Http\AbstractTransferFactory;
 
 /**
- * Class TransferFactory
+ * Class CustomerExistTransferFactory
+ * @package Tonder\Payment\Gateway\Http
  */
-class TransferFactory extends AbstractTransferFactory
+class CustomerExistTransferFactory extends AbstractTransferFactory
 {
 
     /**
@@ -15,14 +17,15 @@ class TransferFactory extends AbstractTransferFactory
      */
     public function create(array $request)
     {
+        $url = $this->getUrl() . $request[TransactionCustomerExistDataBuilder::CUSTOMER_EMAIL];
         return $this->transferBuilder
-            ->setMethod('POST')
+            ->setMethod('GET')
             ->setBody($this->serializer->serialize($request))
             ->setHeaders([
                 "Authorization: Token " . $this->getToken(),
                 "Content-type: application/json",
             ])
-            ->setUri($this->getUrl())
+            ->setUri($url)
             ->build();
     }
 }

@@ -1,24 +1,19 @@
 <?php
-
+declare(strict_types=1);
 namespace Tonder\Payment\Helper;
 
 use Firebase\JWT\JWT;
+use Laminas\Http\Client;
+use Laminas\Http\ClientFactory;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
-use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Payment\Gateway\Command\CommandException;
 use Magento\Sales\Model\Order\Payment;
-use Psr\Log\LoggerInterface;
-use Laminas\Http\Client;
-use Laminas\Http\ClientFactory;
+use Tonder\Payment\Logger\Logger;
 
 class SkyFlowProcessor extends AbstractHelper
 {
-    /**
-     * @var EncryptorInterface
-     */
-    private $encryptor;
 
     /**
      * @var ClientFactory
@@ -26,7 +21,7 @@ class SkyFlowProcessor extends AbstractHelper
     private $clientFactory;
 
     /**
-     * @var LoggerInterface
+     * @var Logger
      */
     private $logger;
 
@@ -36,21 +31,19 @@ class SkyFlowProcessor extends AbstractHelper
     private $serializer;
 
     /**
-     * @param EncryptorInterface $encryptor
      * @param ClientFactory $clientFactory
      * @param SerializerInterface $serializer
      * @param Context $context
      */
     public function __construct(
-        EncryptorInterface $encryptor,
         ClientFactory $clientFactory,
         SerializerInterface $serializer,
-        LoggerInterface $logger,
+        Logger $logger,
         Context $context
     ) {
         $this->clientFactory = $clientFactory;
         $this->serializer = $serializer;
-        $this->encryptor = $encryptor;
+
         $this->logger = $logger;
         parent::__construct($context);
     }
@@ -84,9 +77,7 @@ class SkyFlowProcessor extends AbstractHelper
             '/cards';
 
         $client->setUri($url);
-
         $client->setEncType('application/json');
-
         $client->setHeaders([
             "Authorization: Bearer " . $accessToken,
             "Content-type: application/json",
@@ -136,7 +127,6 @@ class SkyFlowProcessor extends AbstractHelper
         ];
 
         $signedJwt = JWT::encode($claims, $sfData['privateKey'], 'RS256');
-
         $data = [
             'grant_type' => 'urn:ietf:params:oauth:grant-type:jwt-bearer',
             'assertion' => $signedJwt

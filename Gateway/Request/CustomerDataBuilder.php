@@ -1,30 +1,14 @@
 <?php
-
+declare(strict_types=1);
 namespace Tonder\Payment\Gateway\Request;
 
-use Magento\Payment\Gateway\ConfigInterface;
-use Magento\Payment\Model\Method\AbstractMethod;
 use Magento\Payment\Gateway\Helper\SubjectReader;
-use Magento\Payment\Gateway\Request\BuilderInterface;
-
 /**
  * Class CustomerDataBuilder
  * @package Tonder\Payment\Gateway\Request
  */
-class CustomerDataBuilder extends AbstractDataBuilder implements BuilderInterface
+class CustomerDataBuilder extends AbstractDataBuilder
 {
-    /**
-     * Customer block name
-     */
-    const CUSTOMER = 'cust_info';
-
-    /**
-     * The customer’s email address, which must be correctly formatted if present
-     */
-    const EMAIL = 'email';
-
-    const INSTRUCTIONS = 'instructions';
-
     /**
      * @inheritdoc
      */
@@ -38,12 +22,33 @@ class CustomerDataBuilder extends AbstractDataBuilder implements BuilderInterfac
         if (!$billingAddress) {
             return [];
         }
-
+        $phone = $this->onlyNumbers($billingAddress->getTelephone());
         return [
             'name' => $billingAddress->getFirstname(),
             'last_name' => $billingAddress->getLastname(),
             'email_client' => $billingAddress->getEmail(),
-            'phone_number' => $billingAddress->getTelephone()
+            'phone' => $this->removeSpecialCharacterInPhone( $phone)
         ];
+    }
+
+    /**
+     * @param $param
+     * @return array|string|string[]|null
+     */
+    private function onlyNumbers($param){
+        return preg_replace("/[^0-9]/", "", $param);
+    }
+
+    /**
+     * @param $param
+     * @return string
+     */
+    private function removeSpecialCharacterInPhone($param)
+    {
+        if (!empty($param)) {
+            $caracters = preg_match("/^([+]).*$/", $param) ? '+' : '';
+            return $caracters . preg_replace("/[^0-9]/", "", $param);
+        }
+        return $param;
     }
 }

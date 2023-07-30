@@ -40,6 +40,7 @@ class ResponseValidator extends AbstractResponseValidator
             && $this->validateTransactionId($response)
             && $this->validateResponseCode($response)
             && $this->validateResponseMessage($response);
+
         if (!$this->validateErrors($response) && $this->validateResponseMessage($response)) {
             throw new LocalizedException(__($response[self::RESPONSE_MESSAGE]));
         }

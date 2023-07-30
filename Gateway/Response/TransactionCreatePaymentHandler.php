@@ -3,6 +3,8 @@
 namespace Tonder\Payment\Gateway\Response;
 
 use Magento\Framework\DataObject;
+use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Model\Order;
 use Tonder\Payment\Gateway\Validator\AbstractResponseValidator;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Payment\Gateway\Helper\ContextHelper;
@@ -11,9 +13,9 @@ use Magento\Payment\Gateway\Response\HandlerInterface;
 use Magento\Sales\Model\Order\Payment;
 
 /**
- * Class PaymentDetailsHandler
+ * Class TransactionCreatePaymentHandler
  */
-class PaymentDetailsHandler implements HandlerInterface
+class TransactionCreatePaymentHandler implements HandlerInterface
 {
     /**
      * @var ScopeConfigInterface
@@ -28,7 +30,6 @@ class PaymentDetailsHandler implements HandlerInterface
     {
         $this->scopeConfig = $scopeConfig;
     }
-
     /**
      * @inheritdoc
      */
@@ -39,10 +40,16 @@ class PaymentDetailsHandler implements HandlerInterface
         /** @var Payment $payment */
         $payment = $paymentDO->getPayment();
         ContextHelper::assertOrderPayment($payment);
-        $transctationId = $response["response"][AbstractResponseValidator::TRANSACTION_ID] ?? "";
 
-        $payment->setTransactionId( $transctationId);
-        $payment->setLastTransId( $transctationId);
-        $payment->setIsTransactionClosed(false);
+        $payment_id = $response[AbstractResponseValidator::PK];
+        if($payment_id){
+            $payment->setAdditionalInformation('payment_id', $payment_id);
+            $payment->setIsTransactionClosed(false);
+        }else {
+            $payment->getOrder()->setState(OrderInterface::STATE, Order::STATE_PENDING_PAYMENT);
+            $payment->getOrder()->setStatus(OrderInterface::STATUS, Order::STATE_PENDING_PAYMENT);
+            $payment->setIsTransactionPending(true);
+            $payment->setAdditionalInformation('error_messages', 'Erro this Payment Tonder');
+        }
     }
 }

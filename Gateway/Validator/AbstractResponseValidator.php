@@ -17,11 +17,6 @@ abstract class AbstractResponseValidator extends AbstractValidator
      */
     const TOTAL_AMOUNT = "amount";
 
-    /**
-     * The transaction type that this transaction was processed under
-     * One of: Purchase, MOTO, Recurring
-     */
-    const TRANSACTION_TYPE = 'TransType';
 
     /**
      * A unique identifier that represents the transaction in eWAY’s system
@@ -39,16 +34,14 @@ abstract class AbstractResponseValidator extends AbstractValidator
     const RESPONSE_CODE = 'ResponseCode';
 
     /**
-     * Value of response code
+     * This is the payment_id
      */
-    const RESPONSE_CODE_ACCEPT = '00';
+    const PK = "pk";
 
     /**
-     * Reference Number
+     * This is the order ID for create order
      */
-    const REFERENCE_NUM = 'ReferenceNum';
-
-    const AUTH_CODE = 'AuthCode';
+    const ORDER_ID = "id";
 
     /**
      * @var ScopeConfigInterface
@@ -56,11 +49,13 @@ abstract class AbstractResponseValidator extends AbstractValidator
     protected $scopeConfig;
 
     /**
-     * AbstractResponseValidator constructor.
      * @param ResultInterfaceFactory $resultFactory
      * @param ScopeConfigInterface $scopeConfig
      */
-    public function __construct(ResultInterfaceFactory $resultFactory, ScopeConfigInterface $scopeConfig)
+    public function __construct(
+        ResultInterfaceFactory $resultFactory,
+        ScopeConfigInterface $scopeConfig
+    )
     {
         $this->scopeConfig = $scopeConfig;
         parent::__construct($resultFactory);
@@ -72,9 +67,9 @@ abstract class AbstractResponseValidator extends AbstractValidator
      */
     protected function validateErrors(array $response)
     {
-        return $response[self::RESPONSE_CODE] !== 'null' && (int)$response[self::RESPONSE_CODE] === 200;
+        $responseCode = $response[self::RESPONSE_CODE];
+        return ($responseCode !== null && (int)$responseCode === 200) || (int)$responseCode === 201;
     }
-
     /**
      * @param array $response
      * @param array|number|string $amount
@@ -82,7 +77,17 @@ abstract class AbstractResponseValidator extends AbstractValidator
      */
     protected function validateTotalAmount(array $response, $amount)
     {
-        return (float)$response["response"][self::TOTAL_AMOUNT] === (float)$amount;
+        if (isset($response["response"]) && is_array($response["response"])) {
+            return (
+                isset($response["response"][self::TOTAL_AMOUNT])
+                && (float)$response["response"][self::TOTAL_AMOUNT] === (float)$amount
+            );
+        }
+
+        return (
+            isset($response[self::TOTAL_AMOUNT])
+            && (float)$response[self::TOTAL_AMOUNT] === (float)$amount
+        );
     }
     /**
      * @param array $response
@@ -91,7 +96,7 @@ abstract class AbstractResponseValidator extends AbstractValidator
 
     protected function validateTransactionId(array $response)
     {
-        return isset($response["response"]["charges"]["data"][0][self::TRANSACTION_ID]);
+        return isset($response["response"][self::TRANSACTION_ID]);
     }
 
 
@@ -111,5 +116,21 @@ abstract class AbstractResponseValidator extends AbstractValidator
     protected function validateResponseMessage(array $response)
     {
         return !empty($response[self::RESPONSE_MESSAGE]);
+    }
+
+    /**
+     * @param array $response
+     * @return bool
+     */
+    protected function validatePaymentId(array $response){
+        return isset($response[self::PK]);
+    }
+
+    /**
+     * @param array $response
+     * @return bool
+     */
+    protected function validateOrderID(array $response){
+        return isset($response[self::ORDER_ID]);
     }
 }

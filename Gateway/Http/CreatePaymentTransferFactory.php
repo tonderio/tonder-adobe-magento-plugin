@@ -5,9 +5,9 @@ namespace Tonder\Payment\Gateway\Http;
 use Tonder\Payment\Gateway\Http\AbstractTransferFactory;
 
 /**
- * Class TransferFactory
+ * Class CreatePaymentTransferFactory
  */
-class TransferFactory extends AbstractTransferFactory
+class CreatePaymentTransferFactory extends AbstractTransferFactory
 {
 
     /**
@@ -15,6 +15,8 @@ class TransferFactory extends AbstractTransferFactory
      */
     public function create(array $request)
     {
+        $url = $this->getUrl() . "business/". $request["business"] ."/payments/";
+        unset($request["business"]);
         return $this->transferBuilder
             ->setMethod('POST')
             ->setBody($this->serializer->serialize($request))
@@ -22,7 +24,7 @@ class TransferFactory extends AbstractTransferFactory
                 "Authorization: Token " . $this->getToken(),
                 "Content-type: application/json",
             ])
-            ->setUri($this->getUrl())
+            ->setUri($url)
             ->build();
     }
 }

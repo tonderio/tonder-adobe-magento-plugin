@@ -1,149 +1,78 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tonder\Payment\Helper;
 
+use Magento\Checkout\Model\Cart;
+use Magento\Checkout\Model\Session;
+use Magento\Framework\App\Helper\Context;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Directory\Model\CountryFactory;
+use Magento\Payment\Gateway\ConfigInterface;
+use Magento\Framework\App\Helper\AbstractHelper;
+use Magento\Framework\Encryption\EncryptorInterface;
 use Tonder\Payment\Model\Adminhtml\Source\Mode;
+use Tonder\Payment\Logger\Logger;
+use Tonder\Payment\Helper\Curl as CurlTonderHelper;
 
-/**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- */
-class Data extends \Magento\Framework\App\Helper\AbstractHelper
+class Data extends AbstractHelper
 {
-    /**
-     * @var \Magento\Framework\App\Request\Http
-     */
-    protected $request;
+    const URL_LIVE = 'https://live.api.tonder.mx/v2';
+
+    const URL_SANBOX = "https://sandbox.api.tonder.mx/v2";
 
     /**
-     * @var \Magento\Framework\App\Response\Http
-     */
-    protected $response;
-
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    protected $logger;
-
-    /**
-     * @var \Magento\Framework\Event\ManagerInterface
-     */
-    protected $eventManager;
-
-    /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    protected $storeManager;
-
-    /**
-     * @var \Magento\Sales\Model\Order\CreditmemoFactory
-     */
-    protected $creditmemoFactory;
-
-    /**
-     * @var \Magento\Sales\Model\Service\CreditmemoService
-     */
-    protected $creditmemoService;
-
-    /**
-     * @var \Magento\Framework\DB\TransactionFactory
-     */
-    protected $transactionFactory;
-
-    /**
-     * @var \Magento\Sales\Model\Order\Invoice
-     */
-    protected $invoiceModel;
-
-    /**
-     * @var \Magento\Framework\UrlInterface
-     */
-    protected $urlInterface;
-
-    /**
-     * @var \Magento\Framework\Encryption\EncryptorInterface
+     * @var EncryptorInterface
      */
     protected $encryptor;
 
     /**
-     * @var \Tonder\Payment\Model\Curl
+     * @var CountryFactory
      */
-     protected $curlCustom;
-
-     /**
-      * @var \Tonder\Payment\Logger\Logger
-      */
-     protected $loggerCustom;
-
-     /**
-      * @var \Magento\Directory\Model\CountryFactory
-      */
-     protected $countryFactory;
-
-     /**
-      * @var \Magento\Checkout\Model\Cart
-      */
-     protected $cart;
-
-     /**
-      * @var \Magento\Checkout\Model\Session
-      */
-     protected $checkoutSession;
+    protected $countryFactory;
 
     /**
-     * @param   \Magento\Framework\App\Request\Http                 $request
-     * @param   \Magento\Framework\App\Response\Http                $response
-     * @param   \Psr\Log\LoggerInterface                            $logger
-     * @param   \Magento\Framework\Event\ManagerInterface           $eventManager
-     * @param   \Magento\Sales\Model\Order\Email\Sender\OrderSender $quoteSender
-     * @param   \Magento\Store\Model\StoreManagerInterface          $storeManager
-     * @param   \Magento\Sales\Model\Order\CreditmemoFactory        $creditmemoFactory
-     * @param   \Magento\Sales\Model\Service\CreditmemoService      $creditmemoService
-     * @param   \Magento\Framework\DB\TransactionFactory            $transactionFactory
-     * @param   \Magento\Sales\Model\Order\Invoice                  $invoiceModel
-     * @param   \Magento\Framework\UrlInterface                     $urlInterface
-     * @param   \Magento\Framework\Encryption\EncryptorInterface    $encryptor
-     * @param   \Tonder\Payment\Model\Curl                        $curlCustom
-     * @param   \Tonder\Payment\Logger\Logger                     $loggerCustom
-     * @param   \Magento\Directory\Model\CountryFactory             $countryFactory
-     * @param   \Magento\Checkout\Model\Cart                        $cart
-     * @param   \Magento\Checkout\Model\Session                     $checkoutSession
-     * @param   \Magento\Framework\App\Helper\Context               $context
+     * @var Cart
      */
+    protected $cart;
+
+    /**
+     * @var Session
+     */
+    protected $checkoutSession;
+    /**
+     * @var ConfigInterface
+     */
+    protected $config;
+
+    /**
+     * @var CurlTonderHelper
+     */
+    protected $curlCustom;
+
+    /**
+     * @var Logger
+     */
+    protected $logger;
+
     public function __construct(
-        \Magento\Framework\App\Request\Http $request,
-        \Magento\Framework\App\Response\Http $response,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Sales\Model\Order\CreditmemoFactory $creditmemoFactory,
-        \Magento\Sales\Model\Service\CreditmemoService $creditmemoService,
-        \Magento\Framework\DB\TransactionFactory $transactionFactory,
-        \Magento\Sales\Model\Order\Invoice $invoiceModel,
-        \Magento\Framework\UrlInterface $urlInterface,
-        \Magento\Framework\Encryption\EncryptorInterface $encryptor,
-        \Tonder\Payment\Model\Curl $curlCustom,
-        \Tonder\Payment\Logger\Logger $loggerCustom,
-        \Magento\Directory\Model\CountryFactory $countryFactory,
-        \Magento\Checkout\Model\Cart $cart,
-        \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Framework\App\Helper\Context $context
+        EncryptorInterface $encryptor,
+        CountryFactory $countryFactory,
+        Cart $cart,
+        Session $checkoutSession,
+        Context $context,
+        ConfigInterface $config,
+        CurlTonderHelper $curlCustom,
+        Logger $logger
     ) {
-        $this->request = $request;
-        $this->response = $response;
-        $this->logger = $logger;
-        $this->eventManager = $eventManager;
-        $this->storeManager = $storeManager;
-        $this->creditmemoFactory = $creditmemoFactory;
-        $this->creditmemoService = $creditmemoService;
-        $this->transactionFactory = $transactionFactory;
-        $this->invoiceModel = $invoiceModel;
-        $this->urlInterface = $urlInterface;
         $this->encryptor = $encryptor;
-        $this->curlCustom = $curlCustom;
-        $this->loggerCustom = $loggerCustom;
         $this->countryFactory = $countryFactory;
         $this->cart = $cart;
         $this->checkoutSession = $checkoutSession;
+        $this->config = $config;
+        $this->curlCustom = $curlCustom;
+        $this->logger = $logger;
         parent::__construct($context);
     }
 
@@ -156,10 +85,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $mode = $this->getActiveMode();
         return $this->encryptor->decrypt(
-            $this->scopeConfig->getValue(
-                'payment/tonder/'.$mode.'_webhook',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            )
+            $this->scopeConfig->getValue('payment/tonder/' . $mode . '_webhook', ScopeInterface::SCOPE_STORE)
         );
     }
 
@@ -172,10 +98,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $mode = $this->getActiveMode();
         return $this->encryptor->decrypt(
-            $this->scopeConfig->getValue(
-                'payment/tonder/'.$mode.'_secret',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            )
+            $this->scopeConfig->getValue('payment/tonder/' . $mode . '_secret', ScopeInterface::SCOPE_STORE)
         );
     }
 
@@ -187,10 +110,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function getPublicKey()
     {
         $mode = $this->getActiveMode();
-        return $this->scopeConfig->getValue(
-            'payment/tonder/'.$mode.'_api_key',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
+        return $this->scopeConfig->getValue('payment/tonder/' . $mode . '_api_key', ScopeInterface::SCOPE_STORE);
     }
 
     /**
@@ -203,12 +123,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $mode = $this->getActiveMode();
         $debug = false;
-        if ($mode=="sandbox") {
+        if ($mode == "sandbox") {
             $tmpDebug = $this->scopeConfig->getValue(
                 'payment/tonder/debug',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                ScopeInterface::SCOPE_STORE
             );
-            if ($tmpDebug=="1") {
+            if ($tmpDebug == "1") {
                 $debug = true;
             } else {
                 $debug = false;
@@ -225,7 +145,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getActiveMode()
     {
-        $mode = $this->scopeConfig->getValue('payment/tonder/mode', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        $mode = $this->scopeConfig->getValue('payment/tonder/mode', ScopeInterface::SCOPE_STORE);
         if ($mode == Mode::PRODUCTION) {
             return 'production';
         } elseif ($mode == Mode::SANDBOX) {
@@ -244,10 +164,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function getApiBaseUrl()
     {
         $mode = $this->getActiveMode();
-        if ($mode=="production") {
-            return 'https://live.api.tonder.mx/v2';
+        if ($mode == "production") {
+            return self::URL_LIVE;
         } else {
-            return 'https://sandbox.api.tonder.mx/v2';
+            return self::URL_SANBOX;
         }
     }
 
@@ -282,37 +202,37 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         if ($quoteItems) {
             foreach ($quoteItems as $quoteItem) {
                 $items[] = [
-                    "item_total_amount"=>[
-                        "amount"=>(int)($quoteItem->getRowTotal()*100),"currency_code"=>$currencyCode
+                    "item_total_amount" => [
+                        "amount" => (int)($quoteItem->getRowTotal() * 100), "currency_code" => $currencyCode
                     ],
-                    "description"=> $quoteItem->getName(),
-                    "id"=> $quoteItem->getSku(),
-                    "quantity"=> $quoteItem->getQty(),
-                    "unit_amount"=>[
-                        "amount"=> (int)($quoteItem->getPrice()*100),
-                        "currency_code"=> $currencyCode
-                        ]
-                    ];
+                    "description" => $quoteItem->getName(),
+                    "id" => $quoteItem->getSku(),
+                    "quantity" => $quoteItem->getQty(),
+                    "unit_amount" => [
+                        "amount" => (int)($quoteItem->getPrice() * 100),
+                        "currency_code" => $currencyCode
+                    ]
+                ];
             }
         }
 
-        $URL = $apiBaseUrl.'/order/'.$tonderOrderId;
+        $URL = $apiBaseUrl . '/order/' . $tonderOrderId;
 
         $postArray = [
             "order_total_amount" => [
-                "amount"=>(int)($quote->getGrandTotal()*100),"currency_code"=>$currencyCode
+                "amount" => (int)($quote->getGrandTotal() * 100), "currency_code" => $currencyCode
             ],
-            "description"=> "Tonder payment order",
-            "purchases"=>$items
+            "description" => "Tonder payment order",
+            "purchases" => $items
         ];
         if ($debugMode) {
-            $this->loggerCustom->info("-----Helper Update Order starts-----");
-            $this->loggerCustom->info("Posted Data:");
+            $this->logger->info("-----Helper Update Order starts-----");
+            $this->logger->info("Posted Data:");
         }
 
         $jsonData = json_encode($postArray);
         if ($debugMode) {
-            $this->loggerCustom->info($jsonData);
+            $this->logger->info($jsonData);
         }
         $this->curlCustom->addHeader("X-Api-Client-Key", $publicKey);
         $this->curlCustom->addHeader("X-Cash-Anti-Fraud-Metadata", $antiFraudMeta);
@@ -322,9 +242,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
         $response = $this->curlCustom->getBody();
         if ($debugMode) {
-            $this->loggerCustom->info("Received Data:");
-            $this->loggerCustom->info($response);
-            $this->loggerCustom->info("-----Helper Update Order ends-----");
+            $this->logger->info("Received Data:");
+            $this->logger->info($response);
+            $this->logger->info("-----Helper Update Order ends-----");
         }
     }
     /**
@@ -333,15 +253,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param  string $countryCode
      * @return string
      */
-    public function getCountryCode($countryCode)
+    public function getCountryName($countryCode)
     {
-        if ($countryCode) {
-            $country = $this->countryFactory->create()->loadByCode($countryCode);
-            if ($country->getData('iso3_code')) {
-                $countryCode = $country->getData('iso3_code');
-            }
-        }
-        return $countryCode;
+        return $this->countryFactory->create()->loadByCode($countryCode)->getName();
     }
     /**
      * Clear last order id
@@ -370,10 +284,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getPaymentMethodStatus()
     {
-        return $this->scopeConfig->getValue(
-            'payment/tonder/active',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
+        return $this->scopeConfig->getValue('payment/tonder/active', ScopeInterface::SCOPE_STORE);
     }
 
     /**
@@ -383,9 +294,14 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getProcessSignifydRejectedOrder()
     {
-        return (boolean) $this->scopeConfig->getValue(
+        return (bool) $this->scopeConfig->getValue(
             'payment/tonder/processSignifydRejectedOrder',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
+    }
+
+    public function getToken()
+    {
+        return $this->encryptor->decrypt($this->config->getValue('token'));
     }
 }

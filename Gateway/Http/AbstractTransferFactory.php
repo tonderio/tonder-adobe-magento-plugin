@@ -1,11 +1,11 @@
 <?php
-
+declare(strict_types=1);
 namespace Tonder\Payment\Gateway\Http;
 
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Tonder\Payment\Gateway\Request\AbstractDataBuilder;
-use Tonder\Payment\Gateway\Request\TransactionDataBuilder;
+use Tonder\Payment\Gateway\Request\TransactionSaleDataBuilder;
 use Tonder\Payment\Model\Adminhtml\Source\Environment;
 use Magento\Framework\Xml\GeneratorFactory;
 use Magento\Payment\Gateway\ConfigInterface;
@@ -182,8 +182,8 @@ abstract class AbstractTransferFactory implements TransferFactoryInterface
         if (isset($request[AbstractDataBuilder::REPLACE_KEY])) {
             $prefix = $this->isUsCountry() ? 'us_' : '';
             $action = $prefix . $this->getAction();
-            if (isset($request[AbstractDataBuilder::REPLACE_KEY][TransactionDataBuilder::ORDER_ID])) {
-                $orderId = $request[AbstractDataBuilder::REPLACE_KEY][TransactionDataBuilder::ORDER_ID];
+            if (isset($request[AbstractDataBuilder::REPLACE_KEY][TransactionSaleDataBuilder::ORDER_ID])) {
+                $orderId = $request[AbstractDataBuilder::REPLACE_KEY][TransactionSaleDataBuilder::ORDER_ID];
                 if ($this->getAction() == AbstractDataBuilder::PURCHASE) {
                     $action = $this->checkMCPPurchase($request) ? AbstractDataBuilder::MCP_PURCHASE : AbstractDataBuilder::PURCHASE;
                 } elseif ($this->getAction() == AbstractDataBuilder::REFUND) {

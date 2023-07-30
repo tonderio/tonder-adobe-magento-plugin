@@ -1,18 +1,15 @@
 <?php
-
+declare(strict_types=1);
 namespace Tonder\Payment\Gateway\Request;
 
 use Magento\Payment\Gateway\Helper\SubjectReader;
-use Magento\Payment\Gateway\Request\BuilderInterface;
-use Tonder\Payment\Gateway\Helper\MappingCurrency;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * Class AmountDataBuilder
  *
  * @package Tonder\Payment\Gateway\Request
  */
-class AmountDataBuilder extends AbstractDataBuilder implements BuilderInterface
+class AmountDataBuilder extends AbstractDataBuilder
 {
     /**
      * @inheritdoc

@@ -1,19 +1,17 @@
 <?php
-
+declare(strict_types=1);
 namespace Tonder\Payment\Gateway\Http\Client;
 
-
-use Magento\Framework\HTTP\ZendClient;
-use Magento\Framework\HTTP\ZendClientFactory;
-
+use Laminas\Http\Client;
+use Laminas\Http\ClientFactory;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Payment\Gateway\Http\ClientException;
 use Magento\Payment\Gateway\Http\ClientInterface;
 use Magento\Payment\Gateway\Http\ConverterInterface;
 use Magento\Payment\Gateway\Http\TransferInterface;
-use Tonder\Payment\Gateway\Request\AbstractDataBuilder;
 use Magento\Framework\Serialize\Serializer\Json;
 use Tonder\Payment\Logger\Logger;
+use Tonder\Payment\Gateway\Request\AbstractDataBuilder;
 
 /**
  * Class Zend
@@ -21,7 +19,7 @@ use Tonder\Payment\Logger\Logger;
 class Zend  implements ClientInterface
 {
     /**
-     * @var ZendClientFactory
+     * @var ClientFactory
      */
     private $clientFactory;
 
@@ -41,13 +39,13 @@ class Zend  implements ClientInterface
     private $serializer;
 
     /**
-     * @param ZendClientFactory $clientFactory
+     * @param ClientFactory $clientFactory
      * @param Logger $logger
      * @param Json $jsonFramework
      * @param ConverterInterface|null $converter
      */
     public function __construct(
-        ZendClientFactory                 $clientFactory,
+        ClientFactory                 $clientFactory,
         Logger                               $logger,
         SerializerInterface                  $serializer,
         ConverterInterface                   $converter = null
@@ -69,18 +67,18 @@ class Zend  implements ClientInterface
             'request_url' => $transferObject->getUri()
         ];
         $result = [];
-         /** @var ZendClient $client */
+         /** @var Client $client */
         $client = $this->clientFactory->create();
 
         $client->setMethod($transferObject->getMethod());
-        $client->setRawData($transferObject->getBody());
+        $client->setRawBody($transferObject->getBody());
 
         $client->setHeaders($transferObject->getHeaders());
         $client->setUri($transferObject->getUri());
         $client->setEncType('application/json');
 
         try {
-            $response = $client->request();
+            $response = $client->send();
             try {
                 $result = $this->serializer->unserialize($response->getBody());
                 if (!isset($result['message'])) {
@@ -89,16 +87,14 @@ class Zend  implements ClientInterface
             } catch (\Exception $e) {
                 $result['message'] = "Invalid body returned!";
             }
-            $result['ResponseCode'] = $response->getStatus();
-            $result['ResponseMessage'] = $response->getMessage();
+            $result['ResponseCode'] = $response->getStatusCode();
+            $result['ResponseMessage'] = $response->getReasonPhrase();
 
             $result['message'] .= " Details: " . $result['ResponseCode'] . " - " . $result['ResponseMessage'];
             $logInfo['response_body'] = [$response->getBody()];
 
         } catch (\RuntimeException $e) {
             throw new ClientException( __($e->getMessage()) );
-        } catch (\Magento\Payment\Gateway\Http\ConverterException  $e) {
-            throw $e;
         } finally {
             $this->logger->info('Info log: ', [$logInfo]);
         }

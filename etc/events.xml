@@ -3,7 +3,4 @@
     <event name="payment_method_assign_data_tonder">
         <observer name="tonder_gateway_data_assign" instance="Tonder\Payment\Observer\DataAssignObserver" />
     </event>
-    <event name="sales_order_save_commit_after">
-        <observer name="tonder_save_order" instance="Tonder\Payment\Observer\Order\Save"/>
-    </event>
 </config>

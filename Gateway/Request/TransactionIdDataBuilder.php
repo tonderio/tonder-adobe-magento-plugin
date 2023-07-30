@@ -1,14 +1,14 @@
 <?php
+declare(strict_types=1);
 namespace Tonder\Payment\Gateway\Request;
 
 use Magento\Payment\Gateway\Helper\SubjectReader;
-use Magento\Payment\Gateway\Request\BuilderInterface;
 
 /**
  * Class TransactionIdDataBuilder
  * @package Tonder\Payment\Gateway\Request
  */
-class TransactionIdDataBuilder extends AbstractDataBuilder implements BuilderInterface
+class TransactionIdDataBuilder extends AbstractDataBuilder
 {
     /**
      * A unique identifier that represents the transaction in eWAY’s system

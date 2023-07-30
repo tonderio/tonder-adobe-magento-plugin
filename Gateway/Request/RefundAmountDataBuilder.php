@@ -1,9 +1,8 @@
 <?php
-
+declare(strict_types=1);
 namespace Tonder\Payment\Gateway\Request;
 
 use Tonder\Payment\Gateway\Helper\MappingCurrency;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Payment\Gateway\Helper\SubjectReader;
 
 class RefundAmountDataBuilder extends AmountDataBuilder

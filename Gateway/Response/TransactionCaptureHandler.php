@@ -20,6 +20,7 @@ class TransactionCaptureHandler implements HandlerInterface
         /** @var Payment $orderPayment */
         $orderPayment = $paymentDO->getPayment();
         $orderPayment->setTransactionId($response[AbstractResponseValidator::TRANSACTION_ID]);
+        $orderPayment->setOrderStateProcessing($response[AbstractResponseValidator::TRANSACTION_ID]);
         $orderPayment->setIsTransactionClosed(false);
     }
 }

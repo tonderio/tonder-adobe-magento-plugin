@@ -1,6 +1,8 @@
 <?php
+declare(strict_types=1);
 namespace Tonder\Payment\Gateway\Http;
 
+use Tonder\Payment\Gateway\Http\AbstractTransferFactory;
 /**
  * Class VoidTransferFactory
  * @package Tonder\Payment\Gateway\Http

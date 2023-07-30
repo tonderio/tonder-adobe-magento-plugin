@@ -1,20 +1,19 @@
 <?php
 declare(strict_types=1);
+
 namespace Tonder\Payment\Gateway\Request;
 
 use Magento\Payment\Gateway\Helper\SubjectReader;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
- * Class ItemsDataBuilder
+ * Class ItemsCreateOrderDataBuilder
  * @package Tonder\Payment\Gateway\Request
  */
-class ItemsDataBuilder extends AbstractDataBuilder
+class ItemsCreateOrderDataBuilder extends AbstractDataBuilder
 {
     const ITEMS = 'items';
-    const SKU = 'product_code';
-    const QUANTITY = 'quantity';
-    const NAME = 'name';
+
 
     /**
      * @var ScopeConfigInterface
@@ -36,28 +35,26 @@ class ItemsDataBuilder extends AbstractDataBuilder
     public function build(array $buildSubject)
     {
         $paymentDO = SubjectReader::readPayment($buildSubject);
-
         $order = $paymentDO->getOrder();
-
-        $result = [
-            'id_product' => [],
-            'quantity_product' => 0,
-            'id_ship' => "0",
-            'instance_id_ship' => "2",
-            'title_ship' => 'shipping',
-        ];
+        $result = [];
 
         /** @var \Magento\Sales\Model\Order\Item $item */
 
         foreach ($order->getItems() as $item) {
-            if (!$item->getParentItem()) {
-                $result['id_product'][] = $item->getProductId();
-                $result['quantity_product'] += $item->getQtyOrdered();
-            }
+            $result[] = [
+                "description" => $item->getDescription() ?? "",
+                "product_reference" => $item->getName() ?? "",
+                'quantity' => $item->getQtyOrdered() ?? 0,
+                'price_unit' => $item->getPrice() ?? 0,
+                'discount' => $item->getDiscountAmount() ?? 0,
+                'taxes' => $item->getTaxAmount() ?? 0,
+                "amount_total" => $item->getRowTotal() ?? 0
+            ];
         }
 
-        $result['id_product'] = implode(",", $result['id_product']);
+        return [
+            self::ITEMS =>  $result,
+        ];
 
-        return $result;
     }
 }

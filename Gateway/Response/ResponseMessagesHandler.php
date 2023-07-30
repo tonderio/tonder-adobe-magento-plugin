@@ -11,6 +11,8 @@ use Magento\Sales\Model\Order\Payment;
  */
 class ResponseMessagesHandler implements HandlerInterface
 {
+
+    const RESPONSE_CODE = 'ResponseCode';
     /**
      * @inheritdoc
      */
@@ -20,10 +22,8 @@ class ResponseMessagesHandler implements HandlerInterface
         /** @var Payment $payment */
         $payment = $paymentDO->getPayment();
         ContextHelper::assertOrderPayment($payment);
-
-        $responseCode = $response['ResponseCode'];
         $messages = $response['message'];
-        $state = $this->getState($responseCode);
+        $state = $this->getState($response);
 
         if ($state) {
             $payment->setAdditionalInformation(
@@ -38,14 +38,12 @@ class ResponseMessagesHandler implements HandlerInterface
     }
 
     /**
-     * @param int $responseCode
-     * @return boolean
+     * @param array $response
+     * @return bool
      */
-    protected function getState($responseCode)
+    protected function getState(array $response)
     {
-        if ($responseCode == 'null' || (int)$responseCode !== 200) {
-            return false;
-        }
-        return true;
+        $responseCode = $response[self::RESPONSE_CODE];
+        return ($responseCode !== null && (int)$responseCode === 200) || (int)$responseCode === 201;
     }
 }

@@ -1,15 +1,14 @@
 <?php
-
+declare(strict_types=1);
 namespace Tonder\Payment\Gateway\Request;
 
 use Magento\Payment\Gateway\ConfigInterface;
-use Magento\Payment\Gateway\Request\BuilderInterface;
 
 /**
  * Class AbstractDataBuilder
  * @package Tonder\Payment\Gateway\Request
  */
-class MerchantDataBuilder extends AbstractDataBuilder implements BuilderInterface
+class MerchantDataBuilder extends AbstractDataBuilder
 {
 
     /**

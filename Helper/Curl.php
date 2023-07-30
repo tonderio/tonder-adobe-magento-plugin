@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
+namespace Tonder\Payment\Helper;
 
-namespace Tonder\Payment\Model;
-
-class Curl extends \Magento\Framework\HTTP\Client\Curl
+use Magento\Framework\HTTP\Client\Curl as CurlInterface;
+class Curl extends CurlInterface
 {
     /**
      * Sending patch request

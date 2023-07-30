@@ -2,7 +2,7 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="content">
-            <block class="Tonder\Payment\Block\Message\Notice" name="message.notice" template="Tonder_Tonder::message/notice.phtml" cacheable="false" before="-"/>
+            <block class="Tonder\Payment\Block\Message\Notice" name="message.notice" template="Tonder_Payment::message/notice.phtml" cacheable="false" before="-"/>
         </referenceContainer>
     </body>
 </page>

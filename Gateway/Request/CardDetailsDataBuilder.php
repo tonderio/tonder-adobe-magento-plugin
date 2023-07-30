@@ -1,11 +1,10 @@
 <?php
-
+declare(strict_types=1);
 namespace Tonder\Payment\Gateway\Request;
 
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Payment\Gateway\Helper\ContextHelper;
 use Magento\Payment\Gateway\Helper\SubjectReader;
-use Magento\Payment\Gateway\Request\BuilderInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Tonder\Payment\Helper\SkyFlowProcessor;
 use Tonder\Payment\Observer\DataAssignObserver;
@@ -15,15 +14,20 @@ use Tonder\Payment\Observer\DataAssignObserver;
  *
  * @package Tonder\Payment\Gateway\Request
  */
-class CardDetailsDataBuilder extends AbstractDataBuilder implements BuilderInterface
+class CardDetailsDataBuilder extends AbstractDataBuilder
 {
     const CVV = 'cvv';
+
+    const CARD ="card";
 
     /**
      * @var EncryptorInterface
      */
     private $encryptor;
 
+    /**
+     * @var SkyFlowProcessor
+     */
     private $skyFlowProcessor;
 
     /**
@@ -67,7 +71,7 @@ class CardDetailsDataBuilder extends AbstractDataBuilder implements BuilderInter
         $skyFlowData['tokens']['skyflow_id'] = $skyFlowData['skyflow_id'];
 
         return [
-            "card" => $skyFlowData['tokens']
+            self::CARD => $skyFlowData['tokens']
         ];
     }
 
@@ -80,6 +84,12 @@ class CardDetailsDataBuilder extends AbstractDataBuilder implements BuilderInter
         return !empty($month) ? sprintf('%02d', $month) : null;
     }
 
+    /**
+     * @param $payment
+     * @param $creditData
+     * @return array|mixed
+     * @throws \Magento\Payment\Gateway\Command\CommandException
+     */
     private function skyFlowTokenization($payment, $creditData)
     {
         return $this->skyFlowProcessor->tokenization($payment, $creditData);

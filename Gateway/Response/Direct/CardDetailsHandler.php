@@ -40,11 +40,12 @@ class CardDetailsHandler implements HandlerInterface
         $payment = $paymentDO->getPayment();
         ContextHelper::assertOrderPayment($payment);
 
-        $cardDetails = $response['response']['data']['charges']['data'][0]['payment_method_details']['card'] ?? false;
+
+        $cardDetails = $this->cardDetails($response);
         if ($cardDetails) {
             $payment->setAdditionalInformation(
                 'cc_type',
-                $cardDetails['brand']
+                $this->nameCard($response)
             );
         } else {
             $payment->setAdditionalInformation(
@@ -72,28 +73,13 @@ class CardDetailsHandler implements HandlerInterface
         $payment->unsAdditionalInformation(OrderPaymentInterface::CC_NUMBER_ENC);
         $payment->unsAdditionalInformation('cc_sid_enc');
     }
-
-    /**
-     * @param $response
-     * @return string
-     */
-    public function getCreditCard($response)
+    private function cardDetails($response)
     {
-        switch ($response['CardType']) {
-            case 'M':
-                return 'Mastercard';
-            case 'V':
-                return 'Visa';
-            case 'AX':
-                return 'American Express';
-            case 'DC':
-                return 'Diners Card';
-            case 'NO':
-                return 'Novus/Discover';
-            case 'SE':
-                return 'Sears';
-            default:
-                return "N/A";
-        }
+        return !empty($response['response']['data']['charges']['data'][0]['payment_method_details']['card'])
+            || !empty($response['response']['brand']);
+    }
+
+    private function nameCard($response) {
+        return $response['response']['brand'];
     }
 }

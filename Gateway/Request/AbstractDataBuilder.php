@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types=1);
 namespace Tonder\Payment\Gateway\Request;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -7,6 +7,7 @@ use Magento\Payment\Gateway\ConfigInterface;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 use Magento\Payment\Model\Method\AbstractMethod;
 use Tonder\Payment\Model\Adminhtml\Source\Environment;
+use Tonder\Payment\Helper\Data;
 
 /**
  * Class AbstractDataBuilder
@@ -18,7 +19,6 @@ abstract class AbstractDataBuilder implements BuilderInterface
      * List Transaction Type
      * @const
      */
-    const KOUNT_INQUIRY = 'kount_inquiry';
 
     const PRE_AUTH_CAPTURE = 'completion';
 
@@ -44,7 +44,6 @@ abstract class AbstractDataBuilder implements BuilderInterface
 
     const MCP_AUTHORIZE = 'mcp_preauth';
 
-    const CARD_VERIFICATION = 'card_verification';
 
     /**
      * Transaction Type: Refund
@@ -67,17 +66,6 @@ abstract class AbstractDataBuilder implements BuilderInterface
      * Cardholder Amount
      */
 
-    const CARDHOLDER_AMOUNT = 'cardholder_amount';
-
-    /**
-     * Comp Amount
-     */
-    const COMP_AMOUNT = 'comp_amount';
-
-    /**
-     * Tonder CC Vault
-     */
-    const CC_VAULT_CODE = 'tonder_cc_vault';
 
     /**
      * Vault Capture
@@ -92,31 +80,5 @@ abstract class AbstractDataBuilder implements BuilderInterface
     const VAULT_AUTHORIZE = 'res_preauth_cc';
 
     const MCP_VAULT_AUTHORIZE = 'mcp_res_preauth_cc';
-
-    const CARD_LOOKUP = 'card_lookup';
-    const CAVV_PURCHASE = 'cavv_purchase';
-    const CAVV_PREAUTH = 'cavv_preauth';
-    const CAVV_VAULT_PURCHASE = 'res_cavv_purchase_cc';
-    const CAVV_VAULT_PREAUTH = 'res_cavv_preauth_cc';
-    /**
-     * Get Key
-     */
-    const GET_KEY = 'get_key';
-
-    /**
-     * MCP Version
-     */
-    const MCP_VERSION = 'mcp_version';
-
-    /**
-     * Cardholder Currency Code
-     */
-    const CARDHOLDER_CURRENCY_CODE = 'cardholder_currency_code';
-
-    /**
-     * Card Verification with Vault
-     */
-    const CARD_VERIFICATION_VAULT = 'res_card_verification_cc';
-
 
 }

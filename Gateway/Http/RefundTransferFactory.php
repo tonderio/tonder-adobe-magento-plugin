@@ -1,8 +1,10 @@
 <?php
+declare(strict_types=1);
 namespace Tonder\Payment\Gateway\Http;
 
 use Tonder\Payment\Gateway\Request\MerchantDataBuilder;
 use Tonder\Payment\Gateway\Request\TransactionIdDataBuilder;
+use Tonder\Payment\Gateway\Http\AbstractTransferFactory;
 
 /**
  * Class RefundTransferFactory

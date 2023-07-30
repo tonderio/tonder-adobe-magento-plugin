@@ -1,20 +1,53 @@
 <?php
-
+declare(strict_types=1);
 namespace Tonder\Payment\Gateway\Request;
 
 use Magento\Payment\Gateway\ConfigInterface;
-use Magento\Payment\Model\Method\AbstractMethod;
 use Magento\Payment\Gateway\Helper\SubjectReader;
-use Magento\Payment\Gateway\Request\BuilderInterface;
+use Magento\Sales\Model\Order\Payment;
+use Magento\Directory\Model\CountryFactory;
+use Magento\Directory\Model\RegionFactory;
 
 /**
  * Class ShippingAddressDataBuilder
  *
  * @package Tonder\Payment\Gateway\Request
  */
-class ShippingAddressDataBuilder extends AbstractDataBuilder implements BuilderInterface
+class ShippingAddressDataBuilder extends AbstractDataBuilder
 {
-    const SHIPPING = 'shipping';
+    const SHIPPING_ADDRESS = 'shipping_address';
+
+    /**
+     * @var ConfigInterface
+     */
+    private $config;
+
+    /**
+     * @var CountryFactory
+     */
+    protected $countryFactory;
+
+    /**
+     * @var RegionFactory
+     */
+    protected $regionFactory;
+
+
+    /**
+     * @param ConfigInterface $config
+     * @param CountryFactory $countryFactory
+     * @param RegionFactory $regionFactory
+     */
+    public function __construct(
+        ConfigInterface $config,
+        CountryFactory  $countryFactory,
+        RegionFactory   $regionFactory
+    )
+    {
+        $this->config = $config;
+        $this->countryFactory = $countryFactory;
+        $this->regionFactory = $regionFactory;
+    }
 
     /**
      * @inheritdoc
@@ -22,7 +55,7 @@ class ShippingAddressDataBuilder extends AbstractDataBuilder implements BuilderI
     public function build(array $buildSubject)
     {
         $paymentDO = SubjectReader::readPayment($buildSubject);
-
+        /** @var Payment $payment */
         $order = $paymentDO->getOrder();
         $shippingAddress = $order->getShippingAddress();
 
@@ -30,34 +63,42 @@ class ShippingAddressDataBuilder extends AbstractDataBuilder implements BuilderI
             return [];
         }
 
-        /** @var \Magento\Sales\Model\Order\Payment $payment */
-        $payment = $paymentDO->getPayment();
-        $order = $payment->getOrder();
-        $shipping = [
-            BillingAddressDataBuilder::FIRST_NAME => $shippingAddress->getFirstname(),
-            BillingAddressDataBuilder::LAST_NAME => $shippingAddress->getLastname(),
-            BillingAddressDataBuilder::ADDRESS => $shippingAddress->getStreetLine1(),
-            BillingAddressDataBuilder::COMPANY_NAME => $shippingAddress->getCompany() ? $shippingAddress->getCompany() : 'none',
-            BillingAddressDataBuilder::CITY => $shippingAddress->getCity(),
-            BillingAddressDataBuilder::PROVINCE => $shippingAddress->getRegionCode() ?? 'none',
-            BillingAddressDataBuilder::PHONE => $shippingAddress->getTelephone(),
-            BillingAddressDataBuilder::FAX => $shippingAddress->getTelephone(),
-            BillingAddressDataBuilder::COUNTRY => $shippingAddress->getCountryId(),
-            BillingAddressDataBuilder::POSTAL_CODE => $shippingAddress->getPostcode(),
-            BillingAddressDataBuilder::TAX1 => sprintf('%.2F', $order->getBaseTaxAmount()),
-            BillingAddressDataBuilder::TAX2 => '0',
-            BillingAddressDataBuilder::TAX3 => '0',
-            BillingAddressDataBuilder::SHIPPING_COST => sprintf('%.2F', $order->getBaseShippingAmount())
-        ];
-        if ($shippingAddress->getRegionCode()) {
-            $shipping[BillingAddressDataBuilder::PROVINCE] = $shippingAddress->getRegionCode();
-        }
+        $countryCode = $shippingAddress->getCountryId();
+        $regionCode = $shippingAddress->getRegionCode();
+        $postalCode = $shippingAddress->getPostcode();
         return [
-            self::REPLACE_KEY => [
-                CustomerDataBuilder::CUSTOMER => [
-                    self::SHIPPING => $shipping
-                ]
+            self::SHIPPING_ADDRESS => [
+                "street" => $shippingAddress->getStreetLine1() ?? "",
+                "number" => 0,
+                "suburb" => $this->getRegionName($regionCode, $countryCode) ?? 'none',
+                "zip_code" => $this->cutPostalCode( $postalCode) ?? 0000,
+                "country" => $this->getCountryName($countryCode) ?? "",
+                "state" => $this->getRegionName($regionCode, $countryCode) ?? 'none',
+                "city" => $shippingAddress->getCity() ?? "none"
             ]
         ];
+    }
+
+
+    private function cutPostalCode( $postalCode){
+        return substr($postalCode, 0, 4);
+    }
+    /**
+     * @param $countryCode
+     * @return string
+     */
+    private function getCountryName($countryCode)
+    {
+        return $this->countryFactory->create()->loadByCode($countryCode)->getName();
+    }
+
+    /**
+     * @param $regionCode
+     * @param $countryCode
+     * @return string
+     */
+    private function getRegionName($regionCode, $countryCode)
+    {
+        return $this->regionFactory->create()->loadByCode($regionCode,$countryCode)->getName();
     }
 }

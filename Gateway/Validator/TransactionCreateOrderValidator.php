@@ -1,18 +1,20 @@
 <?php
+
 namespace Tonder\Payment\Gateway\Validator;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Payment\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
+
 /**
- * Class TransactionCaptureValidator
- * @package Tonder\Payment\Gateway\Validator
+ * Class TransactionCreateOrderValidator
+ * @package Tonder\Payment\Gateway\Validator\Direct
  */
-class TransactionCaptureValidator extends AbstractResponseValidator
+class TransactionCreateOrderValidator extends AbstractResponseValidator
 {
     /**
-     * TransactionCaptureValidator constructor.
+     * ResponseValidator constructor.
      * @param ResultInterfaceFactory $resultFactory
      * @param ScopeConfigInterface $scopeConfig
      */
@@ -23,25 +25,26 @@ class TransactionCaptureValidator extends AbstractResponseValidator
 
     /**
      * @inheritdoc
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function validate(array $validationSubject)
     {
         $response = SubjectReader::readResponse($validationSubject);
-        $amount = SubjectReader::readAmount($validationSubject);
 
         $errorMessages = [];
         $validationResult = $this->validateErrors($response)
-            && $this->validateTotalAmount($response, $amount)
-            && $this->validateTransactionId($response)
             && $this->validateResponseCode($response)
+            && $this->validateOrderID($response)
             && $this->validateResponseMessage($response);
 
-        if (!$validationResult && $this->validateResponseMessage($response)) {
-            throw new LocalizedException(__($response[AbstractResponseValidator::RESPONSE_MESSAGE]));
+
+        if (!$this->validateErrors($response) && $this->validateResponseMessage($response)) {
+            throw new LocalizedException(__($response[self::RESPONSE_MESSAGE]));
         }
 
         if (!$validationResult) {
-            $errorMessages = [__('Error Checkout. Please try again later.')];
+            $errorMessages = [__('Error in Create Order. Please try again later.')];
         }
 
         return $this->createResult($validationResult, $errorMessages);
