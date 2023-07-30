@@ -137,7 +137,6 @@
                 <item name="authorize" xsi:type="string">TonderAuthorizeStrategyCommand</item>
                 <item name="sale" xsi:type="string">TonderSaleGatewayCommand</item>
                 <item name="pre_auth" xsi:type="string">TonderDirectGatewayCommand</item>
-                <item name="authorize" xsi:type="string">TonderAuthorizeStrategyCommand</item>
                 <item name="cancel_order" xsi:type="string">Magento\Payment\Gateway\Command\NullCommand</item>
                 <item name="void" xsi:type="string">TonderVoidGatewayCommand</item>
                 <item name="refund" xsi:type="string">TonderRefundGatewayCommand</item>
