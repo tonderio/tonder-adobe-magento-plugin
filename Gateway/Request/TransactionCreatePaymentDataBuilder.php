@@ -1,6 +1,5 @@
 <?php
 declare(strict_types=1);
-
 namespace Tonder\Payment\Gateway\Request;
 
 use Magento\Framework\Encryption\EncryptorInterface;
@@ -9,7 +8,7 @@ use Magento\Payment\Gateway\Helper\SubjectReader;
 use Magento\Sales\Model\Order\Payment;
 
 /**
- * Class CreatePaymentDataBuilder
+ * Class TransactionCreatePaymentDataBuilder
  * @package Tonder\Payment\Gateway\Request
  */
 class TransactionCreatePaymentDataBuilder extends AbstractDataBuilder
@@ -25,9 +24,8 @@ class TransactionCreatePaymentDataBuilder extends AbstractDataBuilder
     private $encryptor;
 
     /**
-     * AbstractDataBuilder constructor.
-     *
      * @param ConfigInterface $config
+     * @param EncryptorInterface $encryptor
      */
     public function __construct(
         ConfigInterface $config,
