@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Tonder\Payment\Gateway\Request;
 
-use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Payment\Gateway\ConfigInterface;
 use Magento\Payment\Gateway\Helper\SubjectReader;
 use Magento\Sales\Model\Order\Payment;
@@ -18,22 +17,15 @@ class TransactionCreatePaymentDataBuilder extends AbstractDataBuilder
      */
     private $config;
 
-    /**
-     * @var EncryptorInterface
-     */
-    private $encryptor;
 
     /**
      * @param ConfigInterface $config
-     * @param EncryptorInterface $encryptor
      */
     public function __construct(
-        ConfigInterface $config,
-        EncryptorInterface $encryptor
+        ConfigInterface $config
     )
     {
         $this->config = $config;
-        $this->encryptor = $encryptor;
     }
 
     /**
@@ -49,10 +41,8 @@ class TransactionCreatePaymentDataBuilder extends AbstractDataBuilder
         $tonder_id = $payment->getAdditionalInformation("tonder_id");
         $order_id = $payment->getAdditionalInformation("order_id");
         $createData = $payment->getAdditionalInformation("created");
+        $token = $payment->getAdditionalInformation("business_token");
 
-
-        $tokenEncriptor = $methodInstance->getConfigData('token');
-        $token = $this->getToken($tokenEncriptor);
 
         return [
             "business" => $methodInstance->getConfigData('merchant_id'),
@@ -64,8 +54,4 @@ class TransactionCreatePaymentDataBuilder extends AbstractDataBuilder
         ];
     }
 
-    public function getToken($tokenEncriptor)
-    {
-        return $this->encryptor->decrypt($tokenEncriptor);
-    }
 }

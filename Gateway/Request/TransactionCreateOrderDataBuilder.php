@@ -50,6 +50,7 @@ class TransactionCreateOrderDataBuilder extends AbstractDataBuilder
 
         $tokenEncriptor = $methodInstance->getConfigData('token');
         $token = $this->getToken($tokenEncriptor);
+        $payment->setAdditionalInformation('business_token',$token);
         $auth_token = $payment->getAdditionalInformation('auth_token');
 
         if(!empty($auth_token) && !empty($token) ){
