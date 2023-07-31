@@ -20,6 +20,11 @@ class TransactionCreatePaymentDataBuilder extends AbstractDataBuilder
     private $config;
 
     /**
+     * @var EncryptorInterface
+     */
+    private $encryptor;
+
+    /**
      * AbstractDataBuilder constructor.
      *
      * @param ConfigInterface $config
