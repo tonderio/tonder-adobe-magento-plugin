@@ -72,7 +72,7 @@ class Zend  implements ClientInterface
 
         $client->setMethod($transferObject->getMethod());
         $client->setRawBody($transferObject->getBody());
-
+        $client->setOptions(array('timeout'=> 30));
         $client->setHeaders($transferObject->getHeaders());
         $client->setUri($transferObject->getUri());
         $client->setEncType('application/json');
