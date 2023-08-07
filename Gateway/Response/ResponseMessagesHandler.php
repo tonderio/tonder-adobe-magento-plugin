@@ -4,6 +4,7 @@ namespace Tonder\Payment\Gateway\Response;
 use Magento\Payment\Gateway\Helper\ContextHelper;
 use Magento\Payment\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Response\HandlerInterface;
+use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 
 /**
@@ -32,7 +33,7 @@ class ResponseMessagesHandler implements HandlerInterface
             );
         } else {
             $payment->setIsTransactionPending(false);
-            $payment->setIsFraudDetected(true);
+            $payment->getOrder()->addStatusToHistory(Order::STATE_PENDING_PAYMENT, $messages, false)->setIsCustomerNotified(false);
             $payment->setAdditionalInformation('error_messages', $messages);
         }
     }

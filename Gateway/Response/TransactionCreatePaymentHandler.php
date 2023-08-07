@@ -46,10 +46,10 @@ class TransactionCreatePaymentHandler implements HandlerInterface
             $payment->setAdditionalInformation('payment_id', $payment_id);
             $payment->setIsTransactionClosed(false);
         }else {
-            $payment->getOrder()->setState(OrderInterface::STATE, Order::STATE_PENDING_PAYMENT);
-            $payment->getOrder()->setStatus(OrderInterface::STATUS, Order::STATE_PENDING_PAYMENT);
+            $payment->getOrder()->setState( Order::STATE_PENDING_PAYMENT);
+            $payment->getOrder()->setStatus(Order::STATE_PENDING_PAYMENT);
             $payment->setIsTransactionPending(true);
-            $payment->setAdditionalInformation('error_messages', 'Erro this Payment Tonder');
+            $payment->setAdditionalInformation('error_messages', 'Error this Payment Tonder');
         }
     }
 }

@@ -41,7 +41,6 @@ define(
                 },
                 code: 'tonder',
             },
-
             placeOrderHandler: null,
             validateHandler: null,
             canUseDSecure: ko.observable(false),
@@ -53,11 +52,12 @@ define(
              */
             initObservable: function () {
                 this._super()
-                    .observe('active');
-                this._super()
-                    .observe('saveKeyData');
-                this._super()
-                    .observe('creditCardHolderName');
+                    .observe(
+                        [
+                            'active',
+                            'saveKeyData',
+                            'creditCardHolderName'
+                        ]);
                 return this;
             },
 
@@ -67,7 +67,19 @@ define(
                         event.preventDefault();
                     }
                 }
-                if ( event.which === 38 || event.which === 40 ) {
+                if (event.which === 38 || event.which === 40) {
+                    event.preventDefault();
+                } else {
+                    return true;
+                }
+            },
+            disableArrowKeysCC: function (event, length = false) {
+                if (length && parseInt(event.key) >= 0 && parseInt(event.key) <= 4) {
+                    if ($(event.currentTarget).val().length >= length) {
+                        event.preventDefault();
+                    }
+                }
+                if (event.which === 38 || event.which === 40) {
                     event.preventDefault();
                 } else {
                     return true;
@@ -152,24 +164,23 @@ define(
                 var self = this;
 
                 $.ajax({
-                    url : self.getKeyDataUrl(),
-                    data : {
-                        'isUs' : self.isUsCountry(),
-                        'form_key' : window.checkoutConfig.formKey,
-                        'card_data' : this.getData(),
+                    url: self.getKeyDataUrl(),
+                    data: {
+                        'isUs': self.isUsCountry(),
+                        'form_key': window.checkoutConfig.formKey,
+                        'card_data': this.getData(),
                         'address': {
                             'street': address().currentBillingAddress()['street'],
                             'post_code': address().currentBillingAddress()['postcode']
                         }
                     },
-                    type : 'POST',
-                    showLoader : true
+                    type: 'POST',
+                    showLoader: true
                 }).done(
                     function (response) {
                         this.placeOrder();
                         return response;
                     }.bind(this)
-
                 ).fail(
                     function () {
                         return false;
@@ -229,7 +240,8 @@ define(
                         content: 'Please provide credit card information first!',
                         clickableOverlay: true,
                         actions: {
-                            always: function (){}
+                            always: function () {
+                            }
                         }
                     });
                 }

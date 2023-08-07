@@ -1,12 +1,12 @@
 {
     "name": "tonder/module-payment",
-    "description": "Tonder Payment Integration for Magento2.4.6",
+    "description": "Tonder Payment Integration for Magento",
     "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
-    "version": "1.0.2",
+    "version": "1.0.3",
     "authors": [
         {
             "name": "Tonder",

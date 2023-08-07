@@ -34,10 +34,8 @@ class TransactionCreateOrderHandler implements HandlerInterface
             $dateCreated = $response['created'] ?? "";
             $payment->setAdditionalInformation("created",$dateCreated);
         } else {
-            $payment->getOrder()->setState(OrderInterface::STATE, Order::STATE_PENDING_PAYMENT);
-            $payment->getOrder()->setStatus(OrderInterface::STATUS, Order::STATE_PENDING_PAYMENT);
-
-            $payment->setIsTransactionPending(true);
+            $payment->getOrder()->setState( Order::STATE_PENDING_PAYMENT);
+            $payment->getOrder()->setStatus( Order::STATE_PENDING_PAYMENT);;
             $payment->setAdditionalInformation('error_messages', 'Error this order Tonder');
         }
     }

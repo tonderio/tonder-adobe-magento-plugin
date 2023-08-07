@@ -71,8 +71,9 @@ class CaptureStrategyCommand implements CommandInterface
         $payment->setBaseAmountAuthorized($payment->getOrder()->getBaseTotalDue());
         $payment->getOrder()->setCanSendNewEmailFlag(false);
 
-        $payment->getOrder()->setState(OrderInterface::STATE, Order::STATE_PENDING_PAYMENT);
-        $payment->getOrder()->setStatus(OrderInterface::STATUS, Order::STATE_PENDING_PAYMENT);
+        $payment->getOrder()->setState( Order::STATE_PENDING_PAYMENT);
+        $payment->getOrder()->setStatus(Order::STATE_PENDING_PAYMENT);
+
         $this->logger->info('CUSTOMER_EXIST');
         $this->commandPool->get(self::CUSTOMER_EXIST)->execute($commandSubject);
         $this->logger->info('CREATE_CUSTOMER');

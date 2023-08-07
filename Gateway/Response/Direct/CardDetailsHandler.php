@@ -40,12 +40,11 @@ class CardDetailsHandler implements HandlerInterface
         $payment = $paymentDO->getPayment();
         ContextHelper::assertOrderPayment($payment);
 
-
-        $cardDetails = $this->cardDetails($response);
-        if ($cardDetails) {
+        $cardType =  $payment->getAdditionalInformation('cc_type');
+        if ($cardType) {
             $payment->setAdditionalInformation(
                 'cc_type',
-                $this->nameCard($response)
+                $cardType
             );
         } else {
             $payment->setAdditionalInformation(
@@ -72,14 +71,5 @@ class CardDetailsHandler implements HandlerInterface
 
         $payment->unsAdditionalInformation(OrderPaymentInterface::CC_NUMBER_ENC);
         $payment->unsAdditionalInformation('cc_sid_enc');
-    }
-    private function cardDetails($response)
-    {
-        return !empty($response['response']['data']['charges']['data'][0]['payment_method_details']['card'])
-            || !empty($response['response']['brand']);
-    }
-
-    private function nameCard($response) {
-        return $response['response']['brand'];
     }
 }

@@ -30,7 +30,8 @@ class TransactionCaptureValidator extends AbstractResponseValidator
         $amount = SubjectReader::readAmount($validationSubject);
 
         $errorMessages = [];
-        $validationResult = $this->validateErrors($response)
+        $validationResult =
+            $this->validateErrors($response)
             && $this->validateTotalAmount($response, $amount)
             && $this->validateTransactionId($response)
             && $this->validateResponseCode($response)
