@@ -23,7 +23,7 @@ class TransactionCreatePaymentHandler implements HandlerInterface
     protected $scopeConfig;
 
     /**
-     * PaymentDetailsHandler constructor.
+     *  TransactionCreatePaymentHandler constructor.
      * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(ScopeConfigInterface $scopeConfig)
