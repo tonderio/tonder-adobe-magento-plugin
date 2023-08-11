@@ -35,17 +35,11 @@ class ResponseValidator extends AbstractResponseValidator
         $amount = SubjectReader::readAmount($validationSubject);
 
         $errorMessages = [];
-        $validationResult = $this->validateErrors($response)
-            && $this->validateTotalAmount($response, $amount)
-            && $this->validateTransactionId($response)
-            && $this->validateResponseCode($response)
-            && $this->validateResponseMessage($response);
+        $validationResult = $this->validateTotalAmount($response, $amount)
+            && $this->validateTransactionId($response);
 
-        if (!$this->validateErrors($response) && $this->validateResponseMessage($response)) {
-            throw new LocalizedException(__($response[self::RESPONSE_MESSAGE]));
-        }
         if (!$validationResult) {
-            $errorMessages = [__('Transaction has been declined. Please try again later.')];
+            $errorMessages = [__('Error in Capture Order. Please try again later.')];
         }
 
         return $this->createResult($validationResult, $errorMessages);

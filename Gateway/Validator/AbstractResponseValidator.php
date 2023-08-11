@@ -43,6 +43,7 @@ abstract class AbstractResponseValidator extends AbstractValidator
      */
     const ORDER_ID = "id";
 
+
     /**
      * @var ScopeConfigInterface
      */
@@ -77,10 +78,15 @@ abstract class AbstractResponseValidator extends AbstractValidator
      */
     protected function validateTotalAmount(array $response, $amount)
     {
-        if (isset($response["response"]) && is_array($response["response"])) {
+        if (isset($response['psp_response']['response']) && is_array($response['psp_response']['response'])) {
             return (
-                isset($response["response"][self::TOTAL_AMOUNT])
-                && (float)$response["response"][self::TOTAL_AMOUNT] === (float)$amount
+                isset($response['psp_response']['response']['transaction_amount'])
+                &&  (float)$response['psp_response']['response']['transaction_amount'] ===  (float)$amount
+            );
+        }elseif (isset($response["psp_response"]) && is_array($response["psp_response"])) {
+            return (
+                isset($response["psp_response"][self::TOTAL_AMOUNT])
+                && (float)$response["psp_response"][self::TOTAL_AMOUNT] === (float)$amount
             );
         }
 
@@ -96,7 +102,22 @@ abstract class AbstractResponseValidator extends AbstractValidator
 
     protected function validateTransactionId(array $response)
     {
-        return isset($response["response"][self::TRANSACTION_ID]);
+        if (isset($response['psp_response']['response']) && is_array($response['psp_response']['response'])) {
+            return (
+                isset($response["psp_response"]['response'][self::TRANSACTION_ID])
+                && $response["psp_response"]['response'][self::TRANSACTION_ID]
+            );
+        }elseif (isset($response["psp_response"]) && is_array($response["psp_response"])) {
+            return (
+                isset($response["psp_response"][self::TRANSACTION_ID])
+                && $response["psp_response"][self::TRANSACTION_ID]
+            );
+        }
+        return (
+            isset($response[self::TRANSACTION_ID])
+            && $response[self::TRANSACTION_ID]
+        );
+
     }
 
 
@@ -106,7 +127,8 @@ abstract class AbstractResponseValidator extends AbstractValidator
      */
     protected function validateResponseCode(array $response)
     {
-        return isset($response[self::RESPONSE_CODE]);
+        $responseCode = $response[self::RESPONSE_CODE];
+        return ($responseCode !== null && (int)$responseCode === 200) || (int)$responseCode === 201;
     }
 
     /**

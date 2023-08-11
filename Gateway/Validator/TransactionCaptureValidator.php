@@ -30,19 +30,11 @@ class TransactionCaptureValidator extends AbstractResponseValidator
         $amount = SubjectReader::readAmount($validationSubject);
 
         $errorMessages = [];
-        $validationResult =
-            $this->validateErrors($response)
-            && $this->validateTotalAmount($response, $amount)
-            && $this->validateTransactionId($response)
-            && $this->validateResponseCode($response)
-            && $this->validateResponseMessage($response);
-
-        if (!$validationResult && $this->validateResponseMessage($response)) {
-            throw new LocalizedException(__($response[AbstractResponseValidator::RESPONSE_MESSAGE]));
-        }
+        $validationResult = $this->validateTotalAmount($response, $amount)
+            && $this->validateTransactionId($response);
 
         if (!$validationResult) {
-            $errorMessages = [__('Error Checkout. Please try again later.')];
+            $errorMessages = [__('Error in Capture Order. Please try again later.')];
         }
 
         return $this->createResult($validationResult, $errorMessages);
