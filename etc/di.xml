@@ -407,6 +407,11 @@
         <plugin name="tonder_form_field_attribute_plugin" type="Tonder\Payment\Plugin\System\Config\FormFieldPlugin" sortOrder="0"/>
     </type>
 
+    <!-- Csrf validator bypass -->
+    <type name="Magento\Framework\App\Request\CsrfValidator">
+        <plugin name="csrf_bypass" type="Tonder\Payment\Plugin\Framework\App\Request\CsrfByPass" sortOrder="0"/>
+    </type>
+
     <!-- Tonder log   -->
     <type name="Tonder\Payment\Logger\Handler">
         <arguments>
