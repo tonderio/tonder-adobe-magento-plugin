@@ -43,7 +43,7 @@ class ItemsCreateOrderDataBuilder extends AbstractDataBuilder
         foreach ($order->getItems() as $item) {
             $result[] = [
                 "description" => $item->getDescription() ?? "",
-                "product_reference" => $item->getName() ?? "",
+                "product_reference" => substr($item->getName(), 0, 50)  ?? "",
                 'quantity' => $item->getQtyOrdered() ?? 0,
                 'price_unit' => $item->getPrice() ?? 0,
                 'discount' => $item->getDiscountAmount() ?? 0,
