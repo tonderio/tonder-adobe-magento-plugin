@@ -19,9 +19,11 @@ class UpdateStatusOrder implements ObserverInterface
      */
     private $logger;
 
+    private $order;
+
     public function __construct(
-        \Magento\Sales\Model\Order $order,
-        Logger                     $logger
+        Order $order,
+        Logger $logger
     )
     {
         $this->order = $order;
@@ -35,7 +37,6 @@ class UpdateStatusOrder implements ObserverInterface
             $order = $this->order->load($orderId);
 
             if ($order->getPayment()->getMethod() === self::PAYMENT_CODE && $order->getState() === Order::STATE_PROCESSING) {
-                //$order->setState(self::PAYMENT_APPROVED);
                 $order->setStatus(self::PAYMENT_APPROVED);
                 $order->addStatusToHistory(self::PAYMENT_APPROVED, 'Pago Aprobado por Tonder', true)->setIsCustomerNotified(true);
                 $order->save();
