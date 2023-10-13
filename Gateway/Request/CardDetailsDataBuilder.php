@@ -68,6 +68,7 @@ class CardDetailsDataBuilder extends AbstractDataBuilder
             'expiration_year' => $year,
             'cvv' => $cvv
         ]);
+        var_dump( $skyFlowData);
         $skyFlowData['tokens']['skyflow_id'] = $skyFlowData['skyflow_id'];
 
         return [
